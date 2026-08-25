@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LibraryManagementSystemV2.Api/LibraryManagementSystemV2.Api.csproj" />
+    <Project Path="src/LibraryManagementSystemV2.BLL/LibraryManagementSystemV2.BLL.csproj" />
+    <Project Path="src/LibraryManagementSystemV2.DAL/LibraryManagementSystemV2.DAL.csproj" />
+    <Project Path="src/LibraryManagementSystemV2.Database/LibraryManagementSystemV2.Database.sqlproj" Id="5c54d450-6530-4064-9257-c7d921d62193">
+      <Build />
+      <Deploy />
+    </Project>
+    <Project Path="src/LibraryManagementSystemV2.Shared/LibraryManagementSystemV2.Shared.csproj" />
+  </Folder>
+</Solution>
