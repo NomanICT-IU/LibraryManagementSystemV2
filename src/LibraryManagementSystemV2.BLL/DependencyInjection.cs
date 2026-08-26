@@ -2,11 +2,11 @@
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplicationServices(
-    this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-
-
+        services.AddScoped<IBookService, BookService>();
+        services.AddScoped<IBookCopyService, BookCopyService>();
+        services.AddScoped<IMemberService, MemberService>();
         return services;
     }
 }

@@ -3,17 +3,16 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mapster" Version="10.0.12" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LibraryManagementSystemV2.DAL\LibraryManagementSystemV2.DAL.csproj" />
     <ProjectReference Include="..\LibraryManagementSystemV2.Shared\LibraryManagementSystemV2.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dtos\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
