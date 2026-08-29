@@ -16,7 +16,7 @@ public class BorrowRecordController : ControllerBase
     {
         var result = await _borrowRecordService.CreateBorrowRecordAsync(recordDto, cancellationToken);
 
-        return Ok(new ApiResponse<BorrowRecordDto>(
+        return Ok(new ApiResponse<BorrowRecordDetailsDto>(
                   result,
                   "Borrow record created successfully."
                   ));

@@ -80,4 +80,14 @@ public class MemberController : ControllerBase
             )
         );
     }
+
+    [HttpGet("get-member-details-by-member-id-or-member-phone")]
+    public async Task<IActionResult> GetMemberDetailsAsync([FromQuery] string searchText, CancellationToken cancellationToken)
+    {
+        var result = await _memberService.GetMemberDetailsAsync(searchText, cancellationToken);
+        return Ok(
+                   new ApiResponse<MemberDetailsDto> { Data = result }
+
+               );
+    }
 }

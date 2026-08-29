@@ -2,7 +2,7 @@
 
 public interface IBorrowRecordService
 {
-    public Task<BorrowRecordDto> CreateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken);
+    public Task<BorrowRecordDetailsDto> CreateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken);
     public Task<bool> UpdateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken);
     public Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken);
     public Task<BorrowRecordDto> GetBorrowRecordByIdAsync(int borrowId, CancellationToken cancellationToken);
@@ -15,11 +15,11 @@ public class BorrowRecordService : IBorrowRecordService
     {
         _borrowRecordRepository = borrowRecordRepository;
     }
-    public async Task<BorrowRecordDto> CreateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken)
+    public async Task<BorrowRecordDetailsDto> CreateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken)
     {
         var record = recordDto.Adapt<BorrowRecord>();
         var result = await _borrowRecordRepository.CreateBorrowRecordAsync(record, cancellationToken);
-        return result.Adapt<BorrowRecordDto>();
+        return result.Adapt<BorrowRecordDetailsDto>();
     }
     public async Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken)
     {

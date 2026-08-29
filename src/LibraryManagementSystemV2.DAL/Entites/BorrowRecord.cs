@@ -2,7 +2,6 @@
 
 public class BorrowRecord
 {
-    public int BorrowId { get; set; }
     public int CopyId { get; set; }
     public int MemberId { get; set; }
 

@@ -6,6 +6,8 @@ public interface IMemberService
     public Task<bool> UpdateMemberAsync(MemberDto memberDto, CancellationToken cancellationToken);
     public Task<bool> DeleteMemberAsync(int memberId, CancellationToken cancellationToken);
     public Task<MemberDto> GetMemberByIdAsync(int memberId, CancellationToken cancellationToken);
+    public Task<MemberDetailsDto> GetMemberDetailsAsync(string searchText, CancellationToken cancellationToken);
+
 }
 
 public class MemberService : IMemberService
@@ -40,4 +42,12 @@ public class MemberService : IMemberService
         var member = memberDto.Adapt<Member>();
         return await _memberRepository.UpdateMemberAsync(member, cancellationToken);
     }
+
+
+    public async Task<MemberDetailsDto> GetMemberDetailsAsync(string searchText, CancellationToken cancellationToken)
+    {
+        var membertails = await _memberRepository.GetMemberDetailsAsync(searchText, cancellationToken);
+        return membertails.Adapt<MemberDetailsDto>();
+    }
+
 }

@@ -2,7 +2,7 @@
 
 public interface IBorrowRecordRepository
 {
-    public Task<BorrowRecord> CreateBorrowRecordAsync(BorrowRecord record, CancellationToken cancellationToken);
+    public Task<BorrowRecordDetails> CreateBorrowRecordAsync(BorrowRecord record, CancellationToken cancellationToken);
     public Task<bool> UpdateBorrowRecordAsync(BorrowRecord record, CancellationToken cancellationToken);
     public Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken);
     public Task<BorrowRecord> GetBorrowRecordByIdAsync(int borrowId, CancellationToken cancellationToken);
@@ -16,7 +16,7 @@ public class BorrowRecordRepository : IBorrowRecordRepository
     {
         _dbConnection = dbConnection;
     }
-    public async Task<BorrowRecord> CreateBorrowRecordAsync(BorrowRecord record, CancellationToken cancellationToken)
+    public async Task<BorrowRecordDetails> CreateBorrowRecordAsync(BorrowRecord record, CancellationToken cancellationToken)
     {
         var command = "dbo.CreateBorrowRecord";
         var parameters = new DynamicParameters();
@@ -27,7 +27,7 @@ public class BorrowRecordRepository : IBorrowRecordRepository
         parameters.Add("@ReturnDate", record.ReturnDate);
 
 
-        return await _dbConnection.QuerySingleAsync<BorrowRecord>(command, parameters, commandType: CommandType.StoredProcedure);
+        return await _dbConnection.QuerySingleAsync<BorrowRecordDetails>(command, parameters, commandType: CommandType.StoredProcedure);
     }
 
     public async Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken)
@@ -52,7 +52,6 @@ public class BorrowRecordRepository : IBorrowRecordRepository
     {
         var command = "dbo.UpdateBorrowRecord";
         var parameters = new DynamicParameters();
-        parameters.Add("@BorrowId", record.BorrowId);
         parameters.Add("@CopyId", record.CopyId);
         parameters.Add("@MemberId", record.MemberId);
         parameters.Add("@IssueDate", record.IssueDate);

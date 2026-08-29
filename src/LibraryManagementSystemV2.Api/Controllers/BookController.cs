@@ -91,4 +91,13 @@ public class BookController : ControllerBase
         return Ok(new ApiResponse<IEnumerable<SearchBookRecordDto>> { Data = result });
 
     }
+
+    [HttpGet("get-book-copy-details/{copyId:int}")]
+    public async Task<IActionResult> GetBookCopyDetailsAsync(int copyId, CancellationToken cancellationToken)
+    {
+        var result = await _bookService.GetBookCopyDetailsAsync(copyId, cancellationToken);
+
+        return Ok(new ApiResponse<BookDetailsDto> { Data = result });
+    }
+
 }

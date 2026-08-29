@@ -6,6 +6,7 @@ public interface IMemberRepository
     public Task<bool> UpdateMemberAsync(Member member, CancellationToken cancellationToken);
     public Task<bool> DeleteMemberAsync(int memberId, CancellationToken cancellationToken);
     public Task<Member> GetMemberByIdAsync(int memberId, CancellationToken cancellationToken);
+    public Task<MemberDetails> GetMemberDetailsAsync(string searchText, CancellationToken cancellationToken);
 }
 
 public class MemberRepository : IMemberRepository
@@ -48,6 +49,7 @@ public class MemberRepository : IMemberRepository
         return await _dbConnection.QuerySingleAsync<Member>(command, parameters, commandType: CommandType.StoredProcedure);
     }
 
+
     public async Task<bool> UpdateMemberAsync(Member member, CancellationToken cancellationToken)
     {
         var command = "dbo.UpdateMember";
@@ -63,4 +65,14 @@ public class MemberRepository : IMemberRepository
         int effectedRows = await _dbConnection.ExecuteAsync(command, parameters, commandType: CommandType.StoredProcedure);
         return effectedRows > 0;
     }
+
+    public async Task<MemberDetails> GetMemberDetailsAsync(string searchText, CancellationToken cancellationToken)
+    {
+        var command = "dbo.GetMemberDetails";
+        var parameters = new DynamicParameters();
+        parameters.Add("@SearchText", searchText);
+        return await _dbConnection.QuerySingleAsync<MemberDetails>(command, parameters, commandType: CommandType.StoredProcedure);
+
+    }
+
 }
