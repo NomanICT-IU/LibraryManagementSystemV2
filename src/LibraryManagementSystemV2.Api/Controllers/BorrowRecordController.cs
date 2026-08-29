@@ -80,4 +80,26 @@ public class BorrowRecordController : ControllerBase
             )
         );
     }
+
+    [HttpGet("search-borrowed-book")]
+    public async Task<IActionResult> SearchBorrowedBookAsync([FromQuery] string searchBy, [FromQuery] string searchText, CancellationToken cancellationToken)
+
+    {
+        var result = await _borrowRecordService.SearchBorrowedBookAsync(searchBy, searchText, cancellationToken);
+        return Ok(new ApiResponse<IEnumerable<BorrowBookSearchResultDto>>(
+                  result
+
+                  ));
+
+    }
+
+    [HttpPut("return-book")]
+    public async Task<IActionResult> ReturnBorrowedBookAsync([FromQuery] int borrowId, CancellationToken cancellationToken)
+    {
+        var result = await _borrowRecordService.ReturnBorrowedBookAsync(borrowId, cancellationToken);
+        return Ok(new ApiResponse<ReturnedBookDto>(
+                         result
+
+                         ));
+    }
 }

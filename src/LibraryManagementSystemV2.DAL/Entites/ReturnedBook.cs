@@ -1,13 +1,10 @@
 ﻿namespace LibraryManagementSystemV2.DAL.Entites;
 
-public class BorrowRecordDetails
+public class ReturnedBook
 {
-    public int BorrowId { get; set; }
     public string Title { get; set; }
     public string CopyCode { get; set; }
     public string Name { get; set; }
-    public DateTime DueDate { get; set; }
+    public DateTime? ReturnDate { get; set; }
     public string Status { get; set; }
 }
-
-

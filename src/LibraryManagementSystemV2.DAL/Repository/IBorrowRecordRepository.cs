@@ -6,6 +6,9 @@ public interface IBorrowRecordRepository
     public Task<bool> UpdateBorrowRecordAsync(BorrowRecord record, CancellationToken cancellationToken);
     public Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken);
     public Task<BorrowRecord> GetBorrowRecordByIdAsync(int borrowId, CancellationToken cancellationToken);
+    public Task<IEnumerable<BorrowBookSearchResult>> SearchBorrowedBookAsync(string searchBy, string searchText, CancellationToken cancellationToken);
+    public Task<ReturnedBook> ReturnBorrowedBookAsync(int borrowId, CancellationToken cancellationToken);
+
 }
 
 public class BorrowRecordRepository : IBorrowRecordRepository
@@ -59,5 +62,22 @@ public class BorrowRecordRepository : IBorrowRecordRepository
         parameters.Add("@ReturnDate", record.ReturnDate);
         int effectedRows = await _dbConnection.ExecuteAsync(command, parameters, commandType: CommandType.StoredProcedure);
         return effectedRows > 0;
+    }
+
+    public async Task<IEnumerable<BorrowBookSearchResult>> SearchBorrowedBookAsync(string searchBy, string searchText, CancellationToken cancellationToken)
+    {
+        var command = "dbo.SearchBorrowedBook";
+        var parameters = new DynamicParameters();
+        parameters.Add("@SearchBy", searchBy);
+        parameters.Add("@SearchText", searchText);
+        return await _dbConnection.QueryAsync<BorrowBookSearchResult>(command, parameters, commandType: CommandType.StoredProcedure);
+    }
+
+    public async Task<ReturnedBook> ReturnBorrowedBookAsync(int borrowId, CancellationToken cancellationToken)
+    {
+        var command = "dbo.ReturnBorrowedBook";
+        var parameters = new DynamicParameters();
+        parameters.Add("@BorrowId", borrowId);
+        return await _dbConnection.QuerySingleAsync<ReturnedBook>(command, parameters, commandType: CommandType.StoredProcedure);
     }
 }

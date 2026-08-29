@@ -6,6 +6,8 @@ public interface IBorrowRecordService
     public Task<bool> UpdateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken);
     public Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken);
     public Task<BorrowRecordDto> GetBorrowRecordByIdAsync(int borrowId, CancellationToken cancellationToken);
+    public Task<IEnumerable<BorrowBookSearchResultDto>> SearchBorrowedBookAsync(string searchBy, string searchText, CancellationToken cancellationToken);
+    public Task<ReturnedBookDto> ReturnBorrowedBookAsync(int borrowId, CancellationToken cancellationToken);
 }
 public class BorrowRecordService : IBorrowRecordService
 {
@@ -30,6 +32,18 @@ public class BorrowRecordService : IBorrowRecordService
     {
         var result = await _borrowRecordRepository.GetBorrowRecordByIdAsync(borrowId, cancellationToken);
         return result.Adapt<BorrowRecordDto>();
+    }
+
+    public async Task<ReturnedBookDto> ReturnBorrowedBookAsync(int borrowId, CancellationToken cancellationToken)
+    {
+        var returnBook = await _borrowRecordRepository.ReturnBorrowedBookAsync(borrowId, cancellationToken);
+        return returnBook.Adapt<ReturnedBookDto>();
+    }
+
+    public async Task<IEnumerable<BorrowBookSearchResultDto>> SearchBorrowedBookAsync(string searchBy, string searchText, CancellationToken cancellationToken)
+    {
+        var boowBooks = await _borrowRecordRepository.SearchBorrowedBookAsync(searchBy, searchText, cancellationToken);
+        return boowBooks.Adapt<IEnumerable<BorrowBookSearchResultDto>>();
     }
 
     public async Task<bool> UpdateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken)
