@@ -7,6 +7,7 @@ public static class DependencyInjection
         services.AddScoped<IBookService, BookService>();
         services.AddScoped<IBookCopyService, BookCopyService>();
         services.AddScoped<IMemberService, MemberService>();
+        services.AddScoped<IBorrowRecordService, BorrowRecordService>();
         return services;
     }
 }

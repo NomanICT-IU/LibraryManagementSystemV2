@@ -22,62 +22,62 @@ public class BorrowRecordController : ControllerBase
                   ));
     }
 
-    //[HttpDelete("delete-member/{memberId:int}")]
-    //public async Task<IActionResult> DeleteMemberAsync(int memberId, CancellationToken cancellationToken)
-    //{
-    //    var result = await _memberService.DeleteMemberAsync(
-    //        memberId,
-    //        cancellationToken);
+    [HttpDelete("delete-borrow-record/{borrowId:int}")]
+    public async Task<IActionResult> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken)
+    {
+        var result = await _borrowRecordService.DeleteBorrowRecordAsync(
+            borrowId,
+            cancellationToken);
 
-    //    if (!result)
-    //    {
-    //        return NotFound(
-    //            new ApiResponse<bool>(
-    //                false,
-    //                "Member not found."
-    //            )
-    //        );
-    //    }
+        if (!result)
+        {
+            return NotFound(
+                new ApiResponse<bool>(
+                    false,
+                    "Book Record not found."
+                )
+            );
+        }
 
-    //    return Ok(
-    //        new ApiResponse<bool>(
-    //            true,
-    //            "Member deleted successfully."
-    //        )
-    //    );
-    //}
+        return Ok(
+            new ApiResponse<bool>(
+                true,
+                "Book Record deleted successfully."
+            )
+        );
+    }
 
-    //[HttpGet("get-member-by-id/{memberId:int}")]
-    //public async Task<IActionResult> GetMemberByIdAsync(int memberId, CancellationToken cancellationToken)
-    //{
-    //    var result = await _memberService.GetMemberByIdAsync(memberId, cancellationToken);
-    //    return Ok(new ApiResponse<MemberDto>(
-    //              result,
-    //              "Get Member successfully."
-    //              ));
+    [HttpGet("get-borrow-record-by-id/{borrowId:int}")]
+    public async Task<IActionResult> GetBorrowRecordByIdAsync(int borrowId, CancellationToken cancellationToken)
+    {
+        var result = await _borrowRecordService.GetBorrowRecordByIdAsync(borrowId, cancellationToken);
+        return Ok(new ApiResponse<BorrowRecordDto>(
+                  result,
+                  "Get Borrow Record successfully."
+                  ));
 
-    //}
+    }
 
-    //[HttpPut("update-member")]
-    //public async Task<IActionResult> UpdateMemberAsync([FromBody] MemberDto memberDto, CancellationToken cancellationToken)
-    //{
-    //    var result = await _memberService.UpdateMemberAsync(memberDto, cancellationToken);
+    [HttpPut("update-borrow-record")]
+    public async Task<IActionResult> UpdateBorrowRecordAsync([FromBody] BorrowRecordDto recordDto, CancellationToken cancellationToken)
+    {
+        var result = await _borrowRecordService.UpdateBorrowRecordAsync(recordDto, cancellationToken);
 
-    //    if (!result)
-    //    {
-    //        return NotFound(
-    //            new ApiResponse<bool>(
-    //                false,
-    //                "Member not Updated."
-    //            )
-    //        );
-    //    }
+        if (!result)
+        {
+            return NotFound(
+                new ApiResponse<bool>(
+                    false,
+                    "Borrow Record not Updated."
+                )
+            );
+        }
 
-    //    return Ok(
-    //        new ApiResponse<bool>(
-    //            true,
-    //            "Member Updated successfully."
-    //        )
-    //    );
-    //}
+        return Ok(
+            new ApiResponse<bool>(
+                true,
+                "Borrow Record Updated successfully."
+            )
+        );
+    }
 }

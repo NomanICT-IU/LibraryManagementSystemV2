@@ -18,7 +18,7 @@ public class BorrowRecordRepository : IBorrowRecordRepository
     }
     public async Task<BorrowRecord> CreateBorrowRecordAsync(BorrowRecord record, CancellationToken cancellationToken)
     {
-        var command = "dbo.CreateMember";
+        var command = "dbo.CreateBorrowRecord";
         var parameters = new DynamicParameters();
         parameters.Add("@CopyId", record.CopyId);
         parameters.Add("@MemberId", record.MemberId);
@@ -30,18 +30,35 @@ public class BorrowRecordRepository : IBorrowRecordRepository
         return await _dbConnection.QuerySingleAsync<BorrowRecord>(command, parameters, commandType: CommandType.StoredProcedure);
     }
 
-    public Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken)
+    public async Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var command = "dbo.DeleteBorrowRecord";
+        var parameters = new DynamicParameters();
+        parameters.Add("@BorrowId", borrowId);
+        int effectedRows = await _dbConnection.ExecuteAsync(command, parameters, commandType: CommandType.StoredProcedure);
+        return effectedRows > 0;
     }
 
-    public Task<BorrowRecord> GetBorrowRecordByIdAsync(int borrowId, CancellationToken cancellationToken)
+    public async Task<BorrowRecord> GetBorrowRecordByIdAsync(int borrowId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var command = "dbo.GetBorrowRecordById";
+        var parameters = new DynamicParameters();
+        parameters.Add("@BorrowId", borrowId);
+        return await _dbConnection.QuerySingleAsync<BorrowRecord>(command, parameters, commandType: CommandType.StoredProcedure);
+
     }
 
-    public Task<bool> UpdateBorrowRecordAsync(BorrowRecord record, CancellationToken cancellationToken)
+    public async Task<bool> UpdateBorrowRecordAsync(BorrowRecord record, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var command = "dbo.UpdateBorrowRecord";
+        var parameters = new DynamicParameters();
+        parameters.Add("@BorrowId", record.BorrowId);
+        parameters.Add("@CopyId", record.CopyId);
+        parameters.Add("@MemberId", record.MemberId);
+        parameters.Add("@IssueDate", record.IssueDate);
+        parameters.Add("@DueDate", record.DueDate);
+        parameters.Add("@ReturnDate", record.ReturnDate);
+        int effectedRows = await _dbConnection.ExecuteAsync(command, parameters, commandType: CommandType.StoredProcedure);
+        return effectedRows > 0;
     }
 }

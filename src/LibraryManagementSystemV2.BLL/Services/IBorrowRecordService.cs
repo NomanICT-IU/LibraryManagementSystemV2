@@ -21,18 +21,21 @@ public class BorrowRecordService : IBorrowRecordService
         var result = await _borrowRecordRepository.CreateBorrowRecordAsync(record, cancellationToken);
         return result.Adapt<BorrowRecordDto>();
     }
-    public Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken)
+    public async Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await _borrowRecordRepository.DeleteBorrowRecordAsync(borrowId, cancellationToken);
     }
 
-    public Task<BorrowRecordDto> GetBorrowRecordByIdAsync(int borrowId, CancellationToken cancellationToken)
+    public async Task<BorrowRecordDto> GetBorrowRecordByIdAsync(int borrowId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = await _borrowRecordRepository.GetBorrowRecordByIdAsync(borrowId, cancellationToken);
+        return result.Adapt<BorrowRecordDto>();
     }
 
-    public Task<bool> UpdateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken)
+    public async Task<bool> UpdateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var record = recordDto.Adapt<BorrowRecord>();
+        return await _borrowRecordRepository.UpdateBorrowRecordAsync(record, cancellationToken);
+
     }
 }
