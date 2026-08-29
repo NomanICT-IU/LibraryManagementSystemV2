@@ -6,6 +6,7 @@ public interface IBookCopyService
     public Task<bool> UpdateBookCopyAsync(BookCopyDto bookCopyDto, CancellationToken cancellationToken);
     public Task<bool> DeleteBookCopyAsync(int copyId, CancellationToken cancellationToken);
     public Task<BookCopyDto> GetBookCopyByIdAsync(int copyId, CancellationToken cancellationToken);
+
 }
 public class BookCopyService : IBookCopyService
 {

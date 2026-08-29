@@ -6,6 +6,8 @@ public interface IBookService
     public Task<bool> UpdateBookAsync(BookDto bookDto, CancellationToken cancellationToken);
     public Task<bool> DeleteBookAsync(int bookId, CancellationToken cancellationToken);
     public Task<BookDto> GetBookByIdAsync(int bookId, CancellationToken cancellationToken);
+    public Task<IEnumerable<SearchBookRecordDto>> SearchBookRecordAsync(string SearchBy, string SearchResult, CancellationToken cancellationToken);
+
 }
 
 public class BookService : IBookService
@@ -39,4 +41,12 @@ public class BookService : IBookService
         var book = bookDto.Adapt<Book>();
         return await _bookRepository.UpdateBookAsync(book, cancellationToken);
     }
+
+
+    public async Task<IEnumerable<SearchBookRecordDto>> SearchBookRecordAsync(string SearchBy, string SearchResult, CancellationToken cancellationToken)
+    {
+        var bookRecord = await _bookRepository.SearchBookRecordAsync(SearchBy, SearchResult, cancellationToken);
+        return bookRecord.Adapt<IEnumerable<SearchBookRecordDto>>();
+    }
+
 }

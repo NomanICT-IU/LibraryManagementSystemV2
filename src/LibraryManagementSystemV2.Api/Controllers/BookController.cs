@@ -81,4 +81,14 @@ public class BookController : ControllerBase
         );
     }
 
+    [HttpGet("search-book-recod")]
+    public async Task<IActionResult> SearchBookRecord([FromQuery] string searchBy,
+        [FromQuery] string searchResult,
+        CancellationToken cancellationToken)
+    {
+        var result = await _bookService.SearchBookRecordAsync(searchBy, searchResult, cancellationToken);
+
+        return Ok(new ApiResponse<IEnumerable<SearchBookRecordDto>> { Data = result });
+
+    }
 }

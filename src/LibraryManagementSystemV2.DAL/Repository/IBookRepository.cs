@@ -6,6 +6,7 @@ public interface IBookRepository
     public Task<bool> UpdateBookAsync(Book book, CancellationToken cancellationToken);
     public Task<bool> DeleteBookAsync(int bookId, CancellationToken cancellationToken);
     public Task<Book> GetBookByIdAsync(int bookId, CancellationToken cancellationToken);
+    public Task<IEnumerable<SearchBookRecord>> SearchBookRecordAsync(string SearchBy, string SearchResult, CancellationToken cancellationToken);
 }
 
 public class BookRepository : IBookRepository
@@ -56,5 +57,15 @@ public class BookRepository : IBookRepository
         parameters.Add("@Category", book.Category);
         int effectedRows = await _dbConnection.ExecuteAsync(command, parameters, commandType: CommandType.StoredProcedure);
         return effectedRows > 0;
+    }
+
+    public async Task<IEnumerable<SearchBookRecord>> SearchBookRecordAsync(string SearchBy, string SearchResult, CancellationToken cancellationToken)
+    {
+        var command = "dbo.SearchBookRecord";
+        var parameters = new DynamicParameters();
+        parameters.Add("@SearchBy", SearchBy);
+        parameters.Add("@SearchResult", SearchResult);
+
+        return await _dbConnection.QueryAsync<SearchBookRecord>(command, parameters, commandType: CommandType.StoredProcedure);
     }
 }
