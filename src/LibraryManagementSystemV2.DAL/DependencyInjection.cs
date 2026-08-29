@@ -13,6 +13,7 @@ public static class DependencyInjection
         services.AddScoped<IBookCopyRepository, BookCopyRepository>();
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<IBorrowRecordRepository, BorrowRecordRepository>();
+        services.AddScoped<IDashboardInformationRepository, DashboardInformationRepository>();
 
         return services;
     }
