@@ -67,6 +67,13 @@
     <Build Include="dbo\Tables\BookCopy.sql" />
     <Build Include="dbo\Tables\Member.sql" />
     <Build Include="dbo\Tables\BorrowRecord.sql" />
+    <Build Include="dbo\Stored Procedures\GetDashboardInformation.sql" />
+    <Build Include="dbo\Stored Procedures\SearchBookRecord.sql" />
+    <Build Include="dbo\Stored Procedures\GetBookCopyDetails.sql" />
+    <Build Include="dbo\Stored Procedures\GetMemberDetails.sql" />
+    <Build Include="dbo\Stored Procedures\SearchBorrowedBook.sql" />
+    <Build Include="dbo\Stored Procedures\ReturnBorrowedBook.sql" />
+    <Build Include="dbo\Stored Procedures\FindMember.sql" />
     <Build Include="dbo\Stored Procedures\CreateBook.sql" />
     <Build Include="dbo\Stored Procedures\UpdateBook.sql" />
     <Build Include="dbo\Stored Procedures\GetBookById.sql" />

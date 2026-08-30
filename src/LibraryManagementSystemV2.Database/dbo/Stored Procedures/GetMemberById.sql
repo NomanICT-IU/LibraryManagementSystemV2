@@ -5,6 +5,7 @@ AS
 BEGIN
 
 select 
+        MemberId,
         MemberCode ,
         Name ,
         [Phone] ,

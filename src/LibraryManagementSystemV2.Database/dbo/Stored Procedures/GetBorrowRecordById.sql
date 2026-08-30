@@ -2,7 +2,7 @@
     @BorrowId int  
 AS
 BEGIN
-select 
+select [BorrowId],
         [CopyId]  ,
         [MemberId]  ,
         [IssueDate] ,
