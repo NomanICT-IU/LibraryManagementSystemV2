@@ -6,7 +6,11 @@ public interface IMemberRepository
     public Task<bool> UpdateMemberAsync(Member member, CancellationToken cancellationToken);
     public Task<bool> DeleteMemberAsync(int memberId, CancellationToken cancellationToken);
     public Task<Member> GetMemberByIdAsync(int memberId, CancellationToken cancellationToken);
-    public Task<MemberDetails> GetMemberDetailsAsync(string searchText, CancellationToken cancellationToken);
+    public Task<MemberDetails> FindMemberAsync(string searchText, CancellationToken cancellationToken);
+    public Task<MemberDetailsResponse> GetMemberDetailsAsync(
+    string searchBy,
+    string searchText,
+    CancellationToken cancellationToken);
 }
 
 public class MemberRepository : IMemberRepository
@@ -66,13 +70,41 @@ public class MemberRepository : IMemberRepository
         return effectedRows > 0;
     }
 
-    public async Task<MemberDetails> GetMemberDetailsAsync(string searchText, CancellationToken cancellationToken)
+    public async Task<MemberDetails> FindMemberAsync(string searchText, CancellationToken cancellationToken)
     {
-        var command = "dbo.GetMemberDetails";
+        var command = "dbo.FindMember";
         var parameters = new DynamicParameters();
         parameters.Add("@SearchText", searchText);
         return await _dbConnection.QuerySingleAsync<MemberDetails>(command, parameters, commandType: CommandType.StoredProcedure);
 
     }
 
+    public async Task<MemberDetailsResponse> GetMemberDetailsAsync(string searchBy, string searchText, CancellationToken cancellationToken)
+    {
+        var parameters = new DynamicParameters();
+
+        parameters.Add("@SearchBy", searchBy);
+        parameters.Add("@SearchText", searchText);
+        var command = new CommandDefinition(
+        "dbo.GetMemberDetails",
+        parameters,
+        commandType: CommandType.StoredProcedure,
+        cancellationToken: cancellationToken);
+
+        using var multi = await _dbConnection.QueryMultipleAsync(command);
+
+        var member = await multi.ReadSingleOrDefaultAsync<MemberProfile>();
+        var borrowSummary = await multi.ReadSingleOrDefaultAsync<MemberBorrowSummary>();
+        var borrowedHistory = (await multi.ReadAsync<MemberBorrowedHistory>()).ToList();
+        var returnHistory = (await multi.ReadAsync<MemberReturnHistory>()).ToList();
+
+        return new MemberDetailsResponse
+        {
+            Member = member,
+            BorrowSummery = borrowSummary,
+            BorrowedHistory = borrowedHistory,
+            ReturnHistory = returnHistory
+
+        };
+    }
 }

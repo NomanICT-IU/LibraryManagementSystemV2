@@ -81,13 +81,23 @@ public class MemberController : ControllerBase
         );
     }
 
-    [HttpGet("get-member-details-by-member-id-or-member-phone")]
-    public async Task<IActionResult> GetMemberDetailsAsync([FromQuery] string searchText, CancellationToken cancellationToken)
+    [HttpGet("find-member-by-member-id-or-member-phone")]
+    public async Task<IActionResult> FindMemberAsync([FromQuery] string searchText, CancellationToken cancellationToken)
     {
-        var result = await _memberService.GetMemberDetailsAsync(searchText, cancellationToken);
+        var result = await _memberService.FindMemberAsync(searchText, cancellationToken);
         return Ok(
                    new ApiResponse<MemberDetailsDto> { Data = result }
 
                );
     }
+    [HttpGet("get-member-details-by-member-id-or-name-or-phone ")]
+    public async Task<IActionResult> GetMemberDetailsAsync([FromQuery] string searchBy, [FromQuery] string searchText, CancellationToken cancellationToken)
+    {
+        var result = await _memberService.GetMemberDetailsAsync(searchBy, searchText, cancellationToken);
+        return Ok(
+                  new ApiResponse<MemberDetailsResponseDto> { Data = result }
+
+              );
+    }
+
 }
