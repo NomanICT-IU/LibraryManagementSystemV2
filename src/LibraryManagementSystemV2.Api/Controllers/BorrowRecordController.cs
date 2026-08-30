@@ -2,14 +2,8 @@
 
 [Route("api/[controller]")]
 [ApiController]
-public class BorrowRecordController : ControllerBase
+public class BorrowRecordController(IBorrowRecordService _borrowRecordService) : ControllerBase
 {
-    private readonly IBorrowRecordService _borrowRecordService;
-
-    public BorrowRecordController(IBorrowRecordService borrowRecordService)
-    {
-        _borrowRecordService = borrowRecordService;
-    }
 
     [HttpPost("create-borrow-record")]
     public async Task<IActionResult> CreateBorrowRecordAsync([FromBody] BorrowRecordDto recordDto, CancellationToken cancellationToken)

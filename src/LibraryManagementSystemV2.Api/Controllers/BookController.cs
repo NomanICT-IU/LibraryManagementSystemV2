@@ -2,15 +2,8 @@
 
 [Route("api/[controller]")]
 [ApiController]
-public class BookController : ControllerBase
+public class BookController(IBookService _bookService) : ControllerBase
 {
-    private readonly IBookService _bookService;
-
-    public BookController(IBookService bookService)
-    {
-        _bookService = bookService;
-    }
-
     [HttpPost("create-book")]
     public async Task<IActionResult> CreateBookAsync([FromBody] BookDto bookDto, CancellationToken cancellationToken)
     {
@@ -88,7 +81,11 @@ public class BookController : ControllerBase
     {
         var result = await _bookService.SearchBookRecordAsync(searchBy, searchResult, cancellationToken);
 
-        return Ok(new ApiResponse<IEnumerable<SearchBookRecordDto>> { Data = result });
+        return Ok(new ApiResponse<SearchBookRecordResponseDto>(
+               result,
+               "Search completed successfully."
+               ));
+
 
     }
 
@@ -97,7 +94,10 @@ public class BookController : ControllerBase
     {
         var result = await _bookService.GetBookCopyDetailsAsync(copyId, cancellationToken);
 
-        return Ok(new ApiResponse<BookDetailsDto> { Data = result });
+        return Ok(new ApiResponse<BookDetailsDto>(
+               result,
+               "Book retrieved successfully."
+               )); ;
     }
 
 }

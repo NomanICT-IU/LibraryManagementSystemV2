@@ -2,15 +2,8 @@
 
 [Route("api/[controller]")]
 [ApiController]
-public class MemberController : ControllerBase
+public class MemberController(IMemberService _memberService) : ControllerBase
 {
-    private readonly IMemberService _memberService;
-
-    public MemberController(IMemberService memberService)
-    {
-        _memberService = memberService;
-    }
-
     [HttpPost("create-member")]
     public async Task<IActionResult> CreateMemberAsync([FromBody] MemberDto memberDto, CancellationToken cancellationToken)
     {
@@ -86,18 +79,19 @@ public class MemberController : ControllerBase
     {
         var result = await _memberService.FindMemberAsync(searchText, cancellationToken);
         return Ok(
-                   new ApiResponse<MemberDetailsDto> { Data = result }
-
-               );
+                   new ApiResponse<MemberDetailsDto>(result,
+                   "Member details retrive successfully."
+                   ));
     }
     [HttpGet("get-member-details-by-member-id-or-name-or-phone ")]
     public async Task<IActionResult> GetMemberDetailsAsync([FromQuery] string searchBy, [FromQuery] string searchText, CancellationToken cancellationToken)
     {
         var result = await _memberService.GetMemberDetailsAsync(searchBy, searchText, cancellationToken);
         return Ok(
-                  new ApiResponse<MemberDetailsResponseDto> { Data = result }
-
-              );
+                  new ApiResponse<MemberDetailsResponseDto>
+                  (result,
+                  "Member data retrive successfully."
+                      ));
     }
 
 }

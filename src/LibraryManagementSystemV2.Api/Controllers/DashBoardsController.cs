@@ -9,7 +9,10 @@ public class DashBoardsController(IDashboardInformationService dashboardInformat
     public async Task<IActionResult> GetDashBoardInformation(int recordLimit, CancellationToken cancellationToken)
     {
         var result = await dashboardInformationService.GetDashboardInformationAsync(recordLimit, cancellationToken);
-        return Ok(new ApiResponse<DashBoardDto> { Data = result });
+        return Ok(new ApiResponse<DashBoardDto>(
+            result,
+            "Dashboard data retrieved successfully."
+            ));
 
     }
 }

@@ -2,14 +2,8 @@
 
 [Route("api/[controller]")]
 [ApiController]
-public class BookCopyController : ControllerBase
+public class BookCopyController(IBookCopyService _bookCopyService) : ControllerBase
 {
-    private readonly IBookCopyService _bookCopyService;
-
-    public BookCopyController(IBookCopyService bookCopyService)
-    {
-        _bookCopyService = bookCopyService;
-    }
 
     [HttpPost("create-book-copy")]
     public async Task<IActionResult> CreateBookAsync([FromBody] BookCopyDto bookCopyDto, CancellationToken cancellationToken)
