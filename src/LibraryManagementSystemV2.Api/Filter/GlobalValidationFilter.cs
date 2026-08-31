@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc.Filters;
-public class GlobalValidationFilter : IAsyncActionFilter
+﻿public class GlobalValidationFilter : IAsyncActionFilter
 {
     public async Task OnActionExecutionAsync(
         ActionExecutingContext context,
