@@ -2,7 +2,7 @@
 
 public interface IDashboardInformationRepository
 {
-    public Task<DashBoard> GetDashboardInformationAsync(int recordLimit, CancellationToken cancellationToken);
+    public Task<DashBoard> GetDashboardInformationAsync(CancellationToken cancellationToken);
 }
 public class DashboardInformationRepository : IDashboardInformationRepository
 {
@@ -12,11 +12,10 @@ public class DashboardInformationRepository : IDashboardInformationRepository
     {
         _dbConnection = dbConnection;
     }
-    public async Task<DashBoard> GetDashboardInformationAsync(int recordLimit, CancellationToken cancellationToken)
+    public async Task<DashBoard> GetDashboardInformationAsync(
+        CancellationToken cancellationToken)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("@RecordLimit", recordLimit);
-        var command = new CommandDefinition("dbo.GetDashboardInformation", parameters,
+        var command = new CommandDefinition("dbo.GetDashboardInformation",
             commandType: CommandType.StoredProcedure);
         using var result = await _dbConnection.QueryMultipleAsync(command);
 

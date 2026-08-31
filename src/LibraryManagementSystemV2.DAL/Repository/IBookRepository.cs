@@ -6,7 +6,8 @@ public interface IBookRepository
     public Task<bool> UpdateBookAsync(Book book, CancellationToken cancellationToken);
     public Task<bool> DeleteBookAsync(int bookId, CancellationToken cancellationToken);
     public Task<Book> GetBookByIdAsync(int bookId, CancellationToken cancellationToken);
-    public Task<SearchBookRecordResponse> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
+    public Task<IEnumerable<BookCopyDetails>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
+    //public Task<SearchBookRecordResponse> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
     public Task<BookDetails> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken);
 
 }
@@ -61,44 +62,44 @@ public class BookRepository : IBookRepository
         return effectedRows > 0;
     }
 
-    public async Task<SearchBookRecordResponse> SearchBookRecordAsync(
- string searchBy,
- string searchText,
- CancellationToken cancellationToken)
-    {
-        var parameters = new DynamicParameters();
-        parameters.Add("@SearchBy", searchBy);
-        parameters.Add("@SearchText", searchText);
+    //   public async Task<SearchBookRecordResponse> SearchBookRecordAsync(
+    //string searchBy,
+    //string searchText,
+    //CancellationToken cancellationToken)
+    //   {
+    //       var parameters = new DynamicParameters();
+    //       parameters.Add("@SearchBy", searchBy);
+    //       parameters.Add("@SearchText", searchText);
 
-        var command = new CommandDefinition(
-            "dbo.SearchBookRecord",
-            parameters,
-            commandType: CommandType.StoredProcedure,
-            cancellationToken: cancellationToken);
+    //       var command = new CommandDefinition(
+    //           "dbo.SearchBookRecord",
+    //           parameters,
+    //           commandType: CommandType.StoredProcedure,
+    //           cancellationToken: cancellationToken);
 
-        using var multi = await _dbConnection.QueryMultipleAsync(command);
+    //       using var multi = await _dbConnection.QueryMultipleAsync(command);
 
-        var copyDetails =
-            (await multi.ReadAsync<BookCopyDetails>()).ToList();
+    //       var copyDetails =
+    //           (await multi.ReadAsync<BookCopyDetails>()).ToList();
 
-        var book =
-            await multi.ReadSingleOrDefaultAsync<BookInformation>();
+    //       var book =
+    //           await multi.ReadSingleOrDefaultAsync<BookInformation>();
 
-        var summary =
-            await multi.ReadSingleOrDefaultAsync<BookCopySummary>();
+    //       var summary =
+    //           await multi.ReadSingleOrDefaultAsync<BookCopySummary>();
 
-        var copyStatus =
-            (await multi.ReadAsync<BookCopyStatus>()).ToList();
+    //       var copyStatus =
+    //           (await multi.ReadAsync<BookCopyStatus>()).ToList();
 
-        return new SearchBookRecordResponse
-        {
-            Book = book,
-            Summary = summary,
-            CopyDetails = copyDetails,
-            CopyStatus = copyStatus
-        };
+    //       return new SearchBookRecordResponse
+    //       {
+    //           Book = book,
+    //           Summary = summary,
+    //           CopyDetails = copyDetails,
+    //           CopyStatus = copyStatus
+    //       };
 
-    }
+    //   }
 
 
     public async Task<BookDetails> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken)
@@ -108,5 +109,15 @@ public class BookRepository : IBookRepository
         parameters.Add("@BookId", bookId);
 
         return await _dbConnection.QuerySingleAsync<BookDetails>(command, parameters, commandType: CommandType.StoredProcedure);
+    }
+
+    public async Task<IEnumerable<BookCopyDetails>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken)
+    {
+        var command = "dbo.SearchBookRecord";
+        var parameters = new DynamicParameters();
+        parameters.Add("@SearchBy", searchBy);
+        parameters.Add("@SearchText", searchText);
+
+        return await _dbConnection.QueryAsync<BookCopyDetails>(command, parameters, commandType: CommandType.StoredProcedure);
     }
 }

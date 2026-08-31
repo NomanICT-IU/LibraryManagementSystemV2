@@ -57,7 +57,7 @@ public class BookController(IBookService _bookService) : ControllerBase
     {
         var result = await _bookService.SearchBookRecordAsync(searchBy, searchResult, cancellationToken);
 
-        return Ok(new ApiResponse<SearchBookRecordResponseDto> { Data = result });
+        return Ok(new ApiResponse<IEnumerable<BookCopyDetailsDto>> { Data = result });
 
 
     }

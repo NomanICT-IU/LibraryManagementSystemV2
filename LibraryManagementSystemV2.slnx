@@ -9,4 +9,7 @@
     </Project>
     <Project Path="src/LibraryManagementSystemV2.Shared/LibraryManagementSystemV2.Shared.csproj" />
   </Folder>
+  <Folder Name="/src/Web/">
+    <Project Path="src/Lms.Mvc/Lms.Mvc.csproj" Id="a4004c50-9ad1-4c2e-810c-eee16c16d52e" />
+  </Folder>
 </Solution>

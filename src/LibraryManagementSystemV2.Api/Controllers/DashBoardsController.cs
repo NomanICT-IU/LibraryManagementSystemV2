@@ -5,10 +5,10 @@
 
 public class DashBoardsController(IDashboardInformationService dashboardInformationService) : ControllerBase
 {
-    [HttpGet("get-dashboard-information/{recordLimit:int}")]
-    public async Task<IActionResult> GetDashBoardInformation(int recordLimit, CancellationToken cancellationToken)
+    [HttpGet("get-dashboard-information")]
+    public async Task<IActionResult> GetDashBoardInformation(CancellationToken cancellationToken)
     {
-        var result = await dashboardInformationService.GetDashboardInformationAsync(recordLimit, cancellationToken);
+        var result = await dashboardInformationService.GetDashboardInformationAsync(cancellationToken);
         return Ok(new ApiResponse<DashBoardDto> { Data = result });
 
     }

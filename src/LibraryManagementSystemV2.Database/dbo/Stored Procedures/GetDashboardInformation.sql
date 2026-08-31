@@ -1,10 +1,7 @@
 ﻿ CREATE   PROCEDURE [dbo].[GetDashboardInformation]
-    @RecordLimit int
 AS
 BEGIN
   
-
-
     SELECT COUNT(*) AS TotalBooks
     FROM [dbo].[BookCopy];
 
@@ -27,7 +24,7 @@ BEGIN
 
 
  
-    SELECT TOP (@RecordLimit)
+    SELECT 
         b.Title ,
         m.Name,
         br.IssueDate,
@@ -39,7 +36,8 @@ BEGIN
         ON bc.BookId = b.BookId
     INNER JOIN [dbo].[Member] AS m
         ON m.MemberId = br.MemberId
-    WHERE br.ReturnDate IS NULL
+     WHERE br.IssueDate >= DATEADD(DAY, -15, GETDATE())
+      AND br.ReturnDate IS NULL
     ORDER BY br.IssueDate DESC;
 
 END;
