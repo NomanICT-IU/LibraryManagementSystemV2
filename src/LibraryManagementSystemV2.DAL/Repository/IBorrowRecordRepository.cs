@@ -55,6 +55,7 @@ public class BorrowRecordRepository : IBorrowRecordRepository
     {
         var command = "dbo.UpdateBorrowRecord";
         var parameters = new DynamicParameters();
+        parameters.Add("@BorrowId", record.BorrowId);
         parameters.Add("@CopyId", record.CopyId);
         parameters.Add("@MemberId", record.MemberId);
         parameters.Add("@IssueDate", record.IssueDate);

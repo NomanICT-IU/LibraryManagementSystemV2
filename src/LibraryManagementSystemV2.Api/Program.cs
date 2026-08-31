@@ -3,6 +3,12 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//xml formate
+builder.Services
+    .AddControllers()
+    .AddXmlSerializerFormatters();
+
+builder.Services.AddEndpointsApiExplorer();
 // Serilog
 builder.Services.AddSerilog((services, loggerConfiguration) =>
 {
