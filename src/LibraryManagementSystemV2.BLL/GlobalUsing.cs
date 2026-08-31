@@ -1,5 +1,7 @@
-﻿global using LibraryManagementSystemV2.BLL.Dtos;
+﻿global using FluentValidation;
+global using LibraryManagementSystemV2.BLL.Dtos;
 global using LibraryManagementSystemV2.BLL.Services;
+global using LibraryManagementSystemV2.BLL.Validators;
 global using LibraryManagementSystemV2.DAL.Entites;
 global using LibraryManagementSystemV2.DAL.Repository;
 global using Mapster;

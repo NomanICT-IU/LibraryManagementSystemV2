@@ -10,6 +10,7 @@ public static class DependencyInjection
         services.AddScoped<IMemberService, MemberService>();
         services.AddScoped<IBorrowRecordService, BorrowRecordService>();
         services.AddScoped<IDashboardInformationService, DashboardInformationService>();
+        services.AddValidatorsFromAssemblyContaining<BookDtoValidator>();
         return services;
     }
 }

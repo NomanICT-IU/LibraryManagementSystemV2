@@ -9,10 +9,10 @@ public class BookController(IBookService _bookService) : ControllerBase
     {
         var result = await _bookService.CreateBookAsync(bookDto, cancellationToken);
 
-        return Ok(new ApiResponse<BookDto>(
-                  result,
-                  "Book created successfully."
-                  ));
+        return Ok(new ApiResponse<BookDto>
+        {
+            Data = result,
+        });
     }
     [HttpDelete("delete-book/{bookId:int}")]
     public async Task<IActionResult> DeleteBookAsync(int bookId, CancellationToken cancellationToken)
@@ -21,21 +21,8 @@ public class BookController(IBookService _bookService) : ControllerBase
             bookId,
             cancellationToken);
 
-        if (!result)
-        {
-            return NotFound(
-                new ApiResponse<bool>(
-                    false,
-                    "Book not found."
-                )
-            );
-        }
-
         return Ok(
-            new ApiResponse<bool>(
-                true,
-                "Book deleted successfully."
-            )
+            new ApiResponse<bool> { Data = result }
         );
     }
 
@@ -45,10 +32,10 @@ public class BookController(IBookService _bookService) : ControllerBase
     public async Task<IActionResult> GetBookByIdAsync(int bookId, CancellationToken cancellationToken)
     {
         var result = await _bookService.GetBookByIdAsync(bookId, cancellationToken);
-        return Ok(new ApiResponse<BookDto>(
-                  result,
-                  "Get Book successfully."
-                  ));
+        return Ok(new ApiResponse<BookDto>
+        {
+            Data = result
+        });
 
     }
     [HttpPut("update-book")]
@@ -56,21 +43,10 @@ public class BookController(IBookService _bookService) : ControllerBase
     {
         var result = await _bookService.UpdateBookAsync(bookDto, cancellationToken);
 
-        if (!result)
-        {
-            return NotFound(
-                new ApiResponse<bool>(
-                    false,
-                    "Book not Updated."
-                )
-            );
-        }
+
 
         return Ok(
-            new ApiResponse<bool>(
-                true,
-                "Book Updated successfully."
-            )
+            new ApiResponse<bool> { Data = result }
         );
     }
 
@@ -81,10 +57,7 @@ public class BookController(IBookService _bookService) : ControllerBase
     {
         var result = await _bookService.SearchBookRecordAsync(searchBy, searchResult, cancellationToken);
 
-        return Ok(new ApiResponse<SearchBookRecordResponseDto>(
-               result,
-               "Search completed successfully."
-               ));
+        return Ok(new ApiResponse<SearchBookRecordResponseDto> { Data = result });
 
 
     }
@@ -94,10 +67,7 @@ public class BookController(IBookService _bookService) : ControllerBase
     {
         var result = await _bookService.GetBookCopyDetailsAsync(copyId, cancellationToken);
 
-        return Ok(new ApiResponse<BookDetailsDto>(
-               result,
-               "Book retrieved successfully."
-               )); ;
+        return Ok(new ApiResponse<BookDetailsDto> { Data = result }); ;
     }
 
 }

@@ -9,10 +9,7 @@ public class MemberController(IMemberService _memberService) : ControllerBase
     {
         var result = await _memberService.CreateMemberAsync(memberDto, cancellationToken);
 
-        return Ok(new ApiResponse<MemberDto>(
-                  result,
-                  "Member created successfully."
-                  ));
+        return Ok(new ApiResponse<MemberDto> { Data = result });
     }
 
     [HttpDelete("delete-member/{memberId:int}")]
@@ -25,18 +22,12 @@ public class MemberController(IMemberService _memberService) : ControllerBase
         if (!result)
         {
             return NotFound(
-                new ApiResponse<bool>(
-                    false,
-                    "Member not found."
-                )
+                new ApiResponse<bool> { Data = result }
             );
         }
 
         return Ok(
-            new ApiResponse<bool>(
-                true,
-                "Member deleted successfully."
-            )
+            new ApiResponse<bool> { Data = result }
         );
     }
 
@@ -44,10 +35,7 @@ public class MemberController(IMemberService _memberService) : ControllerBase
     public async Task<IActionResult> GetMemberByIdAsync(int memberId, CancellationToken cancellationToken)
     {
         var result = await _memberService.GetMemberByIdAsync(memberId, cancellationToken);
-        return Ok(new ApiResponse<MemberDto>(
-                  result,
-                  "Get Member successfully."
-                  ));
+        return Ok(new ApiResponse<MemberDto> { Data = result });
 
     }
 
@@ -59,18 +47,12 @@ public class MemberController(IMemberService _memberService) : ControllerBase
         if (!result)
         {
             return NotFound(
-                new ApiResponse<bool>(
-                    false,
-                    "Member not Updated."
-                )
+                new ApiResponse<bool> { Data = result }
             );
         }
 
         return Ok(
-            new ApiResponse<bool>(
-                true,
-                "Member Updated successfully."
-            )
+            new ApiResponse<bool> { Data = result }
         );
     }
 
@@ -79,9 +61,7 @@ public class MemberController(IMemberService _memberService) : ControllerBase
     {
         var result = await _memberService.FindMemberAsync(searchText, cancellationToken);
         return Ok(
-                   new ApiResponse<MemberDetailsDto>(result,
-                   "Member details retrive successfully."
-                   ));
+                   new ApiResponse<MemberDetailsDto> { Data = result });
     }
     [HttpGet("get-member-details-by-member-id-or-name-or-phone ")]
     public async Task<IActionResult> GetMemberDetailsAsync([FromQuery] string searchBy, [FromQuery] string searchText, CancellationToken cancellationToken)
@@ -89,9 +69,7 @@ public class MemberController(IMemberService _memberService) : ControllerBase
         var result = await _memberService.GetMemberDetailsAsync(searchBy, searchText, cancellationToken);
         return Ok(
                   new ApiResponse<MemberDetailsResponseDto>
-                  (result,
-                  "Member data retrive successfully."
-                      ));
+                  { Data = result });
     }
 
 }

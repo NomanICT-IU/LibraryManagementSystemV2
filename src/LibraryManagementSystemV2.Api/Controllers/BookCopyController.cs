@@ -10,10 +10,7 @@ public class BookCopyController(IBookCopyService _bookCopyService) : ControllerB
     {
         var result = await _bookCopyService.CreateBookCopyAsync(bookCopyDto, cancellationToken);
 
-        return Ok(new ApiResponse<BookCopyDto>(
-                  result,
-                  "Book Copy created successfully."
-                  ));
+        return Ok(new ApiResponse<BookCopyDto> { Data = result });
     }
     [HttpDelete("delete-book-copy/{copyId:int}")]
     public async Task<IActionResult> DeleteBookCopyAsync(int copyId, CancellationToken cancellationToken)
@@ -22,21 +19,10 @@ public class BookCopyController(IBookCopyService _bookCopyService) : ControllerB
             copyId,
             cancellationToken);
 
-        if (!result)
-        {
-            return NotFound(
-                new ApiResponse<bool>(
-                    false,
-                    "Book copy not found."
-                )
-            );
-        }
+
 
         return Ok(
-            new ApiResponse<bool>(
-                true,
-                "Book copy deleted successfully."
-            )
+            new ApiResponse<bool> { Data = result }
         );
     }
 
@@ -45,10 +31,7 @@ public class BookCopyController(IBookCopyService _bookCopyService) : ControllerB
     public async Task<IActionResult> GetBookCopyByIdAsync(int copyId, CancellationToken cancellationToken)
     {
         var result = await _bookCopyService.GetBookCopyByIdAsync(copyId, cancellationToken);
-        return Ok(new ApiResponse<BookCopyDto>(
-                  result,
-                  "Get Book copy successfully."
-                  ));
+        return Ok(new ApiResponse<BookCopyDto> { Data = result });
 
     }
 
@@ -57,21 +40,10 @@ public class BookCopyController(IBookCopyService _bookCopyService) : ControllerB
     {
         var result = await _bookCopyService.UpdateBookCopyAsync(bookCopyDto, cancellationToken);
 
-        if (!result)
-        {
-            return NotFound(
-                new ApiResponse<bool>(
-                    false,
-                    "Book copy not Updated."
-                )
-            );
-        }
+
 
         return Ok(
-            new ApiResponse<bool>(
-                true,
-                "Book Copy Updated successfully."
-            )
+            new ApiResponse<bool> { Data = result }
         );
     }
 }

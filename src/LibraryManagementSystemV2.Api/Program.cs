@@ -1,4 +1,21 @@
+using LibraryManagementSystemV2.Api.Exceptions;
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Serilog
+builder.Services.AddSerilog((services, loggerConfiguration) =>
+{
+    loggerConfiguration
+        .ReadFrom.Configuration(builder.Configuration)
+        .ReadFrom.Services(services);
+});
+
+// Controllers
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalValidationFilter>();
+});
 
 // Add Controllers
 builder.Services.AddControllers();
@@ -17,6 +34,12 @@ builder.Services.AddApplicationDataAccess(
 builder.Services.AddApplicationServices();
 
 var app = builder.Build();
+
+// Custom Exception Handler
+app.UseMiddleware<CustomExceptionHandler>();
+
+// Serilog request logging
+app.UseSerilogRequestLogging();
 
 // Swagger
 if (app.Environment.IsDevelopment())

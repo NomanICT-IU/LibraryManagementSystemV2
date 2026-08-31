@@ -10,10 +10,7 @@ public class BorrowRecordController(IBorrowRecordService _borrowRecordService) :
     {
         var result = await _borrowRecordService.CreateBorrowRecordAsync(recordDto, cancellationToken);
 
-        return Ok(new ApiResponse<BorrowRecordDetailsDto>(
-                  result,
-                  "Borrow record created successfully."
-                  ));
+        return Ok(new ApiResponse<BorrowRecordDetailsDto> { Data = result });
     }
 
     [HttpDelete("delete-borrow-record/{borrowId:int}")]
@@ -26,18 +23,12 @@ public class BorrowRecordController(IBorrowRecordService _borrowRecordService) :
         if (!result)
         {
             return NotFound(
-                new ApiResponse<bool>(
-                    false,
-                    "Book Record not found."
-                )
+                new ApiResponse<bool> { Data = result }
             );
         }
 
         return Ok(
-            new ApiResponse<bool>(
-                true,
-                "Book Record deleted successfully."
-            )
+            new ApiResponse<bool> { Data = result }
         );
     }
 
@@ -45,10 +36,7 @@ public class BorrowRecordController(IBorrowRecordService _borrowRecordService) :
     public async Task<IActionResult> GetBorrowRecordByIdAsync(int borrowId, CancellationToken cancellationToken)
     {
         var result = await _borrowRecordService.GetBorrowRecordByIdAsync(borrowId, cancellationToken);
-        return Ok(new ApiResponse<BorrowRecordDto>(
-                  result,
-                  "Get Borrow Record successfully."
-                  ));
+        return Ok(new ApiResponse<BorrowRecordDto> { Data = result });
 
     }
 
@@ -57,21 +45,9 @@ public class BorrowRecordController(IBorrowRecordService _borrowRecordService) :
     {
         var result = await _borrowRecordService.UpdateBorrowRecordAsync(recordDto, cancellationToken);
 
-        if (!result)
-        {
-            return NotFound(
-                new ApiResponse<bool>(
-                    false,
-                    "Borrow Record not Updated."
-                )
-            );
-        }
 
         return Ok(
-            new ApiResponse<bool>(
-                true,
-                "Borrow Record Updated successfully."
-            )
+            new ApiResponse<bool> { Data = result }
         );
     }
 
@@ -80,10 +56,7 @@ public class BorrowRecordController(IBorrowRecordService _borrowRecordService) :
 
     {
         var result = await _borrowRecordService.SearchBorrowedBookAsync(searchBy, searchText, cancellationToken);
-        return Ok(new ApiResponse<IEnumerable<BorrowBookSearchResultDto>>(
-                  result
-
-                  ));
+        return Ok(new ApiResponse<IEnumerable<BorrowBookSearchResultDto>> { Data = result });
 
     }
 
@@ -91,9 +64,6 @@ public class BorrowRecordController(IBorrowRecordService _borrowRecordService) :
     public async Task<IActionResult> ReturnBorrowedBookAsync([FromQuery] int borrowId, CancellationToken cancellationToken)
     {
         var result = await _borrowRecordService.ReturnBorrowedBookAsync(borrowId, cancellationToken);
-        return Ok(new ApiResponse<ReturnedBookDto>(
-                         result
-
-                         ));
+        return Ok(new ApiResponse<ReturnedBookDto> { Data = result });
     }
 }
