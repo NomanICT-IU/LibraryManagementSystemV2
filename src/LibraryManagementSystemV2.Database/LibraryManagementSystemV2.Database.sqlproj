@@ -90,6 +90,8 @@
     <Build Include="dbo\Stored Procedures\UpdateBorrowRecord.sql" />
     <Build Include="dbo\Stored Procedures\GetBorrowRecordById.sql" />
     <Build Include="dbo\Stored Procedures\DeleteBorrowRecord.sql" />
-    <Build Include="dbo\Stored Procedures\SearchBookDetail.sql" />
+    <Build Include="dbo\Stored Procedures\GetBookList.sql" />
+    <Build Include="dbo\Stored Procedures\GetBookDetails.sql" />
+    <Build Include="dbo\Stored Procedures\[dbo].[GetBookDetail].sql" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
-﻿namespace LibraryManagementSystemV2.DAL.Entites;
+﻿namespace LibraryManagementSystemV2.BLL.Dtos;
 
-public class BookCopyStatus
+public class CopyInformationDto
 {
     public int BookId { get; set; }
     public string CopyCode { get; set; }

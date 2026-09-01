@@ -1,19 +1,18 @@
-﻿Create    PROCEDURE [dbo].[SearchBookDetail]
+﻿Create      PROCEDURE [dbo].[GetBookDetails]
     @SearchBy     NVARCHAR(20),
     @SearchText NVARCHAR(100)
 AS
 BEGIN
 
-
-    DECLARE @BookId INT;
-
-    -- ==========================================
-    -- 1. Find Book
-    -- ==========================================
-    SELECT TOP (1)
-        @BookId = b.BookId
+  
+    SELECT
+    b.BookId,
+        b.Title,
+        b.Author,
+        b.ISBN,
+        b.Category
     FROM [dbo].[Book] AS b
-    WHERE
+      WHERE
         (@SearchBy = 'Title'
             AND b.Title LIKE '%' + @SearchText + '%')
         OR
@@ -24,28 +23,8 @@ BEGIN
             AND b.ISBN LIKE '%' + @SearchText + '%');
 
 
-    -- Book not found
-    IF @BookId IS NULL
-    BEGIN
-        RETURN;
-    END;
-
-    -- ==========================================
-    -- 3. Book Information
-    -- ==========================================
     SELECT
-        b.Title,
-        b.Author,
-        b.ISBN,
-        b.Category
-    FROM [dbo].[Book] AS b
-    WHERE b.BookId = @BookId;
-
-
-    -- ==========================================
-    -- 4. Book Copy Summary
-    -- ==========================================
-    SELECT
+  bc.BookId,
         COUNT(*) AS Total,
 
         COUNT(
@@ -70,15 +49,27 @@ BEGIN
             ELSE 'Unknown'
         END AS Status
 
-    FROM [dbo].[BookCopy]
-    WHERE BookId = @BookId;
+    FROM [dbo].[BookCopy] as bc
+    join [dbo].[Book] as b
+     on bc.BookId = b.BookId
+  WHERE
+        (@SearchBy = 'Title'
+            AND b.Title LIKE '%' + @SearchText + '%')
+        OR
+        (@SearchBy = 'Author'
+            AND b.Author LIKE '%' + @SearchText + '%')
+        OR
+        (@SearchBy = 'ISBN'
+            AND b.ISBN LIKE '%' + @SearchText + '%')
+GROUP BY
+    bc.BookId
+
+ORDER BY
+    bc.BookId;
 
 
-    -- ==========================================
-    -- 5. Book Copy Status Details
-    -- ==========================================
     SELECT
-        @BookId as BookId,
+        bc.BookId,
         bc.CopyCode,
 
         CASE
@@ -98,6 +89,8 @@ BEGIN
         END AS DueDate
 
     FROM [dbo].[BookCopy] AS bc
+    join [dbo].[Book] as b
+     on bc.BookId = b.BookId
 
     LEFT JOIN [dbo].[BorrowRecord] AS br
         ON bc.CopyId = br.CopyId
@@ -105,7 +98,16 @@ BEGIN
     LEFT JOIN [dbo].[Member] AS m
         ON br.MemberId = m.MemberId
 
-    WHERE bc.BookId = @BookId
+     WHERE
+        (@SearchBy = 'Title'
+            AND b.Title LIKE '%' + @SearchText + '%')
+        OR
+        (@SearchBy = 'Author'
+            AND b.Author LIKE '%' + @SearchText + '%')
+        OR
+        (@SearchBy = 'ISBN'
+            AND b.ISBN LIKE '%' + @SearchText + '%')
+
 
     ORDER BY bc.CopyCode;
 

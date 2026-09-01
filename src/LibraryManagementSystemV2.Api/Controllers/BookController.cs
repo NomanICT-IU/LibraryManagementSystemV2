@@ -50,7 +50,7 @@ public class BookController(IBookService _bookService) : ControllerBase
         );
     }
 
-    [HttpGet("search-book-recod")]
+    [HttpGet("search-book-recod-author-isbn-title")]
     public async Task<IActionResult> SearchBookRecord([FromQuery] string searchBy,
         [FromQuery] string searchResult,
         CancellationToken cancellationToken)
@@ -62,12 +62,39 @@ public class BookController(IBookService _bookService) : ControllerBase
 
     }
 
-    [HttpGet("get-book-copy-details/{copyId:int}")]
+    [HttpGet("get-book-copy-detail-id/{copyId:int}")]
     public async Task<IActionResult> GetBookCopyDetailsAsync(int copyId, CancellationToken cancellationToken)
     {
         var result = await _bookService.GetBookCopyDetailsAsync(copyId, cancellationToken);
 
         return Ok(new ApiResponse<BookDetailsDto> { Data = result }); ;
+    }
+
+    [HttpGet("get-book-detail-author-isbn-title")]
+    public async Task<IActionResult> GetBookDetailsAsync(
+    [FromQuery] string searchBy,
+    [FromQuery] string searchResult,
+    CancellationToken cancellationToken)
+    {
+        var result = await _bookService.GetBookDetailsAsync(
+            searchBy,
+            searchResult,
+            cancellationToken);
+
+        return Ok(new ApiResponse<BookDetailsResponseDto>
+        {
+            Data = result
+        });
+    }
+    [HttpGet("get-book-list")]
+    public async Task<IActionResult> GetBookListAsync(string searchText, int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var result = await _bookService.GetBookListAsync(searchText, pageNumber, pageSize, cancellationToken);
+        return Ok(new ApiResponse<BookListResponseDto>
+        {
+            Data = result,
+
+        });
     }
 
 }
