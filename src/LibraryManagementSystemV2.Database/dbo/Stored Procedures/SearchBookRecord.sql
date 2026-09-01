@@ -29,7 +29,7 @@ BEGIN
 
     FROM [dbo].[Book] AS b
 
-    INNER JOIN [dbo].[BookCopy] AS bc
+    JOIN [dbo].[BookCopy] AS bc
         ON b.BookId = bc.BookId
 
     LEFT JOIN [dbo].[BorrowRecord] AS br
@@ -50,7 +50,7 @@ BEGIN
             AND b.Author LIKE '%' + @SearchText + '%')
         OR
         (@SearchBy = 'ISBN'
-            AND b.ISBN LIKE '%' + @SearchText + '%');
-
+            AND b.ISBN LIKE '%' + @SearchText + '%')
+       order by   b.BookId desc
 
 END;

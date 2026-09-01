@@ -7,9 +7,9 @@ public interface IBookService
     public Task<bool> DeleteBookAsync(int bookId, CancellationToken cancellationToken);
     public Task<BookDto> GetBookByIdAsync(int bookId, CancellationToken cancellationToken);
     public Task<IEnumerable<BookCopyDetailsDto>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
-
-    //public Task<SearchBookRecordResponseDto> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
+    public Task<BookDetailsResponseDto> GetBookDetailsAsync(string searchBy, string searchText, CancellationToken cancellationToken);
     public Task<BookDetailsDto> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken);
+    public Task<BookListResponseDto> GetBookListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
 
 }
 
@@ -20,6 +20,19 @@ public class BookService : IBookService
     public BookService(IBookRepository bookRepository)
     {
         _bookRepository = bookRepository;
+    }
+
+    public async Task<BookListResponseDto> GetBookListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    {
+        var result = await _bookRepository.GetBookListAsync(searchText, pageNumber, pageSize, cancellationToken);
+
+        return new BookListResponseDto
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalRecords = result.TotalRecords,
+            BookList = result.BookList.Adapt<List<BookDto>>()
+        };
     }
     public async Task<BookDto> CreateBookAsync(BookDto bookDto, CancellationToken cancellationToken)
     {
@@ -46,11 +59,25 @@ public class BookService : IBookService
     }
 
 
-    //public async Task<SearchBookRecordResponseDto> SearchBookRecordAsync(string searchBy, string searchResult, CancellationToken cancellationToken)
-    //{
-    //    var searchBookRecordResponse = await _bookRepository.SearchBookRecordAsync(searchBy, searchResult, cancellationToken);
-    //    return searchBookRecordResponse.Adapt<SearchBookRecordResponseDto>();
-    //}
+    public async Task<BookDetailsResponseDto> GetBookDetailsAsync(
+    string searchBy,
+    string searchResult,
+    CancellationToken cancellationToken)
+    {
+        var bookDetails = await _bookRepository.GetBookDetailsAsync(
+            searchBy,
+            searchResult,
+            cancellationToken);
+
+        return new BookDetailsResponseDto
+        {
+            BookInformationDto = bookDetails.BookInformation.Adapt<List<BookInformationDto>>(),
+
+            BookAvailabilitySummaryDto = bookDetails.BookAvailabilitySummary.Adapt<List<BookAvailabilitySummaryDto>>(),
+
+            CopyInformationDto = bookDetails.CopyInformation.Adapt<List<CopyInformationDto>>()
+        };
+    }
 
     public async Task<BookDetailsDto> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken)
     {
@@ -63,4 +90,6 @@ public class BookService : IBookService
         var bookRecords = await _bookRepository.SearchBookRecordAsync(searchBy, searchText, cancellationToken);
         return bookRecords.Adapt<IEnumerable<BookCopyDetailsDto>>();
     }
+
+
 }

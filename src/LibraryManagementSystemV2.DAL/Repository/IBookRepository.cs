@@ -7,9 +7,9 @@ public interface IBookRepository
     public Task<bool> DeleteBookAsync(int bookId, CancellationToken cancellationToken);
     public Task<Book> GetBookByIdAsync(int bookId, CancellationToken cancellationToken);
     public Task<IEnumerable<BookCopyDetails>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
-    //public Task<SearchBookRecordResponse> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
+    public Task<BookDetailsResponse> GetBookDetailsAsync(string searchBy, string searchText, CancellationToken cancellationToken);
     public Task<BookDetails> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken);
-
+    public Task<BookListResponse> GetBookListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
 }
 
 public class BookRepository : IBookRepository
@@ -19,6 +19,31 @@ public class BookRepository : IBookRepository
     public BookRepository(IDbConnection dbConnection)
     {
         _dbConnection = dbConnection;
+    }
+    public async Task<BookListResponse> GetBookListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@SearchText", searchText);
+        parameters.Add("@PageNumber", pageNumber);
+        parameters.Add("@PageSize", pageSize);
+
+        var command = new CommandDefinition(
+           "dbo.GetBookList",
+           parameters,
+           commandType: CommandType.StoredProcedure,
+           cancellationToken: cancellationToken);
+
+        using var multi = await _dbConnection.QueryMultipleAsync(command);
+
+        var bookList = (await multi.ReadAsync<Book>()).ToList();
+
+        var totalRecords = await multi.ReadSingleOrDefaultAsync<int>();
+
+        return new BookListResponse
+        {
+            TotalRecords = totalRecords,
+            BookList = bookList
+        };
     }
     public async Task<Book> CreateBookAsync(Book book, CancellationToken cancellationToken)
     {
@@ -62,44 +87,39 @@ public class BookRepository : IBookRepository
         return effectedRows > 0;
     }
 
-    //   public async Task<SearchBookRecordResponse> SearchBookRecordAsync(
-    //string searchBy,
-    //string searchText,
-    //CancellationToken cancellationToken)
-    //   {
-    //       var parameters = new DynamicParameters();
-    //       parameters.Add("@SearchBy", searchBy);
-    //       parameters.Add("@SearchText", searchText);
+    public async Task<BookDetailsResponse> GetBookDetailsAsync(
+         string searchBy,
+         string searchText,
+         CancellationToken cancellationToken)
+    {
+        var parameters = new DynamicParameters();
+        parameters.Add("@SearchBy", searchBy);
+        parameters.Add("@SearchText", searchText);
 
-    //       var command = new CommandDefinition(
-    //           "dbo.SearchBookRecord",
-    //           parameters,
-    //           commandType: CommandType.StoredProcedure,
-    //           cancellationToken: cancellationToken);
+        var command = new CommandDefinition(
+            "dbo.GetBookDetails",
+            parameters,
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
 
-    //       using var multi = await _dbConnection.QueryMultipleAsync(command);
+        using var multi = await _dbConnection.QueryMultipleAsync(command);
 
-    //       var copyDetails =
-    //           (await multi.ReadAsync<BookCopyDetails>()).ToList();
+        var bookInformation =
+            (await multi.ReadAsync<BookInformation>()).ToList();
 
-    //       var book =
-    //           await multi.ReadSingleOrDefaultAsync<BookInformation>();
+        var bookAvailabilitySummary =
+            (await multi.ReadAsync<BookAvailabilitySummary>()).ToList();
+        var copyInformation =
+            (await multi.ReadAsync<CopyInformation>()).ToList();
 
-    //       var summary =
-    //           await multi.ReadSingleOrDefaultAsync<BookCopySummary>();
+        return new BookDetailsResponse
+        {
+            BookInformation = bookInformation,
+            BookAvailabilitySummary = bookAvailabilitySummary,
+            CopyInformation = copyInformation,
+        };
 
-    //       var copyStatus =
-    //           (await multi.ReadAsync<BookCopyStatus>()).ToList();
-
-    //       return new SearchBookRecordResponse
-    //       {
-    //           Book = book,
-    //           Summary = summary,
-    //           CopyDetails = copyDetails,
-    //           CopyStatus = copyStatus
-    //       };
-
-    //   }
+    }
 
 
     public async Task<BookDetails> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken)

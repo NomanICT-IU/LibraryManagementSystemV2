@@ -13,12 +13,9 @@ namespace Lms.Mvc.Controllers
             this.bookService = bookService;
         }
 
-        public async Task<IActionResult> Index(string searchBy = "", string searchText = "", CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Index(string searchText = "", int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
         {
-            var result = await bookService.SearchBookRecordAsync(searchBy, searchText, cancellationToken);
-
-            ViewBag.SearchBy = searchBy;
-            ViewBag.SearchText = searchText;
+            var result = await bookService.GetBooksync(searchText, pageNumber, pageSize, cancellationToken);
 
             return View(result);
         }
@@ -29,12 +26,32 @@ namespace Lms.Mvc.Controllers
             return View();
         }
 
-
         [HttpPost]
-        public IActionResult Create([FromBody] BookModel book)
+        public async Task<IActionResult> Create(
+            BookModel bookModel,
+            CancellationToken cancellationToken)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View(bookModel);
+            }
+
+            var result = await bookService.CreateBookAsync(
+                bookModel,
+                cancellationToken);
+
+            if (result?.Data is not null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            ModelState.AddModelError(
+                string.Empty,
+                "Unable to create the book.");
+
+            return View(bookModel);
         }
+
 
         [HttpGet]
         public IActionResult Update(int bookId)
@@ -59,6 +76,17 @@ namespace Lms.Mvc.Controllers
         public IActionResult Detail(int bookId)
         {
             return View();
+        }
+
+
+        public async Task<IActionResult> SearchBooks(string searchBy = "", string searchText = "", CancellationToken cancellationToken = default)
+        {
+            var result = await bookService.SearchBookRecordAsync(searchBy, searchText, cancellationToken);
+
+            ViewBag.SearchBy = searchBy;
+            ViewBag.SearchText = searchText;
+
+            return View(result);
         }
     }
 }
