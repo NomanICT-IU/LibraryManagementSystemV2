@@ -4,7 +4,7 @@ namespace Lms.Mvc.Services;
 
 public interface IDashboardService
 {
-    public Task<ApiResponse<DashBoardModel>> GetDashBoardInformation(CancellationToken cancellationToken);
+    public Task<ApiResponse<DashBoardModel>> GetDashBoardInformation(int pageNumber, int pageSize, CancellationToken cancellationToken);
 }
 
 public class DashboardService : IDashboardService
@@ -16,9 +16,11 @@ public class DashboardService : IDashboardService
     }
 
 
-    public async Task<ApiResponse<DashBoardModel>> GetDashBoardInformation(CancellationToken cancellationToken)
+    public async Task<ApiResponse<DashBoardModel>> GetDashBoardInformation(int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        const string endpoint = "api/DashBoards/get-dashboard-information";
+        string endpoint = $"api/DashBoards/get-dashboard-information" +
+                               $"?pageNumber={pageNumber}" +
+                               $"&pageSize={pageSize}";
         var result = await _httpClient.GetFromJsonAsync<ApiResponse<DashBoardModel>>(
             endpoint,
             cancellationToken);

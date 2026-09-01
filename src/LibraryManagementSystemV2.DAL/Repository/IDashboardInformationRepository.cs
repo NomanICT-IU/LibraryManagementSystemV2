@@ -2,7 +2,7 @@
 
 public interface IDashboardInformationRepository
 {
-    public Task<DashBoard> GetDashboardInformationAsync(CancellationToken cancellationToken);
+    public Task<DashBoard> GetDashboardInformationAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
 }
 public class DashboardInformationRepository : IDashboardInformationRepository
 {
@@ -12,27 +12,34 @@ public class DashboardInformationRepository : IDashboardInformationRepository
     {
         _dbConnection = dbConnection;
     }
-    public async Task<DashBoard> GetDashboardInformationAsync(
+    public async Task<DashBoard> GetDashboardInformationAsync(int pageNumber, int pageSize,
         CancellationToken cancellationToken)
     {
+        var parameters = new DynamicParameters();
+        parameters.Add("@PageNumber", pageNumber);
+        parameters.Add("@PageSize", pageSize);
+
         var command = new CommandDefinition("dbo.GetDashboardInformation",
+            parameters,
             commandType: CommandType.StoredProcedure);
         using var result = await _dbConnection.QueryMultipleAsync(command);
 
         var totalBooks = await result.ReadSingleAsync<int>();
         var availableCopies = await result.ReadSingleAsync<int>();
         var borrowedCopies = await result.ReadSingleAsync<int>();
-        var member = await result.ReadSingleAsync<int>();
+        var members = await result.ReadSingleAsync<int>();
+        var totalRecords = await result.ReadSingleAsync<int>();
 
-        var recentBorrowedBooks = (await result.ReadAsync<RecentBoardBook>()).ToList();
+        var recentBorrowedBooks = (await result.ReadAsync<RecentBorrowedBook>()).ToList();
 
         return new DashBoard
         {
             TotalBoks = totalBooks,
             AvailableCopies = availableCopies,
             BorrowedCopies = borrowedCopies,
-            Member = member,
-            RecentBoardBooks = recentBorrowedBooks
+            Members = members,
+            TotalRecords = totalRecords,
+            RecentBorrowedBooks = recentBorrowedBooks
         };
     }
 

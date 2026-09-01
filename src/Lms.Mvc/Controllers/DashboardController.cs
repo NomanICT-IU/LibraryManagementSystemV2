@@ -11,10 +11,10 @@ namespace Lms.Mvc.Controllers
         {
             this.dashboardService = dashboardService;
         }
-        public async Task<IActionResult> Index(CancellationToken cancellationToken)
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
         {
             var response = await dashboardService
-                .GetDashBoardInformation(cancellationToken);
+                .GetDashBoardInformation(pageNumber, pageSize, cancellationToken);
 
             return View(response);
         }

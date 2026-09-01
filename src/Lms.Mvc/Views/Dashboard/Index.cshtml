@@ -2,211 +2,419 @@
 
 @{
     ViewData["Title"] = "Dashboard";
+
+    var pageNumber = Model.Data?.PageNumber ?? 1;
+    var pageSize = Model.Data?.PageSize ?? 10;
+    var totalRecords = Model.Data?.TotalRecords ?? 0;
+
+    var totalPages = pageSize > 0
+        ? (int)Math.Ceiling((double)totalRecords / pageSize)
+        : 0;
 }
 
-
-
 <div class="container-fluid py-3">
+
     @if (!Model.IsError)
     {
+        <!-- Statistics -->
+        <div class="row g-3 mb-3">
 
-    <!-- Statistics -->
-    <div class="row g-3 mb-3">
+            <!-- Total Books -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card dashboard-stat-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Total Books</p>
+                                <h3 class="mb-0">
+                                    @Model.Data.TotalBoks.ToString("N0")
+                                </h3>
+                            </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="card dashboard-stat-card h-100">
-                <div class="card-body">
-                    <div class="stat-title">Total Books</div>
-                    <div class="stat-value">@Model.Data.TotalBoks.ToString("N0")</div>
+                            <div class="stat-icon">
+                                <i class="bi bi-book"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="card dashboard-stat-card h-100">
-                <div class="card-body">
-                    <div class="stat-title">Available Copies</div>
-                    <div class="stat-value">@Model.Data.AvailableCopies</div>
+            <!-- Available Copies -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card dashboard-stat-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Available Copies</p>
+                                <h3 class="mb-0">
+                                    @Model.Data.AvailableCopies.ToString("N0")
+                                </h3>
+                            </div>
+
+                            <div class="stat-icon">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="card dashboard-stat-card h-100">
-                <div class="card-body">
-                    <div class="stat-title">Borrowed Copies</div>
-                    <div class="stat-value">@Model.Data.BorrowedCopies</div>
+            <!-- Borrowed Copies -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card dashboard-stat-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Borrowed Copies</p>
+                                <h3 class="mb-0">
+                                    @Model.Data.BorrowedCopies.ToString("N0")
+                                </h3>
+                            </div>
+
+                            <div class="stat-icon">
+                                <i class="bi bi-journal-arrow-up"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="card dashboard-stat-card h-100">
-                <div class="card-body">
-                    <div class="stat-title">Members</div>
-                    <div class="stat-value">@Model.Data.Member</div>
+            <!-- Members -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card dashboard-stat-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Members</p>
+                                <h3 class="mb-0">
+                                    @Model.Data.Members.ToString("N0")
+                                </h3>
+                            </div>
+
+                            <div class="stat-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
 
-    </div>
+
+        <!-- Quick Actions -->
+        <div class="row g-3 mb-3">
+
+            <div class="col-12 col-md-4">
+                <a asp-controller="Book"
+                   asp-action="Search"
+                   class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="stat-icon">
+                                    <i class="bi bi-search"></i>
+                                </div>
+
+                                <div>
+                                    <h6 class="mb-1">Search Book</h6>
+                                    <small class="text-muted">
+                                        Find books from library
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
 
 
-    <!-- Quick Actions -->
-    <div class="row g-3 mb-3">
+            <div class="col-12 col-md-4">
+                <a asp-controller="Borrow"
+                   asp-action="Issue"
+                   class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="stat-icon">
+                                    <i class="bi bi-journal-plus"></i>
+                                </div>
 
-        <!-- Search Book -->
-        <div class="col-12 col-md-4">
-            <div class="card action-card h-100">
-                <div class="card-body d-flex flex-column">
+                                <div>
+                                    <h6 class="mb-1">Issue Book</h6>
+                                    <small class="text-muted">
+                                        Issue a book to member
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
 
-                    <h5 class="card-title">
-                        Search Book
+
+            <div class="col-12 col-md-4">
+                <a asp-controller="Borrow"
+                   asp-action="Return"
+                   class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="stat-icon">
+                                    <i class="bi bi-journal-check"></i>
+                                </div>
+
+                                <div>
+                                    <h6 class="mb-1">Return Book</h6>
+                                    <small class="text-muted">
+                                        Return borrowed book
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+
+        <!-- Recent Borrowed Books -->
+        <div class="card shadow-sm">
+
+            <!-- Card Header -->
+            <div class="card-header bg-white py-3">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                    <h5 class="section-title mb-0">
+                        Recent Borrowed Books
                     </h5>
 
-                    <p class="card-text">
-                        Find books by title, author, or ISBN.
-                    </p>
+                    <!-- Page Size -->
+                    <form asp-controller="Dashboard"
+                          asp-action="Index"
+                          method="get"
+                          class="d-flex align-items-center gap-2">
 
-                    <div class="mt-auto">
-                        <a asp-controller="Book"
-                           asp-action="Search"
-                           class="btn btn-primary">
-                            Open
-                        </a>
-                    </div>
+                        <label for="pageSize"
+                               class="form-label mb-0 fw-semibold">
+                            Page Size
+                        </label>
 
-                </div>
-            </div>
-        </div>
+                        <select id="pageSize"
+                                name="pageSize"
+                                class="form-select form-select-sm"
+                                onchange="this.form.submit()">
 
-
-        <!-- Issue Book -->
-        <div class="col-12 col-md-4">
-            <div class="card action-card h-100">
-                <div class="card-body d-flex flex-column">
-
-                    <h5 class="card-title">
-                        Issue Book
-                    </h5>
-
-                    <p class="card-text">
-                        Issue an available copy to a member.
-                    </p>
-
-                    <div class="mt-auto">
-                        <a asp-controller="Borrow"
-                           asp-action="Issue"
-                           class="btn btn-primary">
-                            Open
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Return Book -->
-        <div class="col-12 col-md-4">
-            <div class="card action-card h-100">
-                <div class="card-body d-flex flex-column">
-
-                    <h5 class="card-title">
-                        Return Book
-                    </h5>
-
-                    <p class="card-text">
-                        Return a borrowed book copy.
-                    </p>
-
-                    <div class="mt-auto">
-                        <a asp-controller="Borrow"
-                           asp-action="Return"
-                           class="btn btn-primary">
-                            Open
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-    <!-- Recent Borrowed Books -->
-    <div class="card recent-card">
-
-        <div class="card-body">
-
-            <h5 class="section-title">
-                Recent Borrowed Books
-            </h5>
-
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle mb-0">
-
-                    <thead>
-                        <tr>
-                            <th>BOOK TITLE</th>
-                            <th>MEMBER</th>
-                            <th>ISSUE DATE</th>
-                            <th>DUE DATE</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        @if (Model.Data.RecentBoardBooks.Any())
-                        {
-                            foreach (var book in Model.Data.RecentBoardBooks)
+                            @foreach (var size in new[] { 5, 10, 20, 50 })
                             {
-                                <tr>
-                                    <td>
-                                        @book.Title
-                                    </td>
-
-                                    <td>
-                                        @book.Name
-                                    </td>
-
-                                    <td>
-                                        @book.IssueDate.ToString("dd MMM yyyy")
-                                    </td>
-
-                                    <td>
-                                        @book.DueDate.ToString("dd MMM yyyy")
-                                    </td>
-                                </tr>
+                                if (pageSize == size)
+                                {
+                                    <option value="@size" selected>
+                                        @size
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@size">
+                                        @size
+                                    </option>
+                                }
                             }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="4"
-                                    class="text-center text-muted py-4">
-                                    No borrowed books found.
-                                </td>
-                            </tr>
-                        }
 
-                    </tbody>
+                        </select>
 
-                </table>
+                        <!-- Page Size Change হলে Page 1 এ যাবে -->
+                        <input type="hidden"
+                               name="pageNumber"
+                               value="1" />
+
+                    </form>
+
+                </div>
 
             </div>
 
+
+            <!-- Table -->
+            <div class="card-body p-0">
+
+                @if (Model.Data?.RecentBorrowedBooks != null &&
+                     Model.Data.RecentBorrowedBooks.Any())
+                {
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle mb-0">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Title</th>
+                                    <th>Member</th>
+                                    <th>Issue Date</th>
+                                    <th>Due Date</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @{
+                                    var serialNumber =
+                                        ((pageNumber - 1) * pageSize) + 1;
+                                }
+
+                                @foreach (var book in Model.Data.RecentBorrowedBooks)
+                                {
+                                    <tr>
+                                        <td>
+                                            @serialNumber
+                                        </td>
+
+                                        <td>
+                                            <span class="fw-semibold">
+                                                @book.Title
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            @book.Name
+                                        </td>
+
+                                        <td>
+                                            @book.IssueDate.ToString("dd MMM yyyy")
+                                        </td>
+
+                                        <td>
+                                            @book.DueDate.ToString("dd MMM yyyy")
+                                        </td>
+                                    </tr>
+
+                                    serialNumber++;
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+
+                        <i class="bi bi-journal-x fs-1 text-muted"></i>
+
+                        <h6 class="mt-3">
+                            No borrowed books found
+                        </h6>
+
+                        <p class="text-muted mb-0">
+                            There are currently no borrowed books.
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- Pagination -->
+            @if (totalPages > 1)
+            {
+                <div class="card-footer bg-white">
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                        <!-- Page Information -->
+                        <div class="text-muted small">
+                            Page @pageNumber of @totalPages
+                        </div>
+
+
+                        <!-- Pagination -->
+                        <nav aria-label="Dashboard pagination">
+
+                            <ul class="pagination pagination-sm mb-0">
+
+                                <!-- Previous -->
+                                <li class="page-item @(pageNumber <= 1 ? "disabled" : "")">
+
+                                    @if (pageNumber > 1)
+                                    {
+                                        <a class="page-link"
+                                           asp-controller="Dashboard"
+                                           asp-action="Index"
+                                           asp-route-pageNumber="@(pageNumber - 1)"
+                                           asp-route-pageSize="@pageSize">
+                                            Previous
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="page-link">
+                                            Previous
+                                        </span>
+                                    }
+
+                                </li>
+
+
+                                <!-- Page Numbers -->
+                                @for (int i = 1; i <= totalPages; i++)
+                                {
+                                    <li class="page-item @(i == pageNumber ? "active" : "")">
+
+                                        <a class="page-link"
+                                           asp-controller="Dashboard"
+                                           asp-action="Index"
+                                           asp-route-pageNumber="@i"
+                                           asp-route-pageSize="@pageSize">
+                                            @i
+                                        </a>
+
+                                    </li>
+                                }
+
+
+                                <!-- Next -->
+                                <li class="page-item @(pageNumber >= totalPages ? "disabled" : "")">
+
+                                    @if (pageNumber < totalPages)
+                                    {
+                                        <a class="page-link"
+                                           asp-controller="Dashboard"
+                                           asp-action="Index"
+                                           asp-route-pageNumber="@(pageNumber + 1)"
+                                           asp-route-pageSize="@pageSize">
+                                            Next
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="page-link">
+                                            Next
+                                        </span>
+                                    }
+
+                                </li>
+
+                            </ul>
+
+                        </nav>
+
+                    </div>
+
+                </div>
+            }
+
         </div>
-
-    </div>
-
     }
     else
     {
-        <div
-            class="text-center text-muted py-4">
+        <!-- Error -->
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>
             @Model.Message
         </div>
     }
