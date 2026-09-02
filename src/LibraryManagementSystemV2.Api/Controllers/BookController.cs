@@ -42,9 +42,6 @@ public class BookController(IBookService _bookService) : ControllerBase
     public async Task<IActionResult> UpdateBookAsync([FromBody] BookDto bookDto, CancellationToken cancellationToken)
     {
         var result = await _bookService.UpdateBookAsync(bookDto, cancellationToken);
-
-
-
         return Ok(
             new ApiResponse<bool> { Data = result }
         );
@@ -58,8 +55,6 @@ public class BookController(IBookService _bookService) : ControllerBase
         var result = await _bookService.SearchBookRecordAsync(searchBy, searchResult, cancellationToken);
 
         return Ok(new ApiResponse<IEnumerable<BookCopyDetailsDto>> { Data = result });
-
-
     }
 
     [HttpGet("get-book-copy-detail-id/{copyId:int}")]

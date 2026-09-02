@@ -1,0 +1,183 @@
+﻿@model MemberModel
+
+@{
+    ViewData["Title"] = "Member Details";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+
+      
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+                <!-- Header -->
+                <div class="bg-primary text-white p-4">
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="bg-white bg-opacity-25 rounded-3 p-3">
+                            <i class="bi bi-person-circle fs-2"></i>
+                        </div>
+
+                        <div>
+                            <h2 class="mb-1 fw-bold">
+                                @Model.Name
+                            </h2>
+
+                            <span class="text-white-50">
+                                Member Details
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Member Information -->
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="row g-4">
+
+                        <!-- Member Code -->
+                        <div class="col-md-6">
+                            <div class="border rounded-3 p-3 h-100">
+
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-person-badge text-primary fs-5 me-2"></i>
+                                    <span class="text-muted small fw-semibold">
+                                        MEMBER CODE
+                                    </span>
+                                </div>
+
+                                <div class="fw-semibold fs-5">
+                                    @Model.MemberCode
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="col-md-6">
+                            <div class="border rounded-3 p-3 h-100">
+
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-telephone text-primary fs-5 me-2"></i>
+                                    <span class="text-muted small fw-semibold">
+                                        PHONE
+                                    </span>
+                                </div>
+
+                                <div class="fw-semibold fs-5">
+                                    @Model.Phone
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-6">
+                            <div class="border rounded-3 p-3 h-100">
+
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-envelope text-primary fs-5 me-2"></i>
+                                    <span class="text-muted small fw-semibold">
+                                        EMAIL
+                                    </span>
+                                </div>
+
+                                <div class="fw-semibold">
+                                    @Model.Email
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="col-md-6">
+                            <div class="border rounded-3 p-3 h-100">
+
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-toggle-on text-primary fs-5 me-2"></i>
+                                    <span class="text-muted small fw-semibold">
+                                        STATUS
+                                    </span>
+                                </div>
+
+                                <span class="badge @(Model.Status == 1 ? "bg-success" : "bg-secondary") fs-6 px-3 py-2">
+                                    @(Model.Status == 1 ? "Active" : "Inactive")
+                                </span>
+
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="col-12">
+                            <div class="border rounded-3 p-3">
+
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-geo-alt text-primary fs-5 me-2"></i>
+                                    <span class="text-muted small fw-semibold">
+                                        ADDRESS
+                                    </span>
+                                </div>
+
+                                <div class="fw-semibold fs-5">
+                                    @Model.Address
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Actions -->
+                <div class="card-footer bg-light border-0 p-4">
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                        <!-- Back -->
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary px-4">
+                            <i class="bi bi-arrow-left me-1"></i>
+                            Back
+                        </a>
+
+                        <div class="d-flex flex-wrap gap-2">
+
+                            <!-- Update -->
+                            <a asp-action="Edit"
+                               asp-route-memberId="@Model.MemberId"
+                               class="btn btn-warning px-3">
+                                <i class="bi bi-pencil-square me-1"></i>
+                                Update
+                            </a>
+
+                            <!-- Delete -->
+                            <form asp-action="Delete"
+                                  asp-route-memberId="@Model.MemberId"
+                                  method="post"
+                                  class="m-0"
+                                  onsubmit="return confirm('Are you sure you want to delete this member?');">
+
+                                <button type="submit"
+                                        class="btn btn-danger px-3">
+                                    <i class="bi bi-trash me-1"></i>
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    ```
+
+</div>

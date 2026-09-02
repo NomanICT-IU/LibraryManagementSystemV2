@@ -11,6 +11,8 @@ public interface IMemberService
    string searchBy,
    string searchText,
    CancellationToken cancellationToken);
+    public Task<MemberListResponseDto> GetMemberListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
+
 }
 
 public class MemberService : IMemberService
@@ -58,5 +60,18 @@ public class MemberService : IMemberService
         var memberDetailsResponse = await _memberRepository.GetMemberDetailsAsync(searchBy, searchText, cancellationToken);
 
         return memberDetailsResponse.Adapt<MemberDetailsResponseDto>();
+    }
+
+    public async Task<MemberListResponseDto> GetMemberListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    {
+        var memberList = await _memberRepository.GetMemberListAsync(searchText, pageNumber, pageSize, cancellationToken);
+
+        return new MemberListResponseDto
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            Members = memberList.Members.Adapt<List<MemberDto>>(),
+            TotalRecords = memberList.TotalRecords
+        };
     }
 }

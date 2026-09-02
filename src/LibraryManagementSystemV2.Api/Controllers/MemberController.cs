@@ -72,4 +72,12 @@ public class MemberController(IMemberService _memberService) : ControllerBase
                   { Data = result });
     }
 
+    [HttpGet("get-member-list-Name-Id-phone-email-address")]
+    public async Task<IActionResult> GetMemberListAsync(string searchText = "", int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var result = await _memberService.GetMemberListAsync(searchText, pageNumber, pageSize, cancellationToken);
+        return Ok(
+                  new ApiResponse<MemberListResponseDto>
+                  { Data = result });
+    }
 }

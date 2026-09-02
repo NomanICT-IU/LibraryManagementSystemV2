@@ -40,7 +40,7 @@ namespace Lms.Mvc.Controllers
                 bookModel,
                 cancellationToken);
 
-            if (result?.Data is not null)
+            if (result is not null)
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -52,31 +52,62 @@ namespace Lms.Mvc.Controllers
             return View(bookModel);
         }
 
-
         [HttpGet]
-        public IActionResult Update(int bookId)
+        public async Task<IActionResult> Detail(int bookId, CancellationToken cancellationToken)
         {
-            return View();
-        }
-
-
-        [HttpPut]
-        public IActionResult Update([FromBody] BookModel book)
-        {
-            return View();
-        }
-
-        [HttpDelete]
-        public IActionResult Delete(int bookId)
-        {
-            return View();
+            var result = await bookService.GetBookByIdAsync(bookId, cancellationToken);
+            return View(result.Data);
         }
 
         [HttpGet]
-        public IActionResult Detail(int bookId)
+        public async Task<IActionResult> Update(int bookId, CancellationToken cancellationToken)
         {
-            return View();
+            var result = await bookService.GetBookByIdAsync(bookId, cancellationToken);
+            return View(result.Data);
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(BookModel book, CancellationToken cancellationToken)
+        {
+            var response = await bookService.UpdateBookAsync(book, cancellationToken);
+            if (response.IsError)
+            {
+                return View("Error", new ErrorViewModel()
+                {
+                    RequestId = response.Message
+                });
+            }
+            else if (response.Data)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(book);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int bookId, CancellationToken cancellationToken)
+        {
+            var response = await bookService.DeleteBookAsync(bookId, cancellationToken);
+            if (response.IsError)
+            {
+                return View("Error", new ErrorViewModel()
+                {
+                    RequestId = response.Message
+                });
+            }
+            else if (response.Data)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction(nameof(Detail), new { bookId });
+            }
+        }
+
+
 
 
         public async Task<IActionResult> SearchBooks(string searchBy = "", string searchText = "", CancellationToken cancellationToken = default)

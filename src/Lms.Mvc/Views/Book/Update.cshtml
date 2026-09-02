@@ -1,0 +1,127 @@
+﻿@model BookModel
+
+@{
+    ViewData["Title"] = "Update Book";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-3">
+
+                <!-- Header -->
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Update Book
+                    </h4>
+                </div>
+
+                <!-- Form -->
+                <div class="card-body p-4">
+
+                    <form asp-action="Update"
+                          method="post" asp-controller="Book">
+                          @Html.AntiForgeryToken()
+                        <!-- Book Id -->
+                        <input asp-for="BookId"
+                               type="hidden" />
+
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label asp-for="Title"
+                                   class="form-label fw-semibold">
+                                Title
+                            </label>
+
+                            <input asp-for="Title"
+                                   class="form-control"
+                                   placeholder="Enter book title" />
+
+                            <span asp-validation-for="Title"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <!-- Author -->
+                        <div class="mb-3">
+                            <label asp-for="Author"
+                                   class="form-label fw-semibold">
+                                Author
+                            </label>
+
+                            <input asp-for="Author"
+                                   class="form-control"
+                                   placeholder="Enter author name" />
+
+                            <span asp-validation-for="Author"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <!-- ISBN -->
+                        <div class="mb-3">
+                            <label asp-for="ISBN"
+                                   class="form-label fw-semibold">
+                                ISBN
+                            </label>
+
+                            <input asp-for="ISBN"
+                                   class="form-control"
+                                   placeholder="Enter ISBN" />
+
+                            <span asp-validation-for="ISBN"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="mb-4">
+                            <label asp-for="Category"
+                                   class="form-label fw-semibold">
+                                Category
+                            </label>
+
+                            <input asp-for="Category"
+                                   class="form-control"
+                                   placeholder="Enter category" />
+
+                            <span asp-validation-for="Category"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex justify-content-between">
+
+                            <a asp-action="Detail"
+                               asp-route-bookId="@Model.BookId"
+                               class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>
+                                Cancel
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Update Book
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

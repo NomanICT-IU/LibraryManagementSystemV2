@@ -7,7 +7,9 @@ public interface IBookService
     public Task<ApiResponse<IEnumerable<BookDetailModel>>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
     public Task<ApiResponse<BookModel>> CreateBookAsync(BookModel bookModel, CancellationToken cancellationToken);
     public Task<ApiResponse<BookListResponseModel>> GetBooksync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
-
+    public Task<ApiResponse<BookModel>> GetBookByIdAsync(int bookId, CancellationToken cancellationToken);
+    public Task<ApiResponse<bool>> UpdateBookAsync(BookModel bookModel, CancellationToken cancellationToken);
+    public Task<ApiResponse<bool>> DeleteBookAsync(int bookId, CancellationToken cancellationToken);
 }
 
 public class BookService : IBookService
@@ -37,6 +39,20 @@ public class BookService : IBookService
         return result!;
     }
 
+    public async Task<ApiResponse<bool>> DeleteBookAsync(int bookId, CancellationToken cancellationToken)
+    {
+        string endpoint = $"api/Book/delete-book/{bookId}";
+        return await _httpClient.DeleteFromJsonAsync<ApiResponse<bool>>(endpoint, cancellationToken);
+    }
+
+    public async Task<ApiResponse<BookModel>> GetBookByIdAsync(int bookId, CancellationToken cancellationToken)
+    {
+        string endpoint = $"api/Book/get-book-by-id/{bookId}";
+
+        return await _httpClient.GetFromJsonAsync<ApiResponse<BookModel>>(endpoint, cancellationToken);
+
+    }
+
     public async Task<ApiResponse<BookListResponseModel>> GetBooksync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
         var endpoint = $"api/Book/get-book-list" +
@@ -55,5 +71,24 @@ public class BookService : IBookService
             $"&searchResult={Uri.EscapeDataString(searchText)}";
 
         return await _httpClient.GetFromJsonAsync<ApiResponse<IEnumerable<BookDetailModel>>>(endpoint, cancellationToken);
+    }
+
+    public async Task<ApiResponse<bool>> UpdateBookAsync(BookModel bookModel, CancellationToken cancellationToken)
+    {
+        var endpoint = "api/Book/update-book";
+
+        var response = await _httpClient.PutAsJsonAsync(
+            endpoint,
+            bookModel,
+            cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        var result = await response.Content.ReadFromJsonAsync<ApiResponse<bool>>(
+            cancellationToken);
+
+        return result!;
+
+
     }
 }

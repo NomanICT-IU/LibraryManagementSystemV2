@@ -1,13 +1,13 @@
-﻿@model ApiResponse<BookListResponseModel>
+﻿@model MemberListModel
 
 @{
-    ViewData["Title"] = "Book List";
+    ViewData["Title"] = "Member List";
 
     var searchText = Context.Request.Query["searchText"].ToString();
 
-    var pageNumber = Model.Data?.PageNumber ?? 1;
-    var pageSize = Model.Data?.PageSize ?? 10;
-    var totalRecords = Model.Data?.TotalRecords ?? 0;
+    var pageNumber = Model.PageNumber;
+    var pageSize = Model.PageSize;
+    var totalRecords = Model.TotalRecords;
 
     // Calculate total number of pages
     var totalPages = pageSize > 0
@@ -20,9 +20,9 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h3 class="fw-bold mb-1">Book List</h3>
+            <h3 class="fw-bold mb-1">Member List</h3>
             <p class="text-muted mb-0">
-                Manage and search your library books
+                Manage and search Register Memeber
             </p>
         </div>
 
@@ -50,7 +50,7 @@
                            name="searchText"
                            value="@searchText"
                            class="form-control"
-                           placeholder="Search by title, author, ISBN or category..." />
+                           placeholder="Search by Name, MemberId, Phone,Email or Address..." />
 
                 </div>
 
@@ -92,7 +92,7 @@
             <a asp-action="Create"
                class="btn btn-primary">
                 <i class="bi bi-plus-circle me-1"></i>
-                Add Book
+                Add Member
             </a>
 
         </div>
@@ -108,7 +108,7 @@
             <div class="d-flex justify-content-between align-items-center">
 
                 <h5 class="mb-0 fw-semibold">
-                    Books
+                    Members
                 </h5>
 
                 <span class="badge bg-primary">
@@ -123,8 +123,8 @@
         <!-- Card Body -->
         <div class="card-body p-0">
 
-            @if (Model.Data?.BookList != null &&
-                 Model.Data.BookList.Any())
+            @if (Model.Members != null &&
+                 Model.Members.Any())
             {
                 <div class="table-responsive">
 
@@ -134,10 +134,12 @@
 
                             <tr>
                                 <th class="ps-4">#</th>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>ISBN</th>
-                                <th>Category</th>
+                                <th>Member Id</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Adress</th>
+                                <th>Status</th>
                                 <th class="text-end pe-4">
                                     Action
                                 </th>
@@ -154,68 +156,85 @@
                                     ((pageNumber - 1) * pageSize) + 1;
                             }
 
-                            @foreach (var book in Model.Data.BookList)
+                            @foreach (var member in Model.Members)
                             {
                                 <tr>
 
-                                    <!-- Serial Number -->
+                                 
                                     <td class="ps-4">
                                         @serialNumber
                                     </td>
 
 
-                                    <!-- Title -->
+                           
                                     <td>
                                         <span class="fw-semibold">
-                                            @book.Title
+                                            @member.MemberCode
                                         </span>
                                     </td>
 
 
-                                    <!-- Author -->
+                       
                                     <td>
-                                        @book.Author
+                                        @member.Name
                                     </td>
 
 
-                                    <!-- ISBN -->
+                      
                                     <td>
                                         <span class="font-monospace">
-                                            @book.ISBN
+                                            @member.Phone
                                         </span>
                                     </td>
 
 
-                                    <!-- Category -->
                                     <td>
 
-                                        <span class="badge bg-secondary">
-                                            @book.Category
+                                        <span class="font-monospace">
+                                            @member.Email
                                         </span>
 
                                     </td>
 
+                                    <td>
+
+                                        <span class="font-monospace">
+                                            @member.Address
+                                        </span>
+
+                                    </td>
+                                    <td>
+                                        @{
+                                            var color = member.Status == 1
+                                                ? "bg-success"
+                                                : "bg-secondary";
+                                        }
+
+                                        <span class="badge @color">
+                                            @(member.Status == 1 ? "Active" : "Inactive")
+                                        </span>
+                                    </td>
 
                                     <!-- Action -->
                                     <td class="text-end pe-4">
 
                                         <a asp-action="Detail"
-                                           asp-route-bookId="@book.BookId"
+                                           asp-route-memberId="@member.MemberId"
                                            class="btn btn-sm btn-outline-primary">
                                             View
                                         </a>
 
                                         <a asp-action="Update"
-                                           asp-route-bookId="@book.BookId"
+                                           asp-route-memberId="@member.MemberId"
                                            class="btn btn-sm btn-outline-warning">
                                             Edit
                                         </a>
                                         <a asp-action="Detail"
-                                           asp-route-bookId="@book.BookId"
+                                           asp-route-memberId="@member.MemberId"
                                            class="btn btn-sm btn-outline-danger">
                                             Delete
                                         </a>
-                               
+
                                     </td>
 
                                 </tr>
@@ -239,7 +258,7 @@
                     </div>
 
                     <h5 class="fw-semibold">
-                        No books found
+                        No Member found
                     </h5>
 
                     <p class="text-muted mb-3">
@@ -248,7 +267,7 @@
 
                     <a asp-action="Index"
                        class="btn btn-outline-primary">
-                        Show All Books
+                        Show All Members
                     </a>
 
                 </div>

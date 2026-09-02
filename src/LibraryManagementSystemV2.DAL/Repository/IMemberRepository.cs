@@ -11,6 +11,8 @@ public interface IMemberRepository
     string searchBy,
     string searchText,
     CancellationToken cancellationToken);
+    public Task<MemberListResponse> GetMemberListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
+
 }
 
 public class MemberRepository : IMemberRepository
@@ -105,6 +107,31 @@ public class MemberRepository : IMemberRepository
             BorrowedHistory = borrowedHistory,
             ReturnHistory = returnHistory
 
+        };
+    }
+
+    public async Task<MemberListResponse> GetMemberListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    {
+        var parameters = new DynamicParameters();
+
+        parameters.Add("@SearchText", searchText);
+        parameters.Add("@PageNumber", pageNumber);
+        parameters.Add("@PageSize", pageSize);
+        var command = new CommandDefinition(
+        "dbo.GetMemberList",
+        parameters,
+        commandType: CommandType.StoredProcedure,
+        cancellationToken: cancellationToken);
+
+        using var multi = await _dbConnection.QueryMultipleAsync(command);
+
+        var members = (await multi.ReadAsync<Member>()).ToList();
+        var totalRecords = await multi.ReadSingleAsync<int>();
+
+        return new MemberListResponse
+        {
+            Members = members,
+            TotalRecords = totalRecords
         };
     }
 }

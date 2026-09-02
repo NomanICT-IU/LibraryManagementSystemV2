@@ -37,7 +37,7 @@ public class MemberDtoValidator : AbstractValidator<MemberDto>
             .WithMessage("Address cannot exceed 256 characters.");
 
         RuleFor(x => x.Status)
-            .InclusiveBetween(0, 1)
-            .WithMessage("Status must be 0 (Inactive) or 1 (Active).");
+            .InclusiveBetween(1, 2)
+            .WithMessage("Status must be 2 (Inactive) or 1 (Active).");
     }
 }
