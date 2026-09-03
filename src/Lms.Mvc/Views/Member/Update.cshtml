@@ -1,21 +1,20 @@
-﻿@model BookModel
+﻿@model MemberModel
 
 @{
-    ViewData["Title"] = "Update Book";
+    ViewData["Title"] = "Update Member";
 }
 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
 
-            ```
-            <div class="card shadow-sm">
+            <div class="card border-0 shadow-sm">
 
                 <!-- Header -->
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">
-                        <i class="bi bi-pencil-square me-2"></i>
-                        Update Book
+                        <i class="bi bi-person-gear me-2"></i>
+                        Update Member
                     </h4>
                 </div>
 
@@ -23,98 +22,130 @@
                 <div class="card-body">
 
                     <form asp-action="Update"
-                          asp-controller="Book"
+                          asp-controller="Member"
                           method="post">
 
                         @Html.AntiForgeryToken()
 
-                        <!-- Book Id -->
-                        <input asp-for="BookId"
-                               type="hidden" />
+                        <!-- Member Id -->
+                        <input asp-for="MemberId" type="hidden" />
 
                         <!-- Validation Summary -->
                         <div asp-validation-summary="ModelOnly"
                              class="text-danger mb-3">
                         </div>
 
-                        <!-- Title -->
+                        <!-- Member Code -->
                         <div class="mb-3">
-                            <label asp-for="Title"
+                            <label asp-for="MemberCode"
                                    class="form-label fw-semibold">
-                                Title
+                                Member Code
                             </label>
 
-                            <input asp-for="Title"
+                            <input asp-for="MemberCode"
                                    class="form-control"
-                                   placeholder="Enter book title" />
+                                   placeholder="Enter Member Code"
+                                   readonly />
 
-                            <span asp-validation-for="Title"
+                            <span asp-validation-for="MemberCode"
                                   class="text-danger">
                             </span>
                         </div>
 
-                        <!-- Author -->
+                        <!-- Name -->
                         <div class="mb-3">
-                            <label asp-for="Author"
+                            <label asp-for="Name"
                                    class="form-label fw-semibold">
-                                Author
+                                Member Name
                             </label>
 
-                            <input asp-for="Author"
+                            <input asp-for="Name"
                                    class="form-control"
-                                   placeholder="Enter author name" />
+                                   placeholder="Enter Member Name" />
 
-                            <span asp-validation-for="Author"
+                            <span asp-validation-for="Name"
                                   class="text-danger">
                             </span>
                         </div>
 
-                        <!-- ISBN -->
+                        <!-- Phone -->
                         <div class="mb-3">
-                            <label asp-for="ISBN"
+                            <label asp-for="Phone"
                                    class="form-label fw-semibold">
-                                ISBN
+                                Phone
                             </label>
 
-                            <input asp-for="ISBN"
+                            <input asp-for="Phone"
                                    class="form-control"
-                                   placeholder="Enter ISBN" />
+                                   placeholder="Enter Phone Number" />
 
-                            <span asp-validation-for="ISBN"
+                            <span asp-validation-for="Phone"
                                   class="text-danger">
                             </span>
                         </div>
 
-                        <!-- Category -->
-                        <div class="mb-4">
-                            <label asp-for="Category"
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label asp-for="Email"
                                    class="form-label fw-semibold">
-                                Category
+                                Email
                             </label>
 
-                            <input asp-for="Category"
+                            <input asp-for="Email"
+                                   type="email"
                                    class="form-control"
-                                   placeholder="Enter category" />
+                                   placeholder="Enter valid Email Address" />
 
-                            <span asp-validation-for="Category"
+                            <span asp-validation-for="Email"
                                   class="text-danger">
                             </span>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label">
+                                Address
+                            </label>
+                            <input asp-for="Address"
+                                   class="form-control"
+                                   placeholder="Enter Address" />
+                            <span asp-validation-for="Address"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="mb-3">
+                            <label asp-for="Status" class="form-label">
+                                Status
+                            </label>
+
+                            <select asp-for="Status" class="form-select">
+                                <option value="">-- Select Status --</option>
+                                <option value="1">Active</option>
+                                <option value="2">Inactive</option>
+                            </select>
+
+                            <span asp-validation-for="Status"
+                                  class="text-danger"></span>
                         </div>
 
                         <!-- Actions -->
                         <div class="d-flex justify-content-between">
 
-                            <a asp-action="Detail"
-                               asp-route-bookId="@Model.BookId"
+                            <a asp-action="Index"
+                               asp-controller="Member"
+                               asp-route-memberId="@Model.MemberId"
                                class="btn btn-secondary">
+
                                 <i class="bi bi-arrow-left me-1"></i>
                                 Cancel
                             </a>
 
                             <button type="submit"
                                     class="btn btn-primary">
+
                                 <i class="bi bi-check-circle me-1"></i>
-                                Update Book
+                                Update Member
                             </button>
 
                         </div>
@@ -126,8 +157,6 @@
 
         </div>
     </div>
-    ```
-
 </div>
 
 @section Scripts {

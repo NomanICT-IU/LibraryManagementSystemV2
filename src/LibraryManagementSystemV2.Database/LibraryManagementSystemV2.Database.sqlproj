@@ -93,5 +93,6 @@
     <Build Include="dbo\Stored Procedures\GetBookList.sql" />
     <Build Include="dbo\Stored Procedures\GetBookDetails.sql" />
     <Build Include="dbo\Stored Procedures\GetMemberList.sql" />
+    <Build Include="dbo\Stored Procedures\GetBookCopyList.sql" />
   </ItemGroup>
 </Project>

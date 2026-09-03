@@ -1,0 +1,348 @@
+﻿@model ApiResponse<BookCopyResponseModel>
+
+@{
+    ViewData["Title"] = "Book Copies";
+
+    var searchText = Context.Request.Query["searchText"].ToString();
+
+    var pageNumber = Model.Data?.PageNumber ?? 1;
+    var pageSize = Model.Data?.PageSize ?? 10;
+    var totalRecords = Model.Data?.TotalRecords ?? 0;
+
+    // Calculate total number of pages
+    var totalPages = pageSize > 0
+        ? (int)Math.Ceiling((double)totalRecords / pageSize)
+        : 0;
+}
+
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1">Book Copy List</h3>
+            <p class="text-muted mb-0">
+                Manage and search book copies
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- Search -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body d-flex justify-content-between align-items-end">
+
+            <form asp-action="Index"
+                  method="get"
+                  class="row g-3 align-items-end flex-grow-1 me-3">
+
+                <!-- Search Text -->
+                <div class="col-md-7">
+
+                    <label for="searchText"
+                           class="form-label fw-semibold">
+                        Search Book Copy
+                    </label>
+
+                    <input type="text"
+                           id="searchText"
+                           name="searchText"
+                           value="@searchText"
+                           class="form-control"
+                           placeholder="Search by title or Copy Id..." />
+
+                </div>
+
+                <!-- Page Size -->
+                <div class="col-md-2">
+
+                    <label for="pageSize"
+                           class="form-label fw-semibold">
+                        Page Size
+                    </label>
+
+                    <select id="pageSize"
+                            name="pageSize"
+                            class="form-select"
+                            onchange="this.form.submit()">
+
+                        @foreach (var size in new[] { 5, 10, 20, 50 })
+                        {
+                            if (pageSize == size)
+                            {
+                                <option value="@size" selected>
+                                    @size
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@size">
+                                    @size
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+            </form>
+
+            <a asp-action="Create"
+               class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i>
+                Add Book Copy
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- Book Table -->
+    <div class="card shadow-sm border-0">
+
+        <!-- Card Header -->
+        <div class="card-header bg-white py-3">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0 fw-semibold">
+                    Book Copies
+                </h5>
+
+                <span class="badge bg-primary">
+                    @totalRecords Records
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Card Body -->
+        <div class="card-body p-0">
+
+            @if (Model.Data?.BookCopies != null &&
+                 Model.Data.BookCopies.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+                                <th class="ps-4">#</th>
+                                <th>Copy Id</th>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th class="text-end pe-4">
+                                    Action
+                                </th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @{
+                                // Calculate serial number for current page
+                                var serialNumber =
+                                    ((pageNumber - 1) * pageSize) + 1;
+                            }
+
+                            @foreach (var bookCopy in Model.Data.BookCopies)
+                            {
+                                <tr>
+
+                                    <!-- Serial Number -->
+                                    <td class="ps-4">
+                                        @serialNumber
+                                    </td>
+
+
+                                    <!-- Title -->
+                                    <td>
+                                        <span class="fw-semibold">
+                                            @bookCopy.CopyCode
+                                        </span>
+                                    </td>
+
+
+                                    <!-- Author -->
+                                    <td>
+                                        @bookCopy.Title
+                                    </td>
+
+                                    <td>
+                                        @{
+                                            var color = bookCopy.Status == 1
+                                                ? "bg-success"
+                                                : "bg-secondary";
+                                        }
+
+                                        <span class="badge @color">
+                                            @(bookCopy.Status == 1 ? "Available" : "Borrowed")
+                                        </span>
+                                    </td>
+
+                                    <!-- Action -->
+                                    <td class="text-end pe-4">
+
+                                        <a asp-action="Detail"
+                                           asp-route-copyId="@bookCopy.CopyId"
+                                           class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+
+                                        <a asp-action="Update"
+                                           asp-route-copyId="@bookCopy.CopyId"
+                                           class="btn btn-sm btn-outline-warning">
+                                            Edit
+                                        </a>
+                                        <a asp-action="Detail"
+                                           asp-route-copyId="@bookCopy.CopyId"
+                                           class="btn btn-sm btn-outline-danger">
+                                            Delete
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                                serialNumber++;
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <!-- No Books -->
+                <div class="text-center py-5">
+
+                    <div class="mb-3">
+                        <i class="bi bi-book fs-1 text-muted"></i>
+                    </div>
+
+                    <h5 class="fw-semibold">
+                        No books found
+                    </h5>
+
+                    <p class="text-muted mb-3">
+                        Try changing your search text.
+                    </p>
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-primary">
+                        Show All Book Copies
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+
+        <!-- Pagination -->
+        @if (totalPages > 1)
+        {
+            <div class="card-footer bg-white">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                    <!-- Page Information -->
+                    <div class="text-muted small">
+
+                        Page
+                        <strong>@pageNumber</strong>
+                        of
+                        <strong>@totalPages</strong>
+
+                    </div>
+
+
+                    <!-- Pagination -->
+                    <nav aria-label="Book pagination">
+
+                        <ul class="pagination mb-0">
+
+                            <!-- Previous -->
+                            <li class="page-item @(pageNumber <= 1 ? "disabled" : "")">
+
+                                @if (pageNumber > 1)
+                                {
+                                    <a class="page-link"
+                                       asp-action="Index"
+                                       asp-route-searchText="@searchText"
+                                       asp-route-pageNumber="@(pageNumber - 1)"
+                                       asp-route-pageSize="@pageSize">
+                                        Previous
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="page-link">
+                                        Previous
+                                    </span>
+                                }
+
+                            </li>
+
+
+                            <!-- Page Numbers -->
+                            @for (int i = 1; i <= totalPages; i++)
+                            {
+                                <li class="page-item @(i == pageNumber ? "active" : "")">
+
+                                    <a class="page-link"
+                                       asp-action="Index"
+                                       asp-route-searchText="@searchText"
+                                       asp-route-pageNumber="@i"
+                                       asp-route-pageSize="@pageSize">
+                                        @i
+                                    </a>
+
+                                </li>
+                            }
+
+
+                            <!-- Next -->
+                            <li class="page-item @(pageNumber >= totalPages ? "disabled" : "")">
+
+                                @if (pageNumber < totalPages)
+                                {
+                                    <a class="page-link"
+                                       asp-action="Index"
+                                       asp-route-searchText="@searchText"
+                                       asp-route-pageNumber="@(pageNumber + 1)"
+                                       asp-route-pageSize="@pageSize">
+                                        Next
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="page-link">
+                                        Next
+                                    </span>
+                                }
+
+                            </li>
+
+                        </ul>
+
+                    </nav>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

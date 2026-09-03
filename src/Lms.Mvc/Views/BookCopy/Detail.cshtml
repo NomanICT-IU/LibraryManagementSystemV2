@@ -1,14 +1,14 @@
-﻿@model MemberModel
+﻿@model BookCopyViewModel
 
 @{
-    ViewData["Title"] = "Member Details";
+    ViewData["Title"] = "Book Copy Details";
 }
 
 <div class="container py-5">
+
     <div class="row justify-content-center">
         <div class="col-12 col-md-10 col-lg-8">
 
-      
             <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
 
                 <!-- Header -->
@@ -16,76 +16,60 @@
                     <div class="d-flex align-items-center gap-3">
 
                         <div class="bg-white bg-opacity-25 rounded-3 p-3">
-                            <i class="bi bi-person-circle fs-2"></i>
+                            <i class="bi bi-book-half fs-2"></i>
                         </div>
 
                         <div>
                             <h2 class="mb-1 fw-bold">
-                                @Model.Name
+                                @Model.Title
                             </h2>
 
                             <span class="text-white-50">
-                                Member Details
+                                Book Copy Details
                             </span>
                         </div>
 
                     </div>
                 </div>
 
-                <!-- Member Information -->
+                <!-- Book Copy Information -->
                 <div class="card-body p-4 p-md-5">
 
                     <div class="row g-4">
 
-                        <!-- Member Code -->
+                        <!-- Copy Code -->
                         <div class="col-md-6">
                             <div class="border rounded-3 p-3 h-100">
 
                                 <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-person-badge text-primary fs-5 me-2"></i>
+                                    <i class="bi bi-upc-scan text-primary fs-5 me-2"></i>
+
                                     <span class="text-muted small fw-semibold">
-                                        MEMBER CODE
+                                        COPY CODE
                                     </span>
                                 </div>
 
                                 <div class="fw-semibold fs-5">
-                                    @Model.MemberCode
+                                    @Model.CopyCode
                                 </div>
 
                             </div>
                         </div>
 
-                        <!-- Phone -->
+                        <!-- Title -->
                         <div class="col-md-6">
                             <div class="border rounded-3 p-3 h-100">
 
                                 <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-telephone text-primary fs-5 me-2"></i>
+                                    <i class="bi bi-book text-primary fs-5 me-2"></i>
+
                                     <span class="text-muted small fw-semibold">
-                                        PHONE
+                                        BOOK TITLE
                                     </span>
                                 </div>
 
                                 <div class="fw-semibold fs-5">
-                                    @Model.Phone
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="col-md-6">
-                            <div class="border rounded-3 p-3 h-100">
-
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-envelope text-primary fs-5 me-2"></i>
-                                    <span class="text-muted small fw-semibold">
-                                        EMAIL
-                                    </span>
-                                </div>
-
-                                <div class="fw-semibold">
-                                    @Model.Email
+                                    @Model.Title
                                 </div>
 
                             </div>
@@ -97,32 +81,15 @@
 
                                 <div class="d-flex align-items-center mb-2">
                                     <i class="bi bi-toggle-on text-primary fs-5 me-2"></i>
+
                                     <span class="text-muted small fw-semibold">
                                         STATUS
                                     </span>
                                 </div>
 
                                 <span class="badge @(Model.Status == 1 ? "bg-success" : "bg-secondary") fs-6 px-3 py-2">
-                                    @(Model.Status == 1 ? "Active" : "Inactive")
+                                    @(Model.Status == 1 ? "Available" : "Borrowed")
                                 </span>
-
-                            </div>
-                        </div>
-
-                        <!-- Address -->
-                        <div class="col-12">
-                            <div class="border rounded-3 p-3">
-
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-geo-alt text-primary fs-5 me-2"></i>
-                                    <span class="text-muted small fw-semibold">
-                                        ADDRESS
-                                    </span>
-                                </div>
-
-                                <div class="fw-semibold fs-5">
-                                    @Model.Address
-                                </div>
 
                             </div>
                         </div>
@@ -145,21 +112,22 @@
 
                         <div class="d-flex flex-wrap gap-2">
 
-                           
                             <!-- Update -->
                             <a asp-action="Update"
-                               asp-route-memberId="@Model.MemberId"
+                               asp-route-copyId="@Model.CopyId"
                                class="btn btn-primary">
-                                <i class="bi bi-check-circle me-1"></i>
-                                Update Member
+                                <i class="bi bi-pencil-square me-1"></i>
+                                Update Copy
                             </a>
 
                             <!-- Delete -->
                             <form asp-action="Delete"
-                                  asp-route-memberId="@Model.MemberId"
+                                  asp-route-copyId="@Model.CopyId"
                                   method="post"
                                   class="m-0"
-                                  onsubmit="return confirm('Are you sure you want to delete this member?');">
+                                  onsubmit="return confirm('Are you sure you want to delete this book copy?');">
+
+                                @Html.AntiForgeryToken()
 
                                 <button type="submit"
                                         class="btn btn-danger px-3">
@@ -179,6 +147,5 @@
 
         </div>
     </div>
-    ```
 
 </div>

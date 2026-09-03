@@ -1,10 +1,9 @@
-﻿CREATE   PROCEDURE [dbo].[GetBookList]
+﻿CREATE    PROCEDURE [dbo].[GetBookList]
     @PageNumber INT = 1,
     @PageSize INT = 10,
     @SearchText NVARCHAR(30) = NULL
 AS
 BEGIN
-    SET NOCOUNT ON;
 
     -- Normalize search text
     SET @SearchText = NULLIF(LTRIM(RTRIM(@SearchText)), '');

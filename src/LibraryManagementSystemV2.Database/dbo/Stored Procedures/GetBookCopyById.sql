@@ -2,11 +2,13 @@
     @CopyId INT
 AS
 BEGIN
-    SELECT
-        [CopyId],
-        [CopyCode],
-        [BookId],
-        [Status]
-    FROM [dbo].[BookCopy]
-    WHERE [CopyId] = @CopyId;
+      SELECT
+        bc.CopyId,
+        bc.CopyCode,
+        b.Title,
+        bc.Status
+    FROM dbo.BookCopy AS bc
+    INNER JOIN dbo.Book AS b
+        ON bc.BookId = b.BookId
+    WHERE bc.CopyId = @CopyId;
 END;

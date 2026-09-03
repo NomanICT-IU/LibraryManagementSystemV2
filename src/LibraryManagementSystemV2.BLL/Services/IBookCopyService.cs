@@ -5,7 +5,8 @@ public interface IBookCopyService
     public Task<BookCopyDto> CreateBookCopyAsync(BookCopyDto bookCopyDto, CancellationToken cancellationToken);
     public Task<bool> UpdateBookCopyAsync(BookCopyDto bookCopyDto, CancellationToken cancellationToken);
     public Task<bool> DeleteBookCopyAsync(int copyId, CancellationToken cancellationToken);
-    public Task<BookCopyDto> GetBookCopyByIdAsync(int copyId, CancellationToken cancellationToken);
+    public Task<BookCopyViewDto> GetBookCopyByIdAsync(int copyId, CancellationToken cancellationToken);
+    public Task<BookCopyResponseDto> GetBookCopyListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
 
 }
 public class BookCopyService : IBookCopyService
@@ -30,10 +31,23 @@ public class BookCopyService : IBookCopyService
 
     }
 
-    public async Task<BookCopyDto> GetBookCopyByIdAsync(int copyId, CancellationToken cancellationToken)
+    public async Task<BookCopyViewDto> GetBookCopyByIdAsync(int copyId, CancellationToken cancellationToken)
     {
         var bookCopy = await _bookCopyRepository.GetBookCopyByIdAsync(copyId, cancellationToken);
-        return bookCopy.Adapt<BookCopyDto>();
+        return bookCopy.Adapt<BookCopyViewDto>();
+    }
+
+    public async Task<BookCopyResponseDto> GetBookCopyListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    {
+        var response = await _bookCopyRepository.GetBookCopyListAsync(searchText, pageNumber, pageSize, cancellationToken);
+        return new BookCopyResponseDto
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalRecords = response.TotalRecords,
+            BookCopies = response.BookCopies.Adapt<List<BookCopiesDto>>()
+
+        };
     }
 
     public async Task<bool> UpdateBookCopyAsync(BookCopyDto bookCopyDto, CancellationToken cancellationToken)

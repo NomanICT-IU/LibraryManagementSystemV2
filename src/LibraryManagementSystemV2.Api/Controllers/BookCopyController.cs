@@ -31,7 +31,7 @@ public class BookCopyController(IBookCopyService _bookCopyService) : ControllerB
     public async Task<IActionResult> GetBookCopyByIdAsync(int copyId, CancellationToken cancellationToken)
     {
         var result = await _bookCopyService.GetBookCopyByIdAsync(copyId, cancellationToken);
-        return Ok(new ApiResponse<BookCopyDto> { Data = result });
+        return Ok(new ApiResponse<BookCopyViewDto> { Data = result });
 
     }
 
@@ -45,5 +45,14 @@ public class BookCopyController(IBookCopyService _bookCopyService) : ControllerB
         return Ok(
             new ApiResponse<bool> { Data = result }
         );
+    }
+
+    [HttpGet("get-book-copy-list")]
+    public async Task<IActionResult> GetBookCopyListAsync(string searchText = "", int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var result = await _bookCopyService.GetBookCopyListAsync(searchText, pageNumber, pageSize, cancellationToken);
+        return Ok(
+              new ApiResponse<BookCopyResponseDto> { Data = result }
+          );
     }
 }

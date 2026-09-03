@@ -70,31 +70,43 @@ public class MemberController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Update(
         MemberModel memberModel,
         CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(memberModel);
-        }
-
-        var response = await _memberService.UpdateMemberAsync(
-            memberModel,
-            cancellationToken);
-
+        var response = await _memberService.UpdateMemberAsync(memberModel, cancellationToken);
         if (response.IsError)
         {
-            ModelState.AddModelError(
-                string.Empty,
-                response.Message);
-
-            return View(memberModel);
+            return View("Error", new ErrorViewModel()
+            {
+                RequestId = response.Message
+            });
         }
-
-        return RedirectToAction(
-            nameof(Detail),
-            new { memberId = memberModel.MemberId });
+        else if (response.Data)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        return View(memberModel);
     }
-
+    [HttpPost]
+    public async Task<IActionResult> Delete(int memberId, CancellationToken cancellationToken)
+    {
+        var response = await _memberService.DeleteMemberAsync(memberId, cancellationToken);
+        if (response.IsError)
+        {
+            return View("Error", new ErrorViewModel()
+            {
+                RequestId = response.Message
+            });
+        }
+        else if (response.Data)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        else
+        {
+            return RedirectToAction(nameof(Detail), new { memberId });
+        }
+    }
 }

@@ -8,6 +8,7 @@ public interface IMemberService
     public Task<ApiResponse<MemberModel>> CreateMemberAsync(MemberModel memberModel, CancellationToken cancellationToken);
     public Task<ApiResponse<MemberModel>> GetMemberByIdAsync(int memberId, CancellationToken cancellationToken);
     public Task<ApiResponse<bool>> UpdateMemberAsync(MemberModel memberModel, CancellationToken cancellationToken);
+    public Task<ApiResponse<bool>> DeleteMemberAsync(int memberId, CancellationToken cancellationToken);
 }
 
 public class MemberService : IMemberService
@@ -84,6 +85,12 @@ public class MemberService : IMemberService
                 cancellationToken);
 
         return result!;
+    }
+
+    public async Task<ApiResponse<bool>> DeleteMemberAsync(int memberId, CancellationToken cancellationToken)
+    {
+        var endpoint = $"api/Member/delete-member/{memberId}";
+        return await _httpClientFactory.DeleteFromJsonAsync<ApiResponse<bool>>(endpoint, cancellationToken);
     }
 }
 

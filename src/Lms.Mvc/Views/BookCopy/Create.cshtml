@@ -1,0 +1,137 @@
+﻿@model BookCopyModel
+
+@{
+    ViewData["Title"] = "Create Book Copy";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <!-- Header -->
+                <div class="card-header bg-primary text-white py-3 rounded-top-4">
+                    <h4 class="mb-0">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Create Book Copy
+                    </h4>
+                </div>
+
+                <!-- Form -->
+                <div class="card-body p-4">
+
+                    <form asp-action="Create"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <!-- Copy Code -->
+                        <div class="mb-4">
+                            <label asp-for="CopyCode"
+                                   class="form-label fw-semibold">
+                                Copy Code
+                            </label>
+
+                            <input asp-for="CopyCode"
+                                   class="form-control"
+                                   placeholder="Enter copy code" />
+
+                            <span asp-validation-for="CopyCode"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <!-- Book / Title -->
+                        <div class="mb-4">
+                            <label asp-for="BookId"
+                                   class="form-label fw-semibold">
+                                Book Title
+                            </label>
+
+                            <select asp-for="BookId"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Book --
+                                </option>
+
+                                @if (ViewBag.Books != null)
+                                {
+                                    foreach (var book in ViewBag.Books)
+                                    {
+                                        <option value="@book.BookId">
+                                            @book.Title
+                                        </option>
+                                    }
+                                }
+
+                            </select>
+
+                            <span asp-validation-for="BookId"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="mb-4">
+                            <label asp-for="Status"
+                                   class="form-label fw-semibold">
+                                Status
+                            </label>
+
+                            <select asp-for="Status"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Status --
+                                </option>
+
+                                <option value="1">
+                                    Available
+                                </option>
+
+                                <option value="2">
+                                    Borrowed
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="Status"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+
+                            <a asp-action="Index"
+                               class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>
+                                Back
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-1"></i>
+                                Create
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -15,6 +15,7 @@ builder.Services.AddHttpClient("LMSApi", client =>
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IMemberService, MemberService>();
+builder.Services.AddScoped<IBookCopyService, BookCopyService>();
 
 var app = builder.Build();
 
