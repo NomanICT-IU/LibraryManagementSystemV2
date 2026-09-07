@@ -4,15 +4,13 @@ namespace Lms.Mvc.Services;
 
 public interface IBookCopyService
 {
-    public Task<ApiResponse<BookCopyResponseModel>> GetBookCopyListAsync(
-        string searchText,
-        int pageNumber,
-        int pageSize,
+    public Task<ApiResponse<IEnumerable<BookCopyResponseModel>>> GetBookCopyListAsync(int bookId,
         CancellationToken cancellationToken);
     public Task<ApiResponse<BookCopyModel>> CreateBookCopiesAsync(BookCopyModel BookCopyModel, CancellationToken cancellationToken);
-    public Task<ApiResponse<BookCopyViewModel>> GetBookCopyById(int copyId, CancellationToken cancellationToken);
+    public Task<ApiResponse<BookCopyModel>> GetBookCopyById(int copyId, CancellationToken cancellationToken);
 
-    public Task<ApiResponse<bool>> UpdateBookCopyAsync(BookCopyViewModel bookCopyViewModel, CancellationToken cancellationToken);
+    public Task<ApiResponse<bool>> UpdateBookCopyAsync(int copyId, BookCopyModel bookCopyViewModel, CancellationToken cancellationToken);
+    public Task<ApiResponse<bool>> DeleteBookCopyAsync(int copyId, CancellationToken cancellationToken);
 }
 
 public class BookCopyService : IBookCopyService
@@ -33,6 +31,7 @@ public class BookCopyService : IBookCopyService
             bookCopyModel,
             cancellationToken);
 
+
         response.EnsureSuccessStatusCode();
 
         var result = await response.Content
@@ -42,41 +41,49 @@ public class BookCopyService : IBookCopyService
         return result!;
     }
 
-    public async Task<ApiResponse<BookCopyViewModel>> GetBookCopyById(int copyId, CancellationToken cancellationToken)
+    public async Task<ApiResponse<bool>> DeleteBookCopyAsync(int copyId, CancellationToken cancellationToken)
+    {
+        var endpoint = $"api/BookCopy/delete-book-copy/{copyId}";
+
+        var response = await _httpClient.DeleteAsync(
+            endpoint,
+            cancellationToken);
+        var result = await response.Content
+            .ReadFromJsonAsync<ApiResponse<bool>>(
+                cancellationToken);
+        return result!;
+    }
+
+    public async Task<ApiResponse<BookCopyModel>> GetBookCopyById(int copyId, CancellationToken cancellationToken)
     {
         var endpoint = $"api/BookCopy/get-book-copy-by-id/{copyId}";
 
         var result = await _httpClient
-            .GetFromJsonAsync<ApiResponse<BookCopyViewModel>>(
+            .GetFromJsonAsync<ApiResponse<BookCopyModel>>(
                 endpoint,
                 cancellationToken);
 
         return result!;
     }
 
-    public async Task<ApiResponse<BookCopyResponseModel>> GetBookCopyListAsync(
-        string searchText,
-        int pageNumber,
-        int pageSize,
+    public async Task<ApiResponse<IEnumerable<BookCopyResponseModel>>> GetBookCopyListAsync(
+         int bookId,
         CancellationToken cancellationToken)
     {
         var endpoint =
-            $"api/BookCopy/get-book-copy-list" +
-            $"?searchText={Uri.EscapeDataString(searchText ?? string.Empty)}" +
-            $"&pageNumber={pageNumber}" +
-            $"&pageSize={pageSize}";
+            $"api/BookCopy/get-book-copies/{bookId}";
 
         var response =
-            await _httpClient.GetFromJsonAsync<ApiResponse<BookCopyResponseModel>>(
+            await _httpClient.GetFromJsonAsync<ApiResponse<IEnumerable<BookCopyResponseModel>>>(
                 endpoint,
                 cancellationToken);
 
         return response!;
     }
 
-    public async Task<ApiResponse<bool>> UpdateBookCopyAsync(BookCopyViewModel bookCopyViewModel, CancellationToken cancellationToken)
+    public async Task<ApiResponse<bool>> UpdateBookCopyAsync(int copyId, BookCopyModel bookCopyViewModel, CancellationToken cancellationToken)
     {
-        var endpoint = "api/BookCopy/update-book-copy";
+        var endpoint = $"api/BookCopy/update-book-copy/{copyId}";
 
         var response = await _httpClient.PutAsJsonAsync(
             endpoint,

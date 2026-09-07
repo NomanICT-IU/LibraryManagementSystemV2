@@ -3,6 +3,7 @@
 public class BookCopyViewDto
 {
     public int CopyId { get; set; }
+    public int BooKid { get; set; }
     public string CopyCode { get; set; }
     public string Title { get; set; }
     public int Status { get; set; }

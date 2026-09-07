@@ -119,5 +119,13 @@ namespace Lms.Mvc.Controllers
 
             return View(result);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Issue(int bookId, CancellationToken cancellationToken)
+        {
+            var result = await bookService.GetBookCopyDetailsAsync(bookId, cancellationToken);
+            return View();
+        }
+
     }
 }

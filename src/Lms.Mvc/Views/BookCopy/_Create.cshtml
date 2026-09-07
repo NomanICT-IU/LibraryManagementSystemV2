@@ -1,0 +1,51 @@
+﻿@model BookCopyModel
+
+<form asp-action="Save"
+      method="post">
+
+    @Html.AntiForgeryToken()
+
+    <input asp-for="BookId" type="hidden" />
+    <input asp-for="CopyId" type="hidden" />
+    <input asp-for="Status" type="hidden" />
+    <!-- Copy Code -->
+    <div class="mb-3">
+
+        <label asp-for="CopyCode"
+               class="form-label fw-semibold">
+            Copy Id
+        </label>
+
+        <input asp-for="CopyCode"
+               class="form-control"
+               placeholder="Enter copy code" />
+
+        <span asp-validation-for="CopyCode"
+              class="text-danger">
+        </span>
+
+    </div>
+
+
+    <!-- Buttons -->
+    <div class="d-flex justify-content-end gap-2">
+
+        <a asp-controller="Book"
+           asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Back
+
+        </a>
+        <button type="submit"
+                class="btn btn-primary">
+
+            <i class="bi bi-plus-circle me-1"></i>
+            @(Model.CopyId > 0?"Update":"Create")
+
+        </button>
+
+    </div>
+
+</form>

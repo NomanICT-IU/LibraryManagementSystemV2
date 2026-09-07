@@ -2,6 +2,7 @@
 
 public class BookCopyDetailsDto
 {
+    public int CopyId { get; set; }
     public int BookId { get; set; }
     public string Title { get; set; }
     public string Author { get; set; }

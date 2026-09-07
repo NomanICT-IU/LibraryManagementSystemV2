@@ -35,10 +35,10 @@ public class BookCopyController(IBookCopyService _bookCopyService) : ControllerB
 
     }
 
-    [HttpPut("update-book-copy")]
-    public async Task<IActionResult> UpdateBookCopyAsync([FromBody] BookCopyDto bookCopyDto, CancellationToken cancellationToken)
+    [HttpPut("update-book-copy/{copyId:int}")]
+    public async Task<IActionResult> UpdateBookCopyAsync(int copyId, [FromBody] BookCopyDto bookCopyDto, CancellationToken cancellationToken)
     {
-        var result = await _bookCopyService.UpdateBookCopyAsync(bookCopyDto, cancellationToken);
+        var result = await _bookCopyService.UpdateBookCopyAsync(copyId, bookCopyDto, cancellationToken);
 
 
 
@@ -47,12 +47,18 @@ public class BookCopyController(IBookCopyService _bookCopyService) : ControllerB
         );
     }
 
-    [HttpGet("get-book-copy-list")]
-    public async Task<IActionResult> GetBookCopyListAsync(string searchText = "", int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+    [HttpGet("get-book-copies/{bookId:int}")]
+    public async Task<IActionResult> GetBookCopyListAsync(
+    int bookId,
+    CancellationToken cancellationToken)
     {
-        var result = await _bookCopyService.GetBookCopyListAsync(searchText, pageNumber, pageSize, cancellationToken);
-        return Ok(
-              new ApiResponse<BookCopyResponseDto> { Data = result }
-          );
+        var result = await _bookCopyService.GetBookCopyListAsync(
+            bookId,
+            cancellationToken);
+
+        return Ok(new ApiResponse<IEnumerable<BookCopyResponseDto>>
+        {
+            Data = result
+        });
     }
 }

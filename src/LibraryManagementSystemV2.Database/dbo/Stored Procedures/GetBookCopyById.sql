@@ -4,6 +4,7 @@ AS
 BEGIN
       SELECT
         bc.CopyId,
+        bc.BookId,
         bc.CopyCode,
         b.Title,
         bc.Status

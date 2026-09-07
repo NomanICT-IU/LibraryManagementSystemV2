@@ -14,7 +14,7 @@
 
     <div class="card mb-4">
         <div class="card-body">
-            <form asp-action="Index" method="get">
+            <form asp-controller="Book" asp-action="SearchBooks" method="get">
 
                 <div class="row g-3">
                     <div class="col-md-5">
@@ -48,7 +48,7 @@
 
                     <div class="col-md-2 d-flex align-items-end gap-2">
                         <button type="submit" class="btn btn-primary w-100">Search</button>
-                        <a asp-action="Index" class="btn btn-secondary w-100">Clear</a>
+                        <a asp-action="SearchBooks" class="btn btn-secondary w-100">Clear</a>
                     </div>
                 </div>
 
@@ -70,6 +70,7 @@
                             <th>Status</th>
                             <th>Borrower</th>
                             <th>Due Date</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,6 +86,17 @@
                                     <td>@book.Status</td>
                                     <td>@book.BorrowedBy</td>
                                     <td>@book.DueDate</td>
+                                    <td>
+                                        <a asp-controller="Book"
+                                           asp-action="Issue"
+                                           asp-route-bookId="@book.BookId"
+                                           class="btn btn-sm btn-outline-primary">
+
+                                            <i class="bi bi-journal-arrow-up me-1"></i>
+                                            Issue
+
+                                        </a>
+                                    </td>
                                 </tr>
                             }
                         }

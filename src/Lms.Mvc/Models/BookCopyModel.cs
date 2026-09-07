@@ -9,9 +9,7 @@ public class BookCopyModel
     [Required(ErrorMessage = "Copy Code is required.")]
     public string CopyCode { get; set; }
 
-    [Required(ErrorMessage = "Please select a book.")]
     public int BookId { get; set; }
 
-    [Required(ErrorMessage = "Please select a status")]
     public int Status { get; set; }
 }

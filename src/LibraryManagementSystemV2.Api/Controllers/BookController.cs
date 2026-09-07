@@ -57,10 +57,10 @@ public class BookController(IBookService _bookService) : ControllerBase
         return Ok(new ApiResponse<IEnumerable<BookCopyDetailsDto>> { Data = result });
     }
 
-    [HttpGet("get-book-copy-detail-id/{copyId:int}")]
-    public async Task<IActionResult> GetBookCopyDetailsAsync(int copyId, CancellationToken cancellationToken)
+    [HttpGet("get-book-copy-detail-id/{bookId:int}")]
+    public async Task<IActionResult> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken)
     {
-        var result = await _bookService.GetBookCopyDetailsAsync(copyId, cancellationToken);
+        var result = await _bookService.GetBookCopyDetailsAsync(bookId, cancellationToken);
 
         return Ok(new ApiResponse<BookDetailsDto> { Data = result }); ;
     }

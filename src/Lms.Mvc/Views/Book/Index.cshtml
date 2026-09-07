@@ -215,7 +215,13 @@
                                            class="btn btn-sm btn-outline-danger">
                                             Delete
                                         </a>
-                               
+                                        <a asp-controller="BookCopy"
+                                           asp-action="Index"
+                                           asp-route-bookId="@book.BookId"
+                                           class="btn btn-sm btn-outline-danger">
+                                            Add New
+                                        </a>
+
                                     </td>
 
                                 </tr>

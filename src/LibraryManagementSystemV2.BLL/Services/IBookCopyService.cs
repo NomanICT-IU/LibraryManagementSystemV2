@@ -3,10 +3,10 @@
 public interface IBookCopyService
 {
     public Task<BookCopyDto> CreateBookCopyAsync(BookCopyDto bookCopyDto, CancellationToken cancellationToken);
-    public Task<bool> UpdateBookCopyAsync(BookCopyDto bookCopyDto, CancellationToken cancellationToken);
+    public Task<bool> UpdateBookCopyAsync(int copyId, BookCopyDto bookCopyDto, CancellationToken cancellationToken);
     public Task<bool> DeleteBookCopyAsync(int copyId, CancellationToken cancellationToken);
     public Task<BookCopyViewDto> GetBookCopyByIdAsync(int copyId, CancellationToken cancellationToken);
-    public Task<BookCopyResponseDto> GetBookCopyListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
+    public Task<IEnumerable<BookCopyResponseDto>> GetBookCopyListAsync(int bookId, CancellationToken cancellationToken);
 
 }
 public class BookCopyService : IBookCopyService
@@ -37,22 +37,15 @@ public class BookCopyService : IBookCopyService
         return bookCopy.Adapt<BookCopyViewDto>();
     }
 
-    public async Task<BookCopyResponseDto> GetBookCopyListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    public async Task<IEnumerable<BookCopyResponseDto>> GetBookCopyListAsync(int bookId, CancellationToken cancellationToken)
     {
-        var response = await _bookCopyRepository.GetBookCopyListAsync(searchText, pageNumber, pageSize, cancellationToken);
-        return new BookCopyResponseDto
-        {
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            TotalRecords = response.TotalRecords,
-            BookCopies = response.BookCopies.Adapt<List<BookCopiesDto>>()
-
-        };
+        var response = await _bookCopyRepository.GetBookCopyListAsync(bookId, cancellationToken);
+        return response.Adapt<IEnumerable<BookCopyResponseDto>>();
     }
 
-    public async Task<bool> UpdateBookCopyAsync(BookCopyDto bookCopyDto, CancellationToken cancellationToken)
+    public async Task<bool> UpdateBookCopyAsync(int copyId, BookCopyDto bookCopyDto, CancellationToken cancellationToken)
     {
         var bookCopy = bookCopyDto.Adapt<BookCopy>();
-        return await _bookCopyRepository.UpdateBookCopyAsync(bookCopy, cancellationToken);
+        return await _bookCopyRepository.UpdateBookCopyAsync(copyId, bookCopy, cancellationToken);
     }
 }

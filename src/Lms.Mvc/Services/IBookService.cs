@@ -10,6 +10,8 @@ public interface IBookService
     public Task<ApiResponse<BookModel>> GetBookByIdAsync(int bookId, CancellationToken cancellationToken);
     public Task<ApiResponse<bool>> UpdateBookAsync(BookModel bookModel, CancellationToken cancellationToken);
     public Task<ApiResponse<bool>> DeleteBookAsync(int bookId, CancellationToken cancellationToken);
+    public Task<ApiResponse<BookDetailsModel>> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken);
+
 }
 
 public class BookService : IBookService
@@ -51,6 +53,12 @@ public class BookService : IBookService
 
         return await _httpClient.GetFromJsonAsync<ApiResponse<BookModel>>(endpoint, cancellationToken);
 
+    }
+
+    public async Task<ApiResponse<BookDetailsModel>> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken)
+    {
+        string endpoint = $"api/Book/get-book-copy-detail-id/{bookId}";
+        return await _httpClient.GetFromJsonAsync<ApiResponse<BookDetailsModel>>(endpoint, cancellationToken);
     }
 
     public async Task<ApiResponse<BookListResponseModel>> GetBooksync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)

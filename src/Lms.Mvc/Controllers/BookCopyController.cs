@@ -1,4 +1,5 @@
 ﻿using Lms.Mvc.Models;
+using Lms.Mvc.Models.ViewModels;
 using Lms.Mvc.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,98 +16,72 @@ public class BookCopyController : Controller
         _bookService = bookService;
     }
     [HttpGet]
-    public async Task<IActionResult> Index(string searchText = "", int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
-    {
-        var response = await _bookCopyService.GetBookCopyListAsync(searchText, pageNumber, pageSize, cancellationToken);
-        return View(response);
-    }
-    [HttpGet]
-    public async Task<IActionResult> Create(
-     CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(
+     int bookId, int copyId = 0,
+     CancellationToken cancellationToken = default)
     {
 
-        var response = await _bookService.GetBooksync(
-            "",
-            1,
-          1000,
+        var book = await _bookService.GetBookByIdAsync(
+            bookId,
+            cancellationToken);
+        var bookList = await _bookCopyService.GetBookCopyListAsync(bookId,
             cancellationToken);
 
-        if (response.IsError)
+        BookCopyViewModel vm = new BookCopyViewModel();
+        //vm.BookTitle = book.Data.Title;
+        vm.BookCopies = bookList.Data;
+        vm.BookCopy.BookId = bookId;
+        vm.BookCopy.Status = 1;
+
+        if (copyId > 0)
         {
-            return View();
+            var result = await _bookCopyService.GetBookCopyById(copyId, cancellationToken);
+            vm.BookCopy = result.Data;
         }
 
-        ViewBag.Books = response.Data.BookList;
+        return View(vm);
+    }
 
-        return View();
+
+    [HttpPost]
+    public async Task<IActionResult> Save(BookCopyModel vm, CancellationToken cancellationToken)
+    {
+        if (vm.CopyId == 0)
+        {
+            await _bookCopyService.CreateBookCopiesAsync(vm, cancellationToken);
+        }
+        else
+        {
+            await _bookCopyService.UpdateBookCopyAsync(vm.CopyId, vm, cancellationToken);
+        }
+
+        return RedirectToAction(nameof(Index), new { bookid = vm.BookId });
+
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(BookCopyModel bookCopyModel, CancellationToken cancellationToken)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(
+    int copyId,
+    int bookId,
+    CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(bookCopyModel);
-        }
-
-        var response = await _bookCopyService.CreateBookCopiesAsync(
-            bookCopyModel,
+        var response = await _bookCopyService.DeleteBookCopyAsync(
+            copyId,
             cancellationToken);
 
         if (response.IsError)
         {
-            ModelState.AddModelError(
-                string.Empty,
-                response.Message);
-
-            return View(bookCopyModel);
+            return View("Error", new ErrorViewModel
+            {
+                RequestId = response.Message
+            });
         }
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(
+            nameof(Index),
+            new { bookId });
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Detail(
-    int copyId,
-    CancellationToken cancellationToken)
-    {
-        var response = await _bookCopyService.GetBookCopyById(
-            copyId,
-            cancellationToken);
 
-        return View(response.Data);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> Update(
-    int copyId,
-    CancellationToken cancellationToken)
-    {
-        var response = await _bookCopyService.GetBookCopyById(
-            copyId,
-            cancellationToken);
-
-        return View(response.Data);
-    }
-
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Update(
-    //    BookCopyModel bookCopyModel,
-    //    CancellationToken cancellationToken)
-    //{
-    //    var response = await _bookCopyService.UpdateBookCopyAsync(bookCopyModel, cancellationToken);
-    //    if (response.IsError)
-    //    {
-    //        return View("Error", new ErrorViewModel()
-    //        {
-    //            RequestId = response.Message
-    //        });
-    //    }
-    //    else if (response.Data)
-    //    {
-    //        return RedirectToAction(nameof(Index));
-    //    }
-    //    return View(bookCopyModel);
-    //}
 }

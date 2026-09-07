@@ -1,12 +1,14 @@
 ﻿namespace LibraryManagementSystemV2.DAL.Repository;
 
+
+
 public interface IBookCopyRepository
 {
     public Task<BookCopy> CreateBookCopyAsync(BookCopy bookCopy, CancellationToken cancellationToken);
-    public Task<bool> UpdateBookCopyAsync(BookCopy bookCopy, CancellationToken cancellationToken);
+    public Task<bool> UpdateBookCopyAsync(int copyId, BookCopy bookCopy, CancellationToken cancellationToken);
     public Task<bool> DeleteBookCopyAsync(int copyId, CancellationToken cancellationToken);
     public Task<BookCopyView> GetBookCopyByIdAsync(int copyId, CancellationToken cancellationToken);
-    public Task<BookCopyResponse> GetBookCopyListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
+    public Task<IEnumerable<BookCopyResponse>> GetBookCopyListAsync(int bookId, CancellationToken cancellationToken);
 }
 
 
@@ -47,39 +49,27 @@ public class BookCopyRepository : IBookCopyRepository
         return await _dbConnection.QuerySingleAsync<BookCopyView>(command, parameters, commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<BookCopyResponse> GetBookCopyListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    public async Task<IEnumerable<BookCopyResponse>> GetBookCopyListAsync(
+    int bookId,
+    CancellationToken cancellationToken)
     {
         var parameters = new DynamicParameters();
-        parameters.Add("@PageNumber", pageNumber);
-        parameters.Add("@PageSize", pageSize);
-        parameters.Add("@SearchText", searchText);
+        parameters.Add("@BookId", bookId);
 
-        using var multi = await _dbConnection.QueryMultipleAsync(
-            new CommandDefinition(
-                "dbo.GetBookCopyList",
-                parameters,
-                commandType: CommandType.StoredProcedure,
-                cancellationToken: cancellationToken));
+        const string command = "dbo.GetBookCopyList";
 
-        var bookCopies = (await multi.ReadAsync<BookCopies>()).ToList();
-
-        var totalRecords = await multi.ReadSingleAsync<int>();
-
-        return new BookCopyResponse
-        {
-            TotalRecords = totalRecords,
-            BookCopies = bookCopies
-        };
-
+        return await _dbConnection.QueryAsync<BookCopyResponse>(
+            command,
+            parameters,
+            commandType: CommandType.StoredProcedure);
     }
 
 
-
-    public async Task<bool> UpdateBookCopyAsync(BookCopy bookCopy, CancellationToken cancellationToken)
+    public async Task<bool> UpdateBookCopyAsync(int copyId, BookCopy bookCopy, CancellationToken cancellationToken)
     {
         var command = "dbo.UpdateBookCopy";
         var parameters = new DynamicParameters();
-        parameters.Add("@CopyId", bookCopy.CopyId);
+        parameters.Add("@CopyId", copyId);
         parameters.Add("@CopyCode", bookCopy.CopyCode);
         parameters.Add("@BookId", bookCopy.BookId);
         parameters.Add("@Status", bookCopy.Status);
