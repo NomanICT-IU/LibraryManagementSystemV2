@@ -1,4 +1,5 @@
 ﻿using Lms.Mvc.Models;
+using Lms.Mvc.Models.ViewModels;
 
 namespace Lms.Mvc.Services;
 
@@ -9,6 +10,7 @@ public interface IMemberService
     public Task<ApiResponse<MemberModel>> GetMemberByIdAsync(int memberId, CancellationToken cancellationToken);
     public Task<ApiResponse<bool>> UpdateMemberAsync(MemberModel memberModel, CancellationToken cancellationToken);
     public Task<ApiResponse<bool>> DeleteMemberAsync(int memberId, CancellationToken cancellationToken);
+    public Task<ApiResponse<MemberInformationModel>> FindMemberAsync(string searchText, CancellationToken cancellationToken);
 }
 
 public class MemberService : IMemberService
@@ -91,6 +93,14 @@ public class MemberService : IMemberService
     {
         var endpoint = $"api/Member/delete-member/{memberId}";
         return await _httpClientFactory.DeleteFromJsonAsync<ApiResponse<bool>>(endpoint, cancellationToken);
+    }
+
+    public async Task<ApiResponse<MemberInformationModel>> FindMemberAsync(string searchText, CancellationToken cancellationToken)
+    {
+        var endpoint = $"api/Member/find-member-by-member-id-or-member-phone" +
+            $"?searchText={searchText}";
+
+        return await _httpClientFactory.GetFromJsonAsync<ApiResponse<MemberInformationModel>>(endpoint, cancellationToken);
     }
 }
 

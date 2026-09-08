@@ -3,7 +3,10 @@
 
 @{
     ViewData["Title"] = "Search Book";
+   
 }
+
+
 
 <div class="container-fluid">
 
@@ -86,16 +89,26 @@
                                     <td>@book.Status</td>
                                     <td>@book.BorrowedBy</td>
                                     <td>@book.DueDate</td>
+
                                     <td>
-                                        <a asp-controller="Book"
-                                           asp-action="Issue"
-                                           asp-route-bookId="@book.BookId"
-                                           class="btn btn-sm btn-outline-primary">
-
-                                            <i class="bi bi-journal-arrow-up me-1"></i>
-                                            Issue
-
-                                        </a>
+                                        @if (book.Status == "Available")
+                                        {
+                                            <a asp-action="Issue"
+                                               asp-route-copyId="@book.CopyId"
+                                               class="btn btn-sm btn-primary"
+                                               style="width: 80px;">
+                                                Issue
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Details"
+                                               asp-route-copyId="@book.CopyId"
+                                               class="btn btn-sm btn-outline-primary"
+                                               style="width: 80px;">
+                                                Details
+                                            </a>
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -103,7 +116,9 @@
                         else
                         {
                             <tr>
-                                <td colspan="7" class="text-center text-muted py-4">No books found.</td>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    No books found.
+                                </td>
                             </tr>
                         }
                     </tbody>

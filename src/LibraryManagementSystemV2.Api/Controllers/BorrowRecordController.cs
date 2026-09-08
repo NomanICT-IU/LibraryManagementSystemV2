@@ -10,7 +10,7 @@ public class BorrowRecordController(IBorrowRecordService _borrowRecordService) :
     {
         var result = await _borrowRecordService.CreateBorrowRecordAsync(recordDto, cancellationToken);
 
-        return Ok(new ApiResponse<BorrowRecordDetailsDto> { Data = result });
+        return Ok(new ApiResponse<bool> { Data = result });
     }
 
     [HttpDelete("delete-borrow-record/{borrowId:int}")]
@@ -60,10 +60,10 @@ public class BorrowRecordController(IBorrowRecordService _borrowRecordService) :
 
     }
 
-    [HttpPut("return-book")]
-    public async Task<IActionResult> ReturnBorrowedBookAsync([FromQuery] int borrowId, CancellationToken cancellationToken)
+    [HttpPut("return-book/{borrowId:int}")]
+    public async Task<IActionResult> ReturnBorrowedBookAsync(int borrowId, CancellationToken cancellationToken)
     {
         var result = await _borrowRecordService.ReturnBorrowedBookAsync(borrowId, cancellationToken);
-        return Ok(new ApiResponse<ReturnedBookDto> { Data = result });
+        return Ok(new ApiResponse<bool> { Data = result });
     }
 }

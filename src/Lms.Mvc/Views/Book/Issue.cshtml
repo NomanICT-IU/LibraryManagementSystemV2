@@ -1,1 +1,299 @@
-﻿
+﻿@using Lms.Mvc.Models.ViewModels
+@model BookIssueViewModel
+
+@{
+    ViewData["Title"] = "Issue Book";
+}
+
+
+<div class="container py-4">
+
+   
+    <div class="mb-4">
+        <h2 class="fw-bold mb-2">Issue Book</h2>
+        <p class="text-muted mb-0">
+            Issue an available book copy to a selected member.
+        </p>
+    </div>
+
+
+    <div class="row g-3">
+
+        <!-- ================= SELECTED BOOK ================= -->
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border rounded-3 h-100">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+                        Selected Book
+                    </h5>
+
+                    <div class="row mb-2">
+                        <div class="col-6 text-muted">
+                            Title
+                        </div>
+                        <div class="col-6 fw-semibold">
+                            @Model.Book.Title
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-6 text-muted">
+                            Author
+                        </div>
+                        <div class="col-6 fw-semibold">
+                            @Model.Book.Author
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-6 text-muted">
+                            ISBN
+                        </div>
+                        <div class="col-6 fw-semibold">
+                            @Model.Book.ISBN
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-6 text-muted">
+                            Copy ID
+                        </div>
+                        <div class="col-6 fw-semibold">
+                            @Model.Book.CopyId
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 text-muted">
+                            Status
+                        </div>
+                        <div class="col-6">
+
+                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2">
+                                Available
+                            </span>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ================= FIND MEMBER ================= -->
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border rounded-3 h-100">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+                        Find Member
+                    </h5>
+
+                    <form asp-controller="Book"
+                          asp-action="Issue"
+                          method="get">
+
+                        <input type="hidden"
+                               name="copyId"
+                               value="@Model.Book.CopyId" />
+
+                        <div class="mb-3">
+
+                            <label for="memberSearch"
+                                   class="form-label fw-semibold">
+                                Member ID / Phone Number
+                            </label>
+
+                            <input type="text"
+                                   id="memberSearch"
+                                   name="memberSearch"
+                                   class="form-control"
+                                   placeholder="Enter Member ID or Phone Number"
+                                  />
+
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-primary">
+                            Search Member
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ================= MEMBER INFORMATION ================= -->
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border rounded-3 h-100">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+                        Member Information
+                    </h5>
+
+                    <div class="row mb-2">
+                        <div class="col-6 text-muted">
+                            Name
+                        </div>
+                        <div class="col-6 fw-semibold">
+                            @Model.Member?.Name
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-6 text-muted">
+                            Member ID
+                        </div>
+                        <div class="col-6 fw-semibold">
+                            @Model.Member?.MemberCode
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-6 text-muted">
+                            Phone
+                        </div>
+                        <div class="col-6 fw-semibold">
+                            @Model.Member?.Phone
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-6 text-muted">
+                            Borrowed Books
+                        </div>
+                        <div class="col-6 fw-semibold">
+                            @Model.Member?.TotalBorrowedBooks
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 text-muted">
+                            Status
+                        </div>
+
+                        <div class="col-6">
+
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2">
+                                    @Model.Member?.Status 
+                              </span>
+                           
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+       
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border rounded-3 h-100">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+                        Issue Information
+                    </h5>
+
+                    <form asp-controller="Book"
+                          asp-action="ConfirmIssue"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <!-- Hidden values -->
+                        <input type="hidden"
+                               asp-for="Issue.CopyId" />
+
+                        <input type="hidden"
+                               asp-for="Issue.MemberId" />
+
+                        <div class="row g-3">
+
+                            <!-- Issue Date -->
+                            <div class="col-md-6">
+
+                                <label asp-for="Issue.IssueDate"
+                                       class="form-label fw-semibold">
+                                    Issue Date
+                                </label>
+
+                                <input asp-for="Issue.IssueDate"
+                                       type="date"
+                                       class="form-control" />
+
+                                <span asp-validation-for="Issue.IssueDate"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Due Date -->
+                            <div class="col-md-6">
+
+                                <label asp-for="Issue.DueDate"
+                                       class="form-label fw-semibold">
+                                    Due Date
+                                </label>
+
+                                <input asp-for="Issue.DueDate"
+                                       type="date"
+                                       class="form-control" />
+
+                                <span asp-validation-for="Issue.DueDate"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+                        <div class="mt-3">
+
+                            <button type="submit"
+                                    class="btn btn-primary me-2">
+                                Confirm Issue
+                            </button>
+
+                            <a asp-controller="Book"
+                               asp-action="SearchBooks"
+                               class="btn btn-light border">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

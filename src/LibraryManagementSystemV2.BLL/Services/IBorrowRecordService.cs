@@ -2,12 +2,12 @@
 
 public interface IBorrowRecordService
 {
-    public Task<BorrowRecordDetailsDto> CreateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken);
+    public Task<bool> CreateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken);
     public Task<bool> UpdateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken);
     public Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken);
     public Task<BorrowRecordDto> GetBorrowRecordByIdAsync(int borrowId, CancellationToken cancellationToken);
     public Task<IEnumerable<BorrowBookSearchResultDto>> SearchBorrowedBookAsync(string searchBy, string searchText, CancellationToken cancellationToken);
-    public Task<ReturnedBookDto> ReturnBorrowedBookAsync(int borrowId, CancellationToken cancellationToken);
+    public Task<bool> ReturnBorrowedBookAsync(int borrowId, CancellationToken cancellationToken);
 }
 public class BorrowRecordService : IBorrowRecordService
 {
@@ -17,12 +17,12 @@ public class BorrowRecordService : IBorrowRecordService
     {
         _borrowRecordRepository = borrowRecordRepository;
     }
-    public async Task<BorrowRecordDetailsDto> CreateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken)
+    public async Task<bool> CreateBorrowRecordAsync(BorrowRecordDto recordDto, CancellationToken cancellationToken)
     {
         var record = recordDto.Adapt<BorrowRecord>();
-        var result = await _borrowRecordRepository.CreateBorrowRecordAsync(record, cancellationToken);
-        return result.Adapt<BorrowRecordDetailsDto>();
+        return await _borrowRecordRepository.CreateBorrowRecordAsync(record, cancellationToken);
     }
+
     public async Task<bool> DeleteBorrowRecordAsync(int borrowId, CancellationToken cancellationToken)
     {
         return await _borrowRecordRepository.DeleteBorrowRecordAsync(borrowId, cancellationToken);
@@ -34,10 +34,10 @@ public class BorrowRecordService : IBorrowRecordService
         return result.Adapt<BorrowRecordDto>();
     }
 
-    public async Task<ReturnedBookDto> ReturnBorrowedBookAsync(int borrowId, CancellationToken cancellationToken)
+    public async Task<bool> ReturnBorrowedBookAsync(int borrowId, CancellationToken cancellationToken)
     {
-        var returnBook = await _borrowRecordRepository.ReturnBorrowedBookAsync(borrowId, cancellationToken);
-        return returnBook.Adapt<ReturnedBookDto>();
+        return await _borrowRecordRepository.ReturnBorrowedBookAsync(borrowId, cancellationToken);
+
     }
 
     public async Task<IEnumerable<BorrowBookSearchResultDto>> SearchBorrowedBookAsync(string searchBy, string searchText, CancellationToken cancellationToken)

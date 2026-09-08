@@ -8,7 +8,7 @@ public interface IBookRepository
     public Task<Book> GetBookByIdAsync(int bookId, CancellationToken cancellationToken);
     public Task<IEnumerable<BookCopyDetails>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
     public Task<BookDetailsResponse> GetBookDetailsAsync(string searchBy, string searchText, CancellationToken cancellationToken);
-    public Task<BookDetails> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken);
+    public Task<BookDetails> GetBookCopyDetailsAsync(int copyId, CancellationToken cancellationToken);
     public Task<BookListResponse> GetBookListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
 }
 
@@ -122,11 +122,11 @@ public class BookRepository : IBookRepository
     }
 
 
-    public async Task<BookDetails> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken)
+    public async Task<BookDetails> GetBookCopyDetailsAsync(int copyId, CancellationToken cancellationToken)
     {
         var command = "dbo.GetBookCopyDetails";
         var parameters = new DynamicParameters();
-        parameters.Add("@BookId", bookId);
+        parameters.Add("@CopyId", copyId);
 
         return await _dbConnection.QuerySingleAsync<BookDetails>(command, parameters, commandType: CommandType.StoredProcedure);
     }

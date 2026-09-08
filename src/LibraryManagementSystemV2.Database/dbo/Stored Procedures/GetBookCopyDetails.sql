@@ -1,5 +1,5 @@
 ﻿CREATE   PROCEDURE [dbo].[GetBookCopyDetails]
-    @BookId INT
+    @CopyId INT
 AS
 BEGIN
 
@@ -17,5 +17,5 @@ BEGIN
     FROM [dbo].[Book] AS b
     INNER JOIN [dbo].[BookCopy] AS bc
         ON b.BookId = bc.BookId
-    WHERE b.BookId = @BookId and bc.Status = 1;
+    WHERE bc.CopyId = @CopyId and bc.Status = 1;
 END;
