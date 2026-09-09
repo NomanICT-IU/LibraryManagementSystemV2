@@ -1,5 +1,19 @@
 ﻿namespace Lms.Mvc.Models;
 
+public class BorrowBookSearchModel
+{
+
+    public string SearchBy { get; set; }
+    public string SearchText { get; set; }
+    public List<BorrowBookSearchResultModel> BorrowModel { get; set; }
+    public BorrowBookSearchModel()
+    {
+        BorrowModel = new List<BorrowBookSearchResultModel>();
+    }
+}
+
+
+
 public class BorrowBookSearchResultModel
 {
     public int BorrowId { get; set; }

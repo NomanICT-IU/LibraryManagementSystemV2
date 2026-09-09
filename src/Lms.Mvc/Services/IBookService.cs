@@ -1,4 +1,5 @@
 ﻿using Lms.Mvc.Models;
+using Lms.Mvc.Models.ViewModels;
 
 namespace Lms.Mvc.Services;
 
@@ -11,7 +12,7 @@ public interface IBookService
     public Task<ApiResponse<bool>> UpdateBookAsync(BookModel bookModel, CancellationToken cancellationToken);
     public Task<ApiResponse<bool>> DeleteBookAsync(int bookId, CancellationToken cancellationToken);
     public Task<ApiResponse<BookDetailsModel>> GetBookCopyDetailsAsync(int bookId, CancellationToken cancellationToken);
-
+    public Task<ApiResponse<BookDetailsResponseViewModel>> GetBookDetailsAsync(string searchBy, string searchResult, CancellationToken cancellationToken);
 }
 
 public class BookService : IBookService
@@ -59,6 +60,22 @@ public class BookService : IBookService
     {
         string endpoint = $"api/Book/get-book-copy-detail-id/{bookId}";
         return await _httpClient.GetFromJsonAsync<ApiResponse<BookDetailsModel>>(endpoint, cancellationToken);
+    }
+
+    public async Task<ApiResponse<BookDetailsResponseViewModel>> GetBookDetailsAsync(string searchBy, string searchResult, CancellationToken cancellationToken)
+    {
+        var endpoint = $"api/Book/get-book-detail-author-isbn-title" +
+            $"?searchBy={Uri.EscapeDataString(searchBy)}" +
+            $"&searchResult={Uri.EscapeDataString(searchResult)}";
+
+        var response = await _httpClient.GetFromJsonAsync<ApiResponse<BookDetailsResponseViewModel>>(endpoint, cancellationToken);
+        return response ?? new ApiResponse<BookDetailsResponseViewModel>();
+
+
+
+
+
+
     }
 
     public async Task<ApiResponse<BookListResponseModel>> GetBooksync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BorrowBookSearchResultModel>
+﻿@model BorrowBookSearchModel
 
 <div class="container py-4">
 
@@ -24,25 +24,23 @@
                     <!-- Search By -->
                     <div class="col-md-5">
 
-                        <label class="form-label fw-semibold small">
+                        <label asp-for="SearchBy"
+                               class="form-label fw-semibold small">
                             Search Borrowed Book By
                         </label>
 
-                        <select name="searchBy"
+                        <select asp-for="SearchBy"
                                 class="form-select">
 
-                            <option value="MemberCode"
-                                    selected="@(ViewBag.SearchBy == "MemberId")">
+                            <option value="MemberCode">
                                 Member ID / Phone
                             </option>
 
-                            <option value="ISBN"
-                                    selected="@(ViewBag.SearchBy == "ISBN")">
+                            <option value="ISBN">
                                 ISBN
                             </option>
 
-                            <option value="CopyCode"
-                                    selected="@(ViewBag.SearchBy == "CopyId")">
+                            <option value="CopyCode">
                                 Copy ID
                             </option>
 
@@ -50,22 +48,20 @@
 
                     </div>
 
-
                     <!-- Search Text -->
                     <div class="col-md-5">
 
-                        <label class="form-label fw-semibold small">
+                        <label asp-for="SearchText"
+                               class="form-label fw-semibold small">
                             Search Text
                         </label>
 
-                        <input type="text"
-                               name="searchText"
+                        <input asp-for="SearchText"
+                               type="text"
                                class="form-control"
-                               value="@ViewBag.SearchText"
                                placeholder="Enter search text..." />
 
                     </div>
-
 
                     <!-- Search Button -->
                     <div class="col-md-2">
@@ -99,11 +95,11 @@
 
 
     <!-- Results -->
-    @if (Model != null && Model.Any())
+    @if (Model != null && Model.BorrowModel.Any())
     {
         <div class="row g-3">
 
-            @foreach (var item in Model)
+            @foreach (var item in Model.BorrowModel)
             {
                 <!-- Borrowed Book Information -->
                 <div class="col-12">
@@ -272,11 +268,21 @@
 
                                     <!-- Return Button -->
                                     <form asp-action="ConfirmReturn"
-                                          method="post">
+                                          method="post"
+                                          onsubmit="return confirm('Are you sure you want to return this book?');">
 
                                         <input type="hidden"
                                                name="BorrowId"
                                                value="@item.BorrowId" />
+
+                                        <input type="hidden"
+                                               name="SearchBy"
+                                               value="@Model.SearchBy" />
+
+                                        <input type="hidden"
+                                               name="SearchText"
+                                               value="@Model.SearchText" />
+
                                         <button type="submit"
                                                 class="btn btn-primary">
 

@@ -7,11 +7,6 @@
 AS
 BEGIN
 
-    BEGIN TRANSACTION;
-
-    -- Reserve Book Copy
-    
-
     -- Create Borrow Record
     INSERT INTO [dbo].[BorrowRecord]
     (
@@ -34,5 +29,5 @@ BEGIN
     SET Status = 2
     WHERE CopyId = @CopyId
       AND Status = 1;
-    COMMIT TRANSACTION;
+ 
 END;

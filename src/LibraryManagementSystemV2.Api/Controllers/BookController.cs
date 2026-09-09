@@ -66,10 +66,8 @@ public class BookController(IBookService _bookService) : ControllerBase
     }
 
     [HttpGet("get-book-detail-author-isbn-title")]
-    public async Task<IActionResult> GetBookDetailsAsync(
-    [FromQuery] string searchBy,
-    [FromQuery] string searchResult,
-    CancellationToken cancellationToken)
+    public async Task<IActionResult> GetBookDetailsAsync(string searchBy = "", string searchResult = "",
+    CancellationToken cancellationToken = default)
     {
         var result = await _bookService.GetBookDetailsAsync(
             searchBy,

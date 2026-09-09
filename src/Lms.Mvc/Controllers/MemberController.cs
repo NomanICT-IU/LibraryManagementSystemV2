@@ -1,4 +1,5 @@
 ﻿using Lms.Mvc.Models;
+using Lms.Mvc.Models.ViewModels;
 using Lms.Mvc.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,12 @@ namespace Lms.Mvc.Controllers;
 public class MemberController : Controller
 {
     private readonly IMemberService _memberService;
+    private readonly IBorrowRecordService _borrowRecordService;
 
-    public MemberController(IMemberService memberService)
+    public MemberController(IMemberService memberService, IBorrowRecordService borrowRecordService)
     {
         _memberService = memberService;
+        _borrowRecordService = borrowRecordService;
     }
     [HttpGet]
     public async Task<IActionResult> Index(string searchText = "", int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
@@ -108,5 +111,51 @@ public class MemberController : Controller
         {
             return RedirectToAction(nameof(Detail), new { memberId });
         }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> MemberDetails(
+     string searchBy = "",
+     string searchText = "",
+     CancellationToken cancellationToken = default)
+    {
+        var models = new MemberDetailsViewModel
+        {
+            SearchBy = searchBy,
+            SearchText = searchText
+        };
+
+        if (!string.IsNullOrWhiteSpace(searchBy) &&
+            !string.IsNullOrWhiteSpace(searchText))
+        {
+            var response = await _memberService.GetMemberDetailsAsync(
+                searchBy,
+                searchText,
+                cancellationToken);
+
+            if (response.Data != null)
+            {
+                models = response.Data;
+                models.SearchBy = searchBy;
+                models.SearchText = searchText;
+            }
+        }
+
+        return View(models);
+    }
+    [HttpPost]
+    public async Task<IActionResult> ConfirmReturn(
+     int borrowId, string searchBy, string searchText,
+     CancellationToken cancellationToken)
+    {
+        var response = await _borrowRecordService
+            .ReturnBorrowedBookAsync(borrowId, cancellationToken);
+
+        if (response.Data)
+        {
+            return RedirectToAction(nameof(MemberDetails), new { searchBy = searchBy, searchText = searchText });
+        }
+
+        return RedirectToAction(nameof(MemberDetails), new { searchBy = searchBy, searchText = searchText });
     }
 }

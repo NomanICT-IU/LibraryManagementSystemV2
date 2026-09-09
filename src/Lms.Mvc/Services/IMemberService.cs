@@ -11,6 +11,7 @@ public interface IMemberService
     public Task<ApiResponse<bool>> UpdateMemberAsync(MemberModel memberModel, CancellationToken cancellationToken);
     public Task<ApiResponse<bool>> DeleteMemberAsync(int memberId, CancellationToken cancellationToken);
     public Task<ApiResponse<MemberInformationModel>> FindMemberAsync(string searchText, CancellationToken cancellationToken);
+    public Task<ApiResponse<MemberDetailsViewModel>> GetMemberDetailsAsync(string searchBy, string searchText, CancellationToken cancellationToken);
 }
 
 public class MemberService : IMemberService
@@ -102,5 +103,26 @@ public class MemberService : IMemberService
 
         return await _httpClientFactory.GetFromJsonAsync<ApiResponse<MemberInformationModel>>(endpoint, cancellationToken);
     }
+
+
+    public async Task<ApiResponse<MemberDetailsViewModel>> GetMemberDetailsAsync(
+        string searchBy,
+        string searchText,
+        CancellationToken cancellationToken = default)
+    {
+        var endpoint =
+            $"api/Member/get-member-details" +
+            $"?searchBy={Uri.EscapeDataString(searchBy ?? string.Empty)}" +
+            $"&searchText={Uri.EscapeDataString(searchText ?? string.Empty)}";
+
+        var response = await _httpClientFactory
+            .GetFromJsonAsync<ApiResponse<MemberDetailsViewModel>>(
+                endpoint,
+                cancellationToken);
+
+        return response ?? new ApiResponse<MemberDetailsViewModel>();
+    }
+
+
 }
 

@@ -1,0 +1,516 @@
+﻿@model Lms.Mvc.Models.ViewModels.MemberDetailsViewModel
+
+<div class="container py-4">
+
+    <!-- Page Header -->
+    <div class="mb-4">
+        <h4 class="fw-bold mb-1">Member Details</h4>
+        <p class="text-muted small mb-0">
+            View member information, currently borrowed books, and borrowing history.
+        </p>
+    </div>
+
+
+    <!-- Search Card -->
+    <div class="card border rounded-3 mb-3">
+        <div class="card-body">
+
+            <form asp-action="MemberDetails"
+                  method="get">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- Search By -->
+                    <div class="col-md-5">
+
+                        <label for="searchBy"
+                               class="form-label fw-semibold small">
+                            Search Member By
+                        </label>
+
+                        <select id="searchBy"
+                                name="searchBy"
+                                class="form-select">
+
+                            <option value="MemberCode"
+                                    selected="@(Model.SearchBy == "MemberCode")">
+                                Member ID
+                            </option>
+
+                            <option value="Phone"
+                                    selected="@(Model.SearchBy == "Phone")">
+                                Phone
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Search Text -->
+                    <div class="col-md-5">
+
+                        <label for="searchText"
+                               class="form-label fw-semibold small">
+                            Search Text
+                        </label>
+
+                        <input type="text"
+                               id="searchText"
+                               name="searchText"
+                               class="form-control"
+                               value="@Model.SearchText"
+                               placeholder="Enter member ID or phone..." />
+
+                    </div>
+
+
+                    <!-- Search Button -->
+                    <div class="col-md-2">
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+
+                            <i class="bi bi-search me-1"></i>
+                            Search Member
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    @if (Model?.Member != null)
+    {
+        <!-- Member Information + Borrowing Summary -->
+        <div class="row g-3 mb-3">
+
+            <!-- Member Information -->
+            <div class="col-md-6">
+
+                <div class="card border rounded-3 h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="fw-bold mb-4">
+                            Member Information
+                        </h6>
+
+                        <div class="row mb-2">
+
+                            <div class="col-5 text-muted small">
+                                Name
+                            </div>
+
+                            <div class="col-7 fw-semibold small">
+                                @Model.Member.Name
+                            </div>
+
+                        </div>
+
+
+                        <div class="row mb-2">
+
+                            <div class="col-5 text-muted small">
+                                Member ID
+                            </div>
+
+                            <div class="col-7 fw-semibold small">
+                                @Model.Member.MemberCode
+                            </div>
+
+                        </div>
+
+
+                        <div class="row mb-2">
+
+                            <div class="col-5 text-muted small">
+                                Phone
+                            </div>
+
+                            <div class="col-7 fw-semibold small">
+                                @Model.Member.Phone
+                            </div>
+
+                        </div>
+
+
+                        <div class="row mb-2">
+
+                            <div class="col-5 text-muted small">
+                                Address
+                            </div>
+
+                            <div class="col-7 fw-semibold small">
+                                @Model.Member.Address
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col-5 text-muted small">
+                                Status
+                            </div>
+
+                            <div class="col-7">
+
+                                @if (Model.Member.Status == "Active")
+                                {
+                                    <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle">
+                                        @Model.Member.Status
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle">
+                                        @Model.Member.Status
+                                    </span>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Borrowing Summary -->
+            <div class="col-md-6">
+
+                <div class="card border rounded-3 h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="fw-bold mb-4">
+                            Borrowing Summary
+                        </h6>
+
+
+                        <div class="row mb-2">
+
+                            <div class="col-6 text-muted small">
+                                Currently Borrowed
+                            </div>
+
+                            <div class="col-6 fw-semibold small">
+                                @Model.BorrowSummery.CurrentlyBorrowed Books
+                            </div>
+
+                        </div>
+
+
+                        <div class="row mb-2">
+
+                            <div class="col-6 text-muted small">
+                                Total Borrowed
+                            </div>
+
+                            <div class="col-6 fw-semibold small">
+                                @Model.BorrowSummery.TotalBorrowed Books
+                            </div>
+
+                        </div>
+
+
+                        <div class="row mb-2">
+
+                            <div class="col-6 text-muted small">
+                                Overdue Books
+                            </div>
+
+                            <div class="col-6 fw-semibold small">
+                                @Model.BorrowSummery.OverdueBooks Books
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col-6 text-muted small">
+                                Last Borrowed
+                            </div>
+
+                            <div class="col-6 fw-semibold small">
+                                @(Model.BorrowSummery.LastBorrowed?.ToString("dd MMM yyyy") ?? "-")
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Currently Borrowed Books -->
+        <div class="card border rounded-3 mb-3">
+
+            <div class="card-body">
+
+                <h6 class="fw-bold mb-3">
+                    Currently Borrowed Books
+                </h6>
+
+                @if (Model.BorrowedHistory != null &&
+                     Model.BorrowedHistory.Any())
+                {
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle mb-0">
+
+                            <thead class="table-light">
+
+                                <tr>
+
+                                    <th class="small text-uppercase">
+                                        Book Title
+                                    </th>
+
+                                    <th class="small text-uppercase">
+                                        Copy ID
+                                    </th>
+
+                                    <th class="small text-uppercase">
+                                        Issue Date
+                                    </th>
+
+                                    <th class="small text-uppercase">
+                                        Due Date
+                                    </th>
+
+                                    <th class="small text-uppercase text-center">
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var item in Model.BorrowedHistory)
+                                {
+                                    <tr>
+
+                                        <td class="small">
+                                            @item.Title
+                                        </td>
+
+                                        <td class="small">
+                                            @item.CopyCode
+                                        </td>
+
+                                        <td class="small">
+                                            @item.IssueDate.ToString("dd MMM yyyy")
+                                        </td>
+
+                                        <td class="small">
+                                            @item.DueDate.ToString("dd MMM yyyy")
+                                        </td>
+
+                                        <td class="text-center">
+
+                                            <form asp-action="ConfirmReturn"
+                                                  method="post"
+                                                  class="d-inline"
+                                                  onsubmit="return confirm('Are you sure you want to return this book?');">
+
+                                                <input type="hidden"
+                                                       name="BorrowId"
+                                                       value="@item.BorrowId" />
+
+                                                <input type="hidden"
+                                                       name="SearchBy"
+                                                       value="@Model.SearchBy" />
+
+                                                <input type="hidden"
+                                                       name="SearchText"
+                                                       value="@Model.SearchText" />
+
+                                                <button type="submit"
+                                                        class="btn btn-primary btn-sm">
+
+                                                    <i class="bi bi-arrow-return-left me-1"></i>
+                                                    Return
+
+                                                </button>
+
+                                            </form>
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted py-4">
+
+                        <i class="bi bi-book fs-3 d-block mb-2"></i>
+
+                        <span class="small">
+                            No currently borrowed books.
+                        </span>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- Borrowing History -->
+        <div class="card border rounded-3">
+
+            <div class="card-body">
+
+                <h6 class="fw-bold mb-3">
+                    Borrowing History
+                </h6>
+
+                @if (Model.ReturnHistory != null &&
+                     Model.ReturnHistory.Any())
+                {
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle mb-0">
+
+                            <thead class="table-light">
+
+                                <tr>
+
+                                    <th class="small text-uppercase">
+                                        Book Title
+                                    </th>
+
+                                    <th class="small text-uppercase">
+                                        Copy ID
+                                    </th>
+
+                                    <th class="small text-uppercase">
+                                        Issue Date
+                                    </th>
+
+                                    <th class="small text-uppercase">
+                                        Return Date
+                                    </th>
+
+                                    <th class="small text-uppercase">
+                                        Status
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var item in Model.ReturnHistory)
+                                {
+                                    <tr>
+
+                                        <td class="small">
+                                            @item.Title
+                                        </td>
+
+                                        <td class="small">
+                                            @item.CopyCode
+                                        </td>
+
+                                        <td class="small">
+                                            @item.IssueDate.ToString("dd MMM yyyy")
+                                        </td>
+
+                                        <td class="small">
+                                            @(item.ReturnDate?.ToString("dd MMM yyyy") ?? "-")
+                                        </td>
+
+                                        <td>
+
+                                            @if (item.ReturnDate.HasValue)
+                                            {
+                                                <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle">
+                                                    Returned
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge rounded-pill bg-warning-subtle text-warning border border-warning-subtle">
+                                                    Borrowed
+                                                </span>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted py-4">
+
+                        <i class="bi bi-clock-history fs-3 d-block mb-2"></i>
+
+                        <span class="small">
+                            No borrowing history found.
+                        </span>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <!-- No Member Selected -->
+        <div class="card border rounded-3">
+
+            <div class="card-body text-center py-5">
+
+                <i class="bi bi-person-search fs-1 text-muted"></i>
+
+                <h6 class="fw-bold mt-3">
+                    Search for a member
+                </h6>
+
+                <p class="text-muted small mb-0">
+                    Enter a Member ID or phone number to view member details.
+                </p>
+
+            </div>
+
+        </div>
+    }
+
+</div>

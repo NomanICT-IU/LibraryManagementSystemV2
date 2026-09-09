@@ -63,8 +63,8 @@ public class MemberController(IMemberService _memberService) : ControllerBase
         return Ok(
                    new ApiResponse<MemberDetailsDto> { Data = result });
     }
-    [HttpGet("get-member-details-by-member-id-or-name-or-phone ")]
-    public async Task<IActionResult> GetMemberDetailsAsync([FromQuery] string searchBy, [FromQuery] string searchText, CancellationToken cancellationToken)
+    [HttpGet("get-member-details")]
+    public async Task<IActionResult> GetMemberDetailsAsync(string searchBy = "", string searchText = "", CancellationToken cancellationToken = default)
     {
         var result = await _memberService.GetMemberDetailsAsync(searchBy, searchText, cancellationToken);
         return Ok(

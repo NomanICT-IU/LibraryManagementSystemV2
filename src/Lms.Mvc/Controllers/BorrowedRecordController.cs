@@ -14,23 +14,23 @@ public class BorrowedRecordController : Controller
     }
     public async Task<IActionResult> Index(string searchBy = "", string searchText = "", CancellationToken cancellationToken = default)
     {
-        var models = new List<BorrowBookSearchResultModel>();
+        var models = new BorrowBookSearchModel();
 
         if (!string.IsNullOrWhiteSpace(searchBy) && !string.IsNullOrWhiteSpace(searchText))
         {
             var response = await borrowRecordService
            .SearchBorrowedBookAsync(searchBy, searchText, cancellationToken);
 
-            models = response.Data.ToList();
-            ViewBag.SearchBy = searchBy;
-            ViewBag.SearchText = searchText;
+            models.BorrowModel = response.Data.ToList();
+            models.SearchBy = searchBy;
+            models.SearchText = searchText;
         }
 
         return View(models);
     }
     [HttpPost]
     public async Task<IActionResult> ConfirmReturn(
-     int borrowId,
+     int borrowId, string searchBy, string searchText,
      CancellationToken cancellationToken)
     {
         var response = await borrowRecordService
@@ -38,9 +38,9 @@ public class BorrowedRecordController : Controller
 
         if (response.Data)
         {
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { searchBy = searchBy, searchText = searchText });
         }
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index), new { searchBy = searchBy, searchText = searchText });
     }
 }

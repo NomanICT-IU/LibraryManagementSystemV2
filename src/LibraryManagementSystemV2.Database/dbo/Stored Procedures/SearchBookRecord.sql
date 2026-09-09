@@ -1,6 +1,6 @@
 ﻿CREATE   PROCEDURE [dbo].[SearchBookRecord]
-    @SearchBy     NVARCHAR(20),
-    @SearchText NVARCHAR(100)
+    @SearchBy     NVARCHAR(20)='',
+    @SearchText NVARCHAR(100)=''
 AS
 BEGIN
 
@@ -39,7 +39,8 @@ BEGIN
     LEFT JOIN [dbo].[Member] AS m
         ON br.MemberId = m.MemberId
 
-    WHERE
+    WHERE 
+        br.ReturnDate is null and
         (
         ISNULL(@SearchBy, '') = ''
         OR ISNULL(@SearchText, '') = ''
