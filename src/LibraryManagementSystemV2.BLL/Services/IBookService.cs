@@ -71,11 +71,11 @@ public class BookService : IBookService
 
         return new BookDetailsResponseDto
         {
-            BookInformationDto = bookDetails.BookInformation.Adapt<List<BookInformationDto>>(),
+            BookInformation = bookDetails.BookInformation.Adapt<List<BookInformationDto>>(),
 
-            BookAvailabilitySummaryDto = bookDetails.BookAvailabilitySummary.Adapt<List<BookAvailabilitySummaryDto>>(),
+            BookSummary = bookDetails.BookAvailabilitySummary.Adapt<List<BookAvailabilitySummaryDto>>(),
 
-            CopyInformationDto = bookDetails.CopyInformation.Adapt<List<CopyInformationDto>>()
+            CopyInformation = bookDetails.CopyInformation.Adapt<List<CopyInformationDto>>()
         };
     }
 

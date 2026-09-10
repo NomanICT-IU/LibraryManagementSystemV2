@@ -3,15 +3,16 @@
 public class BookDetailsResponseViewModel
 {
     public string SearchBy { get; set; }
-    public string SearchText { get; set; }
-    public List<BookInformationModel> BookInfoModel { get; set; }
-    public List<BookAvailabilitySummaryModel> BookSummaryModel { get; set; }
-    public List<CopyInformationModel> CopyInfoModel { get; set; }
+    public string SearchResult { get; set; }
+    //public IssueInformationModel Issue { get; set; }
+    public List<BookInformationModel> BookInformation { get; set; }
+    public List<BookAvailabilitySummaryModel> BookSummary { get; set; }
+    public List<CopyInformationModel> CopyInformation { get; set; }
     public BookDetailsResponseViewModel()
     {
-        var BookInfoModel = new List<BookInformationModel>();
-        var BookSummaryModel = new List<BookAvailabilitySummaryModel>();
-        var CopyInfoModel = new List<CopyInformationModel>();
+        BookInformation = new List<BookInformationModel>();
+        BookSummary = new List<BookAvailabilitySummaryModel>();
+        CopyInformation = new List<CopyInformationModel>();
     }
 
 }
@@ -34,6 +35,8 @@ public class BookAvailabilitySummaryModel
 public class CopyInformationModel
 {
     public int BookId { get; set; }
+    public int CopyId { get; set; }
+    public string Title { get; set; }
     public string CopyCode { get; set; }
     public string Status { get; set; }
     public string BorrowedBy { get; set; }

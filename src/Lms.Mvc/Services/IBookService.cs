@@ -62,20 +62,22 @@ public class BookService : IBookService
         return await _httpClient.GetFromJsonAsync<ApiResponse<BookDetailsModel>>(endpoint, cancellationToken);
     }
 
-    public async Task<ApiResponse<BookDetailsResponseViewModel>> GetBookDetailsAsync(string searchBy, string searchResult, CancellationToken cancellationToken)
+    public async Task<ApiResponse<BookDetailsResponseViewModel>> GetBookDetailsAsync(
+     string searchBy,
+     string searchResult,
+     CancellationToken cancellationToken)
     {
-        var endpoint = $"api/Book/get-book-detail-author-isbn-title" +
+        var endpoint =
+            $"api/Book/get-book-detail" +
             $"?searchBy={Uri.EscapeDataString(searchBy)}" +
             $"&searchResult={Uri.EscapeDataString(searchResult)}";
 
-        var response = await _httpClient.GetFromJsonAsync<ApiResponse<BookDetailsResponseViewModel>>(endpoint, cancellationToken);
+        var response =
+            await _httpClient.GetFromJsonAsync<ApiResponse<BookDetailsResponseViewModel>>(
+                endpoint,
+                cancellationToken);
+
         return response ?? new ApiResponse<BookDetailsResponseViewModel>();
-
-
-
-
-
-
     }
 
     public async Task<ApiResponse<BookListResponseModel>> GetBooksync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)

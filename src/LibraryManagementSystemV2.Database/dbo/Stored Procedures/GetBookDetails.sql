@@ -4,15 +4,12 @@ CREATE PROCEDURE [dbo].[GetBookDetails]
     @SearchText NVARCHAR(100) = NULL
 AS
 BEGIN
-    SET NOCOUNT ON;
+  
 
     -- Clean input
     SET @SearchBy = LTRIM(RTRIM(ISNULL(@SearchBy, '')));
     SET @SearchText = LTRIM(RTRIM(ISNULL(@SearchText, '')));
 
-    /* =========================================================
-       1. Find searched books
-       ========================================================= */
 
     SELECT
         b.BookId,
@@ -39,9 +36,7 @@ BEGIN
         );
 
 
-    /* =========================================================
-       2. Book Information
-       ========================================================= */
+   
 
     SELECT
         BookId,
@@ -53,9 +48,6 @@ BEGIN
     ORDER BY BookId;
 
 
-    /* =========================================================
-       3. Book Copy Summary
-       ========================================================= */
 
     SELECT
         tb.BookId,
@@ -104,13 +96,12 @@ BEGIN
         tb.BookId;
 
 
-    /* =========================================================
-       4. Individual Book Copies
-       ========================================================= */
+ 
 
     SELECT
         bc.BookId,
         bc.CopyId,
+        b.Title,
         bc.CopyCode,
 
         CASE
@@ -142,6 +133,8 @@ BEGIN
 
     LEFT JOIN dbo.Member AS m
         ON br.MemberId = m.MemberId
+    join [dbo].[Book] as b
+       on b.BookId = bc.BookId
 
     ORDER BY
         bc.BookId,

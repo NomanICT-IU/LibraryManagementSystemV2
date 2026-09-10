@@ -1,0 +1,645 @@
+﻿@model Lms.Mvc.Models.ViewModels.BookDetailsResponseViewModel
+
+@{
+    ViewData["Title"] = "Book Details";
+
+    var books = Model?.BookInformation;
+    var summaries = Model?.BookSummary;
+    var copies = Model?.CopyInformation;
+}
+
+<div class="container-fluid py-4">
+
+    <div class="row">
+
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2">
+
+            <div class="bg-dark text-white rounded-4 min-vh-100 p-3">
+
+                <h5 class="fw-bold mb-4">
+                    Library<br />
+                    Management
+                </h5>
+
+                <div class="nav flex-column gap-2">
+
+                    <a asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="nav-link text-white">
+                        Dashboard
+                    </a>
+
+                    <a asp-controller="Book"
+                       asp-action="SearchBook"
+                       class="nav-link text-white">
+                        Search Book
+                    </a>
+
+                    <a asp-controller="BorrowRecord"
+                       asp-action="Issue"
+                       class="nav-link text-white">
+                        Issue Book
+                    </a>
+
+                    <a asp-controller="BorrowRecord"
+                       asp-action="ReturnBook"
+                       class="nav-link text-white">
+                        Return Book
+                    </a>
+
+                    <a asp-controller="Member"
+                       asp-action="Index"
+                       class="nav-link text-white">
+                        Member Details
+                    </a>
+
+                    <a asp-controller="Book"
+                       asp-action="BookDetails"
+                       class="nav-link active bg-secondary rounded-3 text-white">
+                        Book Details
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10">
+
+            <div class="p-3">
+
+                <!-- Header -->
+                <div class="mb-4">
+
+                    <h4 class="fw-bold">
+                        Book Details
+                    </h4>
+
+                    <p class="text-secondary">
+                        View full book information and copy-wise status.
+                    </p>
+
+                </div>
+
+
+                <!-- Search Card -->
+                <div class="card border rounded-4 shadow-sm mb-3">
+
+                    <div class="card-body">
+
+                        <form asp-controller="Book"
+                              asp-action="BookDetails"
+                              method="get">
+
+                            <div class="row g-3 align-items-end">
+
+                                <!-- Search By -->
+                                <div class="col-md-5">
+
+                                    <label asp-for="SearchBy"
+                                           class="form-label small fw-semibold">
+                                        Search Book By
+                                    </label>
+
+                                    <select asp-for="SearchBy"
+                                            class="form-select">
+
+                                        <option value="">
+                                            Select
+                                        </option>
+
+                                        <option value="ISBN">
+                                            ISBN
+                                        </option>
+
+                                        <option value="Title">
+                                            Title
+                                        </option>
+
+                                        <option value="Author">
+                                            Author
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- Search Text -->
+                                <div class="col-md-5">
+
+                                    <label asp-for="SearchResult"
+                                           class="form-label small fw-semibold">
+                                        Search Text
+                                    </label>
+
+                                    <input asp-for="SearchResult"
+                                           class="form-control"
+                                           placeholder="Enter search text" />
+
+                                </div>
+
+
+                                <!-- Search Button -->
+                                <div class="col-md-2">
+
+                                    <button type="submit"
+                                            class="btn btn-primary w-100">
+
+                                        <i class="bi bi-search me-1"></i>
+
+                                        Search Book
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+
+                @if (books != null && books.Any())
+                {
+
+                    <div class="row g-3 mb-3">
+
+                        <div class="col-lg-6">
+
+                            <div class="card border rounded-4 shadow-sm h-100">
+
+                                <div class="card-body">
+
+                                    <h5 class="fw-bold mb-4">
+
+                                        <i class="bi bi-book me-2"></i>
+
+                                        Book Information
+
+                                    </h5>
+
+
+                                    @foreach (var book in books)
+                                    {
+
+                                        <div class="border-bottom pb-3 mb-3">
+
+                                            <!-- Title -->
+                                            <div class="row mb-2">
+
+                                                <div class="col-5 text-secondary">
+                                                    Title
+                                                </div>
+
+                                                <div class="col-7 fw-semibold">
+                                                    @book.Title
+                                                </div>
+
+                                            </div>
+
+
+                                            <!-- Author -->
+                                            <div class="row mb-2">
+
+                                                <div class="col-5 text-secondary">
+                                                    Author
+                                                </div>
+
+                                                <div class="col-7 fw-semibold">
+                                                    @book.Author
+                                                </div>
+
+                                            </div>
+
+
+                                            <!-- ISBN -->
+                                            <div class="row mb-2">
+
+                                                <div class="col-5 text-secondary">
+                                                    ISBN
+                                                </div>
+
+                                                <div class="col-7 fw-semibold">
+                                                    @book.ISBN
+                                                </div>
+
+                                            </div>
+
+
+                                            <!-- Category -->
+                                            <div class="row">
+
+                                                <div class="col-5 text-secondary">
+                                                    Category
+                                                </div>
+
+                                                <div class="col-7 fw-semibold">
+                                                    @book.Category
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                     
+
+                        <div class="col-lg-6">
+
+                            <div class="card border rounded-4 shadow-sm h-100">
+
+                                <div class="card-body">
+
+                                    <h5 class="fw-bold mb-4">
+
+                                        <i class="bi bi-bar-chart me-2"></i>
+
+                                        Availability Summary
+
+                                    </h5>
+
+
+                                    @if (summaries != null && summaries.Any())
+                                    {
+
+                                        @foreach (var summary in summaries)
+                                        {
+
+                                            <div class="border-bottom pb-3 mb-3">
+
+
+                                                <!-- Total Copies -->
+                                                <div class="row mb-2">
+
+                                                    <div class="col-7 text-secondary">
+                                                        Total Copies
+                                                    </div>
+
+                                                    <div class="col-5 fw-semibold">
+                                                        @summary.Total
+                                                    </div>
+
+                                                </div>
+
+
+                                                <!-- Available -->
+                                                <div class="row mb-2">
+
+                                                    <div class="col-7 text-secondary">
+                                                        Available
+                                                    </div>
+
+                                                    <div class="col-5 fw-semibold text-success">
+                                                        @summary.Available
+                                                    </div>
+
+                                                </div>
+
+
+                                                <!-- Borrowed -->
+                                                <div class="row mb-2">
+
+                                                    <div class="col-7 text-secondary">
+                                                        Borrowed
+                                                    </div>
+
+                                                    <div class="col-5 fw-semibold text-danger">
+                                                        @summary.Borrowed
+                                                    </div>
+
+                                                </div>
+
+
+                                                <!-- Status -->
+                                                <div class="row">
+
+                                                    <div class="col-7 text-secondary">
+                                                        Status
+                                                    </div>
+
+                                                    <div class="col-5 fw-semibold">
+                                                        @summary.Status
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        }
+
+                                    }
+                                    else
+                                    {
+
+                                        <div class="alert alert-info mb-0">
+
+                                            <i class="bi bi-info-circle me-1"></i>
+
+                                            No availability information found.
+
+                                        </div>
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ===================================================== -->
+                    <!-- COPY INFORMATION -->
+                    <!-- ===================================================== -->
+
+                    <div class="card border rounded-4 shadow-sm">
+
+                        <div class="card-body">
+
+                            <h5 class="fw-bold mb-4">
+
+                                <i class="bi bi-collection me-2"></i>
+
+                                Copy Information
+
+                            </h5>
+
+
+                            @if (copies != null &&
+                                 copies.Any())
+                            {
+
+                                @foreach (var bookGroup in copies.GroupBy(x => x.BookId))
+                                {
+                                    var book = bookGroup.First();
+
+                                    <div class="mb-4">
+
+                                        <!-- Book Id -->
+                                        <h6 class="fw-bold mb-3">
+                                            @book.Title
+                                        </h6>
+
+
+                                        <div class="table-responsive">
+
+                                            <table class="table table-hover align-middle">
+
+                                                <thead class="table-light">
+
+                                                    <tr>
+
+                                                        <th>
+                                                            COPY CODE
+                                                        </th>
+
+                                                        <th>
+                                                            STATUS
+                                                        </th>
+
+                                                        <th>
+                                                            BORROWED BY
+                                                        </th>
+
+                                                        <th>
+                                                            DUE DATE
+                                                        </th>
+
+                                                        <th>
+                                                            ACTION
+                                                        </th>
+
+                                                    </tr>
+
+                                                </thead>
+
+
+                                                <tbody>
+
+                                                    @foreach (var item in bookGroup)
+                                                    {
+
+                                                        <tr>
+
+                                                            <!-- Copy Code -->
+                                                            <td class="fw-semibold">
+
+                                                                @item.CopyCode
+
+                                                            </td>
+
+
+                                                            <!-- Status -->
+                                                            <td>
+
+                                                                @if (item.Status == "Available")
+                                                                {
+
+                                                                    <span class="badge rounded-pill bg-success-subtle text-success">
+
+                                                                        <i class="bi bi-check-circle me-1"></i>
+
+                                                                        Available
+
+                                                                    </span>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <span class="badge rounded-pill bg-warning-subtle text-warning-emphasis">
+
+                                                                        <i class="bi bi-clock me-1"></i>
+
+                                                                        @item.Status
+
+                                                                    </span>
+
+                                                                }
+
+                                                            </td>
+
+
+                                                            <!-- Borrowed By -->
+                                                            <td>
+
+                                                                @if (string.IsNullOrWhiteSpace(item.BorrowedBy))
+                                                                {
+
+                                                                    <span class="text-secondary">
+                                                                        -
+                                                                    </span>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    @item.BorrowedBy
+
+                                                                }
+
+                                                            </td>
+
+
+                                                            <!-- Due Date -->
+                                                            <td>
+
+                                                                @if (item.DueDate.HasValue)
+                                                                {
+
+                                                                    @item.DueDate.Value.ToString("dd MMM yyyy")
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <span class="text-secondary">
+                                                                        -
+                                                                    </span>
+
+                                                                }
+
+                                                            </td>
+
+
+                                                            <!-- Action -->
+                                                            <td>
+
+                                                                @if (item.Status == "Available")
+                                                                {
+
+                                                                    <a asp-controller="BorrowRecord"
+                                                                       asp-action="Issue"
+                                                                       asp-route-copyId="@item.CopyId"
+                                                                       class="btn btn-primary btn-sm issue-btn"
+                                                                       style="width: 7rem;">
+
+                                                                        <i class="bi bi-book me-1"></i>
+
+                                                                        Issue
+
+                                                                    </a>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <a asp-controller="Member"
+                                                                       asp-action="Detail"
+                                                                       asp-route-memberId="@item"
+                                                                       class="btn btn-outline-primary btn-sm"
+                                                                       style="width: 7rem;">
+
+                                                                        <i class="bi bi-person me-1"></i>
+
+                                                                        View Member
+
+                                                                    </a>
+
+                                                                }
+
+                                                            </td>
+
+                                                        </tr>
+
+                                                    }
+
+                                                </tbody>
+
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+                                }
+
+                            }
+                            else
+                            {
+
+                                <div class="alert alert-info mb-0">
+
+                                    <i class="bi bi-info-circle me-1"></i>
+
+                                    No copies found for this book.
+
+                                </div>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                }
+
+
+               
+                else if (!string.IsNullOrWhiteSpace(Model?.SearchResult))
+                {
+
+                <div class="alert alert-warning rounded-4">
+
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+
+                    No book found for
+
+                    <strong>
+                        @Model.SearchResult
+                    </strong>
+
+                </div>
+
+                }
+
+
+               
+                else
+                {
+
+                <div class="card border rounded-4 shadow-sm">
+
+                    <div class="card-body text-center py-5">
+
+                        <i class="bi bi-search display-5 text-secondary"></i>
+
+                        <h5 class="fw-bold mt-3">
+                            Search for a Book
+                        </h5>
+
+                        <p class="text-secondary mb-0">
+                            Select ISBN, Title, or Author and enter
+                            your search text to view book details.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

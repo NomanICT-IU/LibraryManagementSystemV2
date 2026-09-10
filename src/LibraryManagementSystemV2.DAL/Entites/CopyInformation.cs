@@ -3,6 +3,8 @@
 public class CopyInformation
 {
     public int BookId { get; set; }
+    public int CopyId { get; set; }
+    public string Title { get; set; }
     public string CopyCode { get; set; }
     public string Status { get; set; }
     public string BorrowedBy { get; set; }

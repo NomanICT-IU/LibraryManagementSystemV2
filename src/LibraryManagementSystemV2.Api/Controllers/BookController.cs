@@ -65,7 +65,7 @@ public class BookController(IBookService _bookService) : ControllerBase
         return Ok(new ApiResponse<BookDetailsDto> { Data = result }); ;
     }
 
-    [HttpGet("get-book-detail-author-isbn-title")]
+    [HttpGet("get-book-detail")]
     public async Task<IActionResult> GetBookDetailsAsync(string searchBy = "", string searchResult = "",
     CancellationToken cancellationToken = default)
     {

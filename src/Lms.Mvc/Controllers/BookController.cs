@@ -114,8 +114,6 @@ namespace Lms.Mvc.Controllers
         }
 
 
-
-
         public async Task<IActionResult> SearchBooks(string searchBy = "", string searchText = "", CancellationToken cancellationToken = default)
         {
             var result = await bookService.SearchBookRecordAsync(searchBy, searchText, cancellationToken);
@@ -166,7 +164,7 @@ namespace Lms.Mvc.Controllers
         public async Task<IActionResult> ConfirmIssue(BookIssueViewModel vm, CancellationToken cancellationToken)
         {
             var response = await borrowRecordService
-        .CreateBorrowRecordAsync(vm.Issue, cancellationToken);
+           .CreateBorrowRecordAsync(vm.Issue, cancellationToken);
 
 
             if (response.Data)
@@ -181,5 +179,37 @@ namespace Lms.Mvc.Controllers
             return View("Issue", vm);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> BookDetails(string searchBy = "", string searchResult = "", CancellationToken cancellationToken = default)
+        {
+            var model = new BookDetailsResponseViewModel
+            {
+                SearchBy = searchBy,
+                SearchResult = searchResult
+            };
+
+            if (!string.IsNullOrWhiteSpace(searchBy) &&
+                !string.IsNullOrWhiteSpace(searchResult))
+            {
+                var response = await bookService.GetBookDetailsAsync(
+                    searchBy,
+                    searchResult,
+                    cancellationToken);
+
+                if (response?.Data != null)
+                {
+                    model = response.Data;
+
+
+                    model.SearchBy = searchBy;
+                    model.SearchResult = searchResult;
+                }
+            }
+
+            return View(model);
+        }
+
     }
+
 }
+

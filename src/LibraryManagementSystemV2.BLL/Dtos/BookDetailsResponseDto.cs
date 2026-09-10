@@ -2,7 +2,7 @@
 
 public class BookDetailsResponseDto
 {
-    public List<BookInformationDto> BookInformationDto { get; set; }
-    public List<BookAvailabilitySummaryDto> BookAvailabilitySummaryDto { get; set; }
-    public List<CopyInformationDto> CopyInformationDto { get; set; }
+    public List<BookInformationDto> BookInformation { get; set; }
+    public List<BookAvailabilitySummaryDto> BookSummary { get; set; }
+    public List<CopyInformationDto> CopyInformation { get; set; }
 }

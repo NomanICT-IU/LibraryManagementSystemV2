@@ -4,6 +4,7 @@ namespace Lms.Mvc.Models.ViewModels;
 
 public class BookIssueViewModel
 {
+    public BookIssueModel BookIssue { get; set; } = new();
     public BookDetailsModel Book { get; set; } = new();
 
     public MemberInformationModel Member { get; set; } = new();
@@ -11,6 +12,16 @@ public class BookIssueViewModel
     public IssueInformationModel Issue { get; set; } = new();
 }
 
+public class BookIssueModel
+{
+    public int CopyId { get; set; }
+    public string MemberSearch { get; set; } = string.Empty;
+    public string ReturnPage { get; set; } = string.Empty;
+
+    public string SearchBy { get; set; } = string.Empty;
+
+    public string SearchResult { get; set; } = string.Empty;
+}
 public class MemberInformationModel
 {
     public int MemberId { get; set; }
