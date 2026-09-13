@@ -22,17 +22,17 @@ BEGIN
     WHERE
         (
             @SearchBy = 'Title'
-            AND b.Title LIKE '%' + @SearchText + '%'
+            AND b.Title =  @SearchText 
         )
         OR
         (
             @SearchBy = 'Author'
-            AND b.Author LIKE '%' + @SearchText + '%'
+            AND b.Author = @SearchText 
         )
         OR
         (
             @SearchBy = 'ISBN'
-            AND b.ISBN LIKE '%' + @SearchText + '%'
+            AND b.ISBN = @SearchText 
         );
 
 
@@ -100,6 +100,7 @@ BEGIN
 
     SELECT
         bc.BookId,
+        m.MemberId,
         bc.CopyId,
         b.Title,
         bc.CopyCode,

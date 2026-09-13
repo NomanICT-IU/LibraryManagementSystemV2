@@ -113,14 +113,15 @@ namespace Lms.Mvc.Controllers
         }
 
 
-        public async Task<IActionResult> SearchBooks(string searchBy = "", string searchText = "", CancellationToken cancellationToken = default)
+        public async Task<IActionResult> SearchBooks(string searchBy = "", string searchText = "", int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
         {
-            var result = await bookService.SearchBookRecordAsync(searchBy, searchText, cancellationToken);
+            var result = await bookService.SearchBookRecordAsync(searchBy, searchText, pageNumber, pageSize, cancellationToken);
 
             ViewBag.SearchBy = searchBy;
             ViewBag.SearchText = searchText;
-
-            return View(result);
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.PageSize = pageSize;
+            return View(result.Data);
         }
 
         [HttpGet]

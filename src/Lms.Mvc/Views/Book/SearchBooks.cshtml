@@ -1,131 +1,536 @@
-﻿
-@model ApiResponse<IEnumerable<BookDetailModel>>
+﻿@model BookDetailResponseModel
 
 @{
     ViewData["Title"] = "Search Book";
-   
+
+    var searchBy = Context.Request.Query["searchBy"].ToString();
+    var searchText = Context.Request.Query["searchText"].ToString();
+
+    var pageNumber = ViewBag.PageNumber ?? 1;
+    var pageSize = ViewBag.PageSize ?? 10;
+    var totalRecords = Model?.TotalRecords ?? 0;
+
+    var totalPages = pageSize > 0
+        ? (int)Math.Ceiling((double)totalRecords / pageSize)
+        : 0;
 }
 
+<div class="container py-4">
 
-
-<div class="container-fluid">
-
+    <!-- Header -->
     <div class="mb-4">
-        <h4 class="fw-bold">Search Book</h4>
-        <p class="text-muted small">Search by title, author name, or ISBN.</p>
+
+        <h3 class="fw-bold mb-1">
+            Search Book
+        </h3>
+
+        <p class="text-muted mb-0">
+            Search by title, author name, or ISBN.
+        </p>
+
     </div>
 
-    <div class="card mb-4">
+
+    <!-- Search -->
+    <div class="card shadow-sm border-0 mb-4">
+
         <div class="card-body">
-            <form asp-controller="Book" asp-action="SearchBooks" method="get">
 
-                <div class="row g-3">
-                    <div class="col-md-5">
-                        <label for="searchBy" class="form-label small fw-semibold">Search By</label>
-                        <select id="searchBy" name="searchBy" class="form-select">
-                            <option value="">Search By</option>
-                            <option value="Title" selected="@(ViewBag.SearchBy == "Title")">Title</option>
-                            <option value="Author" selected="@(ViewBag.SearchBy == "Author")">Author</option>
-                            <option value="ISBN" selected="@(ViewBag.SearchBy == "ISBN")">ISBN</option>
-                        </select>
-                    </div>
+            <form asp-controller="Book"
+                  asp-action="SearchBooks"
+                  method="get"
+                  class="row g-2 align-items-end">
 
-                    <div class="col-md-5">
-                        <label for="searchText" class="form-label small fw-semibold">
-                            Search Text
-                        </label>
+                <!-- Search By -->
+                <div class="col-md-4">
 
-                        <input type="text"
-                               id="searchText"
-                               name="searchText"
-                               value="@ViewBag.SearchText"
-                               class="form-control"
-                               placeholder="Enter search text..."
-                               required
-                               minlength="2" />
+                    <label for="searchBy"
+                           class="form-label fw-semibold">
+                        Search By
+                    </label>
 
-                        <div class="invalid-feedback">
-                            Please enter at least 2 characters to search.
-                        </div>
-                    </div>
+                    <select id="searchBy"
+                            name="searchBy"
+                            class="form-select">
 
-                    <div class="col-md-2 d-flex align-items-end gap-2">
-                        <button type="submit" class="btn btn-primary w-100">Search</button>
-                        <a asp-action="SearchBooks" class="btn btn-secondary w-100">Clear</a>
-                    </div>
+                        <option value="">
+                            Search By
+                        </option>
+
+                        @if (searchBy == "Title")
+                        {
+                            <option value="Title" selected>
+                                Title
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Title">
+                                Title
+                            </option>
+                        }
+
+                        @if (searchBy == "Author")
+                        {
+                            <option value="Author" selected>
+                                Author
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Author">
+                                Author
+                            </option>
+                        }
+
+                        @if (searchBy == "ISBN")
+                        {
+                            <option value="ISBN" selected>
+                                ISBN
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="ISBN">
+                                ISBN
+                            </option>
+                        }
+
+                    </select>
+
                 </div>
 
+
+                <!-- Search Text -->
+                <div class="col-md-4">
+
+                    <label for="searchText"
+                           class="form-label fw-semibold">
+                        Search Text
+                    </label>
+
+                    <input type="text"
+                           id="searchText"
+                           name="searchText"
+                           value="@searchText"
+                           class="form-control"
+                           placeholder="Enter search text..."
+                           minlength="2" />
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-md-2">
+
+                    <button type="submit"
+                            class="btn btn-primary"
+                            style="width: 6.5rem">
+                        Search
+                    </button>
+
+                </div>
+
+            
+                <!-- Page Size -->
+                <div class="col-md-2">
+
+                    <label for="pageSize"
+                           class="form-label fw-semibold">
+                        Page Size
+                    </label>
+
+                    <select id="pageSize"
+                            name="pageSize"
+                            class="form-select"
+                            onchange="this.form.submit()">
+
+                        @foreach (var size in new[] { 5, 10, 20, 50 })
+                        {
+                            if (pageSize == size)
+                            {
+                                <option value="@size" selected>
+                                    @size
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@size">
+                                    @size
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+            
             </form>
+
         </div>
+
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title fw-bold mb-4">Search Results</h5>
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>ISBN</th>
-                            <th>Copy ID</th>
-                            <th>Status</th>
-                            <th>Borrower</th>
-                            <th>Due Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model?.Data?.Any() == true)
-                        {
-                            foreach (var book in Model.Data)
+
+    <!-- Search Results -->
+    <div class="card shadow-sm border-0">
+
+        <!-- Card Header -->
+        <div class="card-header bg-white py-3">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0 fw-semibold">
+                    Search Results
+                </h5>
+
+                <span class="badge bg-primary">
+                    @totalRecords Records
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Card Body -->
+        <div class="card-body p-0">
+
+            @if (Model?.BookCopyList != null &&
+                 Model.BookCopyList.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+                                <th>
+                                    Title
+                                </th>
+
+                                <th>
+                                    Author
+                                </th>
+
+                                <th>
+                                    ISBN
+                                </th>
+
+                                <th>
+                                    Copy Id
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th class="text-center">
+                                    Borrower/
+                                    <br />
+                                    Due Date
+                                </th>
+
+                                <th class="text-end pe-4">
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+                            @foreach (var book in Model.BookCopyList)
                             {
                                 <tr>
-                                    <td>@book.Title</td>
-                                    <td>@book.Author</td>
-                                    <td>@book.ISBN</td>
-                                    <td>@book.CopyCode</td>
-                                    <td>@book.Status</td>
-                                    <td>@book.BorrowedBy</td>
-                                    <td>@book.DueDate</td>
-
+                                    <!-- Title -->
                                     <td>
+                                        <span class="fw-semibold">
+                                            @book.Title
+                                        </span>
+                                    </td>
+
+
+                                    <!-- Author -->
+                                    <td>
+                                        @book.Author
+                                    </td>
+
+
+                                    <!-- ISBN -->
+                                    <td>
+                                        <span class="font-monospace">
+                                            @book.ISBN
+                                        </span>
+                                    </td>
+
+
+                                    <!-- Copy Code -->
+                                    <td>
+                                        @book.CopyCode
+                                    </td>
+
+
+                                    <!-- Status -->
+                                    <td>
+
+                                        @if (book.Status == "Available")
+                                        {
+                                            <span class="badge bg-success">
+                                                Available
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                @book.Status
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- Borrower + Due Date -->
+                                    
+                                   <td>
+                                        <div>
+
+                                            <!-- Borrower -->
+                                            <div class="small text-muted">
+                                                Borrower
+                                            </div>
+
+                                            @if (!string.IsNullOrEmpty(book.BorrowedBy))
+                                            {
+                                                <div class="fw-semibold">
+                                                    @book.BorrowedBy
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="text-muted">
+                                                    -
+                                                </div>
+                                            }
+
+                                            <br />
+
+                                            <!-- Due Date -->
+                                            <div class="small text-muted">
+                                                Due Date
+                                            </div>
+
+                                            @if (book.DueDate.HasValue)
+                                            {
+                                                <div class="fw-semibold">
+                                                    @book.DueDate.Value.ToString("dd MMM yyyy")
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="text-muted">
+                                                    -
+                                                </div>
+                                            }
+
+                                        </div>
+                                   </td>
+
+                                    <!-- Action -->
+                                    <td class="text-end pe-4">
+
                                         @if (book.Status == "Available")
                                         {
                                             <a asp-action="Issue"
                                                asp-route-returnpage="SearchBooks"
                                                asp-route-copyId="@book.CopyId"
-                                               class="btn btn-sm btn-primary"
-                                               style="width: 80px;">
+                                               class="btn btn-sm btn-primary">
+
                                                 Issue
+
                                             </a>
                                         }
                                         else
                                         {
                                             <a asp-action="Details"
                                                asp-route-copyId="@book.CopyId"
-                                               class="btn btn-sm btn-outline-primary"
-                                               style="width: 80px;">
+                                               class="btn btn-sm btn-outline-primary">
+
                                                 Details
+
                                             </a>
                                         }
+
                                     </td>
+
                                 </tr>
                             }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="8" class="text-center text-muted py-4">
-                                    No books found.
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <!-- No Results -->
+
+                <div class="text-center py-5">
+
+                    <div class="mb-3">
+                        <i class="bi bi-search fs-1 text-muted"></i>
+                    </div>
+
+                    <h5 class="fw-semibold">
+                        No books found
+                    </h5>
+
+                    <p class="text-muted mb-3">
+                        Try changing your search criteria.
+                    </p>
+
+                    <a asp-action="SearchBooks"
+                       class="btn btn-outline-primary">
+
+                        Show All Books
+
+                    </a>
+
+                </div>
+            }
+
         </div>
+
+
+        <!-- Pagination -->
+        @if (totalPages > 1)
+        {
+            <div class="card-footer bg-white">
+
+                <div class="d-flex justify-content-between
+                    align-items-center
+                    flex-wrap
+                    gap-3">
+
+                    <!-- Page Information -->
+                    <div class="text-muted small">
+
+                        Showing
+                        <strong>
+                            @(((pageNumber - 1) * pageSize) + 1)
+                        </strong>
+
+                        -
+
+                        <strong>
+                            @Math.Min(pageNumber * pageSize, totalRecords)
+                        </strong>
+
+                        of
+
+                        <strong>
+                            @totalRecords
+                        </strong>
+
+                        records
+
+                    </div>
+
+
+                    <!-- Pagination -->
+                    <nav aria-label="Search books pagination">
+
+                        <ul class="pagination mb-0">
+
+                            <!-- Previous -->
+                            <li class="page-item
+                                @(pageNumber <= 1 ? "disabled" : "")">
+
+                                @if (pageNumber > 1)
+                                {
+                                    <a class="page-link"
+                                       asp-controller="Book"
+                                       asp-action="SearchBooks"
+                                       asp-route-searchBy="@searchBy"
+                                       asp-route-searchText="@searchText"
+                                       asp-route-pageNumber="@(pageNumber - 1)"
+                                       asp-route-pageSize="@pageSize">
+
+                                        Previous
+
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="page-link">
+                                        Previous
+                                    </span>
+                                }
+
+                            </li>
+
+
+                            <!-- Page Numbers -->
+                            @for (int i = 1; i <= totalPages; i++)
+                            {
+                                <li class="page-item
+                                    @(i == pageNumber ? "active" : "")">
+
+                                    <a class="page-link"
+                                       asp-controller="Book"
+                                       asp-action="SearchBooks"
+                                       asp-route-searchBy="@searchBy"
+                                       asp-route-searchText="@searchText"
+                                       asp-route-pageNumber="@i"
+                                       asp-route-pageSize="@pageSize">
+
+                                        @i
+
+                                    </a>
+
+                                </li>
+                            }
+
+
+                            <!-- Next -->
+                            <li class="page-item
+                                @(pageNumber >= totalPages ? "disabled" : "")">
+
+                                @if (pageNumber < totalPages)
+                                {
+                                    <a class="page-link"
+                                       asp-controller="Book"
+                                       asp-action="SearchBooks"
+                                       asp-route-searchBy="@searchBy"
+                                       asp-route-searchText="@searchText"
+                                       asp-route-pageNumber="@(pageNumber + 1)"
+                                       asp-route-pageSize="@pageSize">
+
+                                        Next
+
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="page-link">
+                                        Next
+                                    </span>
+                                }
+
+                            </li>
+
+                        </ul>
+
+                    </nav>
+
+                </div>
+
+            </div>
+        }
+
     </div>
+
 </div>
-```

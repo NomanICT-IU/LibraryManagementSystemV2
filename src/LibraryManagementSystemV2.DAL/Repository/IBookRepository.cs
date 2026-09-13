@@ -6,7 +6,7 @@ public interface IBookRepository
     public Task<bool> UpdateBookAsync(Book book, CancellationToken cancellationToken);
     public Task<bool> DeleteBookAsync(int bookId, CancellationToken cancellationToken);
     public Task<Book> GetBookByIdAsync(int bookId, CancellationToken cancellationToken);
-    public Task<IEnumerable<BookCopyDetails>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
+    public Task<BookCopyDetailsReponse> SearchBookRecordAsync(string searchBy, string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
     public Task<BookDetailsResponse> GetBookDetailsAsync(string searchBy, string searchText, CancellationToken cancellationToken);
     public Task<BookDetails> GetBookCopyDetailsAsync(int copyId, CancellationToken cancellationToken);
     public Task<BookListResponse> GetBookListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
@@ -131,13 +131,30 @@ public class BookRepository : IBookRepository
         return await _dbConnection.QuerySingleAsync<BookDetails>(command, parameters, commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<IEnumerable<BookCopyDetails>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken)
+    public async Task<BookCopyDetailsReponse> SearchBookRecordAsync(string searchBy, string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        var command = "dbo.SearchBookRecord";
         var parameters = new DynamicParameters();
         parameters.Add("@SearchBy", searchBy);
         parameters.Add("@SearchText", searchText);
+        parameters.Add("@PageNumber", pageNumber);
+        parameters.Add("@PageSize", pageSize);
 
-        return await _dbConnection.QueryAsync<BookCopyDetails>(command, parameters, commandType: CommandType.StoredProcedure);
+        var command = new CommandDefinition(
+          "dbo.SearchBookRecord",
+          parameters,
+          commandType: CommandType.StoredProcedure,
+          cancellationToken: cancellationToken);
+
+        using var multi = await _dbConnection.QueryMultipleAsync(command);
+        var totalRecords = await multi.ReadSingleOrDefaultAsync<int>();
+        var bookCopyList = (await multi.ReadAsync<BookCopyDetails>()).ToList();
+
+
+
+        return new BookCopyDetailsReponse
+        {
+            TotalRecords = totalRecords,
+            BookCopyList = bookCopyList
+        };
     }
 }

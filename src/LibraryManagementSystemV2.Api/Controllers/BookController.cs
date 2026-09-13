@@ -48,13 +48,11 @@ public class BookController(IBookService _bookService) : ControllerBase
     }
 
     [HttpGet("search-book-recod-author-isbn-title")]
-    public async Task<IActionResult> SearchBookRecord([FromQuery] string searchBy,
-        [FromQuery] string searchResult,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> SearchBookRecordAsync(string searchBy = "", string searchText = "", int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
-        var result = await _bookService.SearchBookRecordAsync(searchBy, searchResult, cancellationToken);
+        var result = await _bookService.SearchBookRecordAsync(searchBy, searchText, pageNumber, pageSize, cancellationToken);
 
-        return Ok(new ApiResponse<IEnumerable<BookCopyDetailsDto>> { Data = result });
+        return Ok(new ApiResponse<BookCopyDetailsReponseDto> { Data = result });
     }
 
     [HttpGet("get-book-copy-detail-id/{copyId:int}")]

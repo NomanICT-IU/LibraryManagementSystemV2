@@ -12,63 +12,11 @@
 
     <div class="row g-3">
 
-        <!-- Sidebar -->
-        <div class="col-12 col-md-3 col-lg-2">
-
-            <div class="bg-dark text-white rounded-4 p-3 h-100">
-
-                <h5 class="fw-bold mb-3 mb-md-4">
-                    Library<br class="d-none d-md-block" />
-                    Management
-                </h5>
-
-                <div class="nav flex-column gap-1 gap-md-2">
-
-                    <a asp-controller="Dashboard"
-                       asp-action="Index"
-                       class="nav-link text-white">
-                        Dashboard
-                    </a>
-
-                    <a asp-controller="Book"
-                       asp-action="SearchBook"
-                       class="nav-link text-white">
-                        Search Book
-                    </a>
-
-                    <a asp-controller="BorrowRecord"
-                       asp-action="Issue"
-                       class="nav-link text-white">
-                        Issue Book
-                    </a>
-
-                    <a asp-controller="BorrowRecord"
-                       asp-action="ReturnBook"
-                       class="nav-link text-white">
-                        Return Book
-                    </a>
-
-                    <a asp-controller="Member"
-                       asp-action="Index"
-                       class="nav-link text-white">
-                        Member Details
-                    </a>
-
-                    <a asp-controller="Book"
-                       asp-action="BookDetails"
-                       class="nav-link active bg-secondary rounded-3 text-white">
-                        Book Details
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
+        
 
 
         <!-- Main Content -->
-        <div class="col-12 col-md-9 col-lg-10">
+        <div >
 
             <div class="p-0 p-md-2 p-lg-3">
 
@@ -98,7 +46,7 @@
                             <div class="row g-3 align-items-end">
 
                                 <!-- Search By -->
-                                <div class="col-12 col-md-5">
+                                <div class="col-12 col-md-4">
 
                                     <label asp-for="SearchBy"
                                            class="form-label small fw-semibold">
@@ -145,7 +93,7 @@
 
 
                                 <!-- Search Button -->
-                                <div class="col-12 col-md-2">
+                                <div class="col-12 col-md-3">
 
                                     <button type="submit"
                                             class="btn btn-primary w-100">

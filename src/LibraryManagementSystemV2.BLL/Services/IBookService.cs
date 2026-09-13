@@ -6,7 +6,7 @@ public interface IBookService
     public Task<bool> UpdateBookAsync(BookDto bookDto, CancellationToken cancellationToken);
     public Task<bool> DeleteBookAsync(int bookId, CancellationToken cancellationToken);
     public Task<BookDto> GetBookByIdAsync(int bookId, CancellationToken cancellationToken);
-    public Task<IEnumerable<BookCopyDetailsDto>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
+    public Task<BookCopyDetailsReponseDto> SearchBookRecordAsync(string searchBy, string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
     public Task<BookDetailsResponseDto> GetBookDetailsAsync(string searchBy, string searchText, CancellationToken cancellationToken);
     public Task<BookDetailsDto> GetBookCopyDetailsAsync(int copyId, CancellationToken cancellationToken);
     public Task<BookListResponseDto> GetBookListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
@@ -85,10 +85,10 @@ public class BookService : IBookService
         return bookDetails.Adapt<BookDetailsDto>();
     }
 
-    public async Task<IEnumerable<BookCopyDetailsDto>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken)
+    public async Task<BookCopyDetailsReponseDto> SearchBookRecordAsync(string searchBy, string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        var bookRecords = await _bookRepository.SearchBookRecordAsync(searchBy, searchText, cancellationToken);
-        return bookRecords.Adapt<IEnumerable<BookCopyDetailsDto>>();
+        var bookRecords = await _bookRepository.SearchBookRecordAsync(searchBy, searchText, pageNumber, pageSize, cancellationToken);
+        return bookRecords.Adapt<BookCopyDetailsReponseDto>();
     }
 
 

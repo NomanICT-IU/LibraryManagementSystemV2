@@ -1,5 +1,10 @@
 ﻿namespace LibraryManagementSystemV2.BLL.Dtos;
 
+public class BookCopyDetailsReponseDto
+{
+    public int TotalRecords { get; set; }
+    public List<BookCopyDetailsDto> BookCopyList { get; set; }
+}
 public class BookCopyDetailsDto
 {
     public int CopyId { get; set; }

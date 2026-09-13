@@ -5,7 +5,7 @@ namespace Lms.Mvc.Services;
 
 public interface IBookService
 {
-    public Task<ApiResponse<IEnumerable<BookDetailModel>>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken);
+    public Task<ApiResponse<BookDetailResponseModel>> SearchBookRecordAsync(string searchBy, string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
     public Task<ApiResponse<BookModel>> CreateBookAsync(BookModel bookModel, CancellationToken cancellationToken);
     public Task<ApiResponse<BookListResponseModel>> GetBooksync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
     public Task<ApiResponse<BookModel>> GetBookByIdAsync(int bookId, CancellationToken cancellationToken);
@@ -90,14 +90,16 @@ public class BookService : IBookService
 
     }
 
-    public async Task<ApiResponse<IEnumerable<BookDetailModel>>> SearchBookRecordAsync(string searchBy, string searchText, CancellationToken cancellationToken)
+    public async Task<ApiResponse<BookDetailResponseModel>> SearchBookRecordAsync(string searchBy, string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
         var endpoint =
             $"api/Book/search-book-recod-author-isbn-title" +
             $"?searchBy={Uri.EscapeDataString(searchBy)}" +
-            $"&searchResult={Uri.EscapeDataString(searchText)}";
+            $"&searchText={Uri.EscapeDataString(searchText)}" +
+            $"&pageNumber={pageNumber}" +
+            $"&pageSize={pageSize}";
 
-        return await _httpClient.GetFromJsonAsync<ApiResponse<IEnumerable<BookDetailModel>>>(endpoint, cancellationToken);
+        return await _httpClient.GetFromJsonAsync<ApiResponse<BookDetailResponseModel>>(endpoint, cancellationToken);
     }
 
     public async Task<ApiResponse<bool>> UpdateBookAsync(BookModel bookModel, CancellationToken cancellationToken)
@@ -115,7 +117,5 @@ public class BookService : IBookService
             cancellationToken);
 
         return result!;
-
-
     }
 }

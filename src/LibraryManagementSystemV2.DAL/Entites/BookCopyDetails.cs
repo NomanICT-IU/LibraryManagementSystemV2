@@ -1,5 +1,13 @@
 ﻿namespace LibraryManagementSystemV2.DAL.Entites;
 
+public class BookCopyDetailsReponse
+{
+    public int TotalRecords { get; set; }
+    public List<BookCopyDetails> BookCopyList { get; set; }
+
+}
+
+
 public class BookCopyDetails
 {
     public int CopyId { get; set; }

@@ -13,9 +13,7 @@ BEGIN
     SET @SearchBy = LTRIM(RTRIM(ISNULL(@SearchBy, '')));
     SET @SearchText = LTRIM(RTRIM(ISNULL(@SearchText, '')));
 
-    /* =========================================================
-       1. Find Member
-       ========================================================= */
+ 
 
     SELECT TOP (1)
         @MemberId = m.MemberId
@@ -37,10 +35,7 @@ BEGIN
         );
 
 
-    /* =========================================================
-       3. Member Information
-       ========================================================= */
-
+   
     SELECT
         m.MemberId,
         m.Name,
@@ -57,10 +52,7 @@ BEGIN
     WHERE m.MemberId = @MemberId;
 
 
-    /* =========================================================
-       4. Borrowing Summary
-       ========================================================= */
-
+   
     SELECT
         COUNT(br.BorrowId) AS TotalBorrowed,
 
@@ -96,7 +88,7 @@ BEGIN
        5. Currently Borrowed Books
        ========================================================= */
 
-    SELECT TOP (2)
+    SELECT TOP (5)
         br.BorrowId,
         b.BookId,
         b.Title,
@@ -115,12 +107,8 @@ BEGIN
     WHERE br.MemberId = @MemberId
       AND br.ReturnDate IS NULL
 
-    ORDER BY br.IssueDate DESC;
+    ORDER BY br.IssueDate asc;
 
-
-    /* =========================================================
-       6. Borrowing / Return History
-       ========================================================= */
 
     SELECT TOP (5)
         b.BookId,

@@ -1,10 +1,14 @@
-﻿@model Lms.Mvc.Models.ViewModels.MemberDetailsViewModel
+﻿
+@model Lms.Mvc.Models.ViewModels.MemberDetailsViewModel
 
-<div class="container py-4">
+<div class="container-fluid container-lg py-3 py-md-4">
 
     <!-- Page Header -->
-    <div class="mb-4">
-        <h4 class="fw-bold mb-1">Member Details</h4>
+    <div class="mb-3 mb-md-4">
+        <h4 class="fw-bold mb-1 fs-5 fs-md-4">
+            Member Details
+        </h4>
+
         <p class="text-muted small mb-0">
             View member information, currently borrowed books, and borrowing history.
         </p>
@@ -12,16 +16,15 @@
 
 
     <!-- Search Card -->
-    <div class="card border rounded-3 mb-3">
-        <div class="card-body">
+    <div class="card border rounded-3 mb-3 shadow-sm">
+        <div class="card-body p-3 p-md-4">
 
-            <form asp-action="MemberDetails"
-                  method="get">
+            <form asp-action="MemberDetails" method="get">
 
                 <div class="row g-3 align-items-end">
 
                     <!-- Search By -->
-                    <div class="col-md-5">
+                    <div class="col-12 col-md-5 col-lg-4">
 
                         <label for="searchBy"
                                class="form-label fw-semibold small">
@@ -48,7 +51,7 @@
 
 
                     <!-- Search Text -->
-                    <div class="col-md-5">
+                    <div class="col-12 col-md-7 col-lg-5">
 
                         <label for="searchText"
                                class="form-label fw-semibold small">
@@ -66,7 +69,7 @@
 
 
                     <!-- Search Button -->
-                    <div class="col-md-2">
+                    <div class="col-12 col-lg-3">
 
                         <button type="submit"
                                 class="btn btn-primary w-100">
@@ -92,75 +95,81 @@
         <div class="row g-3 mb-3">
 
             <!-- Member Information -->
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
 
-                <div class="card border rounded-3 h-100">
+                <div class="card border rounded-3 h-100 shadow-sm">
 
-                    <div class="card-body">
+                    <div class="card-body p-3 p-md-4">
 
-                        <h6 class="fw-bold mb-4">
+                        <h6 class="fw-bold mb-3 mb-md-4">
                             Member Information
                         </h6>
 
-                        <div class="row mb-2">
 
-                            <div class="col-5 text-muted small">
+                        <!-- Name -->
+                        <div class="row g-2 mb-2">
+
+                            <div class="col-12 col-sm-5 text-muted small">
                                 Name
                             </div>
 
-                            <div class="col-7 fw-semibold small">
+                            <div class="col-12 col-sm-7 fw-semibold small text-break">
                                 @Model.Member.Name
                             </div>
 
                         </div>
 
 
-                        <div class="row mb-2">
+                        <!-- Member ID -->
+                        <div class="row g-2 mb-2">
 
-                            <div class="col-5 text-muted small">
+                            <div class="col-12 col-sm-5 text-muted small">
                                 Member ID
                             </div>
 
-                            <div class="col-7 fw-semibold small">
+                            <div class="col-12 col-sm-7 fw-semibold small text-break">
                                 @Model.Member.MemberCode
                             </div>
 
                         </div>
 
 
-                        <div class="row mb-2">
+                        <!-- Phone -->
+                        <div class="row g-2 mb-2">
 
-                            <div class="col-5 text-muted small">
+                            <div class="col-12 col-sm-5 text-muted small">
                                 Phone
                             </div>
 
-                            <div class="col-7 fw-semibold small">
+                            <div class="col-12 col-sm-7 fw-semibold small text-break">
                                 @Model.Member.Phone
                             </div>
 
                         </div>
 
 
-                        <div class="row mb-2">
+                        <!-- Address -->
+                        <div class="row g-2 mb-2">
 
-                            <div class="col-5 text-muted small">
+                            <div class="col-12 col-sm-5 text-muted small">
                                 Address
                             </div>
 
-                            <div class="col-7 fw-semibold small">
+                            <div class="col-12 col-sm-7 fw-semibold small text-break">
                                 @Model.Member.Address
                             </div>
 
                         </div>
 
 
-                        <div class="row">
+                        <!-- Status -->
+                        <div class="row g-2">
 
-                            <div class="col-5 text-muted small">
+                            <div class="col-12 col-sm-5 text-muted small">
                                 Status
                             </div>
 
-                            <div class="col-7">
+                            <div class="col-12 col-sm-7">
 
                                 @if (Model.Member.Status == "Active")
                                 {
@@ -187,63 +196,67 @@
 
 
             <!-- Borrowing Summary -->
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
 
-                <div class="card border rounded-3 h-100">
+                <div class="card border rounded-3 h-100 shadow-sm">
 
-                    <div class="card-body">
+                    <div class="card-body p-3 p-md-4">
 
-                        <h6 class="fw-bold mb-4">
+                        <h6 class="fw-bold mb-3 mb-md-4">
                             Borrowing Summary
                         </h6>
 
 
-                        <div class="row mb-2">
+                        <!-- Currently Borrowed -->
+                        <div class="row g-2 mb-2">
 
-                            <div class="col-6 text-muted small">
+                            <div class="col-12 col-sm-6 text-muted small">
                                 Currently Borrowed
                             </div>
 
-                            <div class="col-6 fw-semibold small">
+                            <div class="col-12 col-sm-6 fw-semibold small">
                                 @Model.BorrowSummery.CurrentlyBorrowed Books
                             </div>
 
                         </div>
 
 
-                        <div class="row mb-2">
+                        <!-- Total Borrowed -->
+                        <div class="row g-2 mb-2">
 
-                            <div class="col-6 text-muted small">
+                            <div class="col-12 col-sm-6 text-muted small">
                                 Total Borrowed
                             </div>
 
-                            <div class="col-6 fw-semibold small">
+                            <div class="col-12 col-sm-6 fw-semibold small">
                                 @Model.BorrowSummery.TotalBorrowed Books
                             </div>
 
                         </div>
 
 
-                        <div class="row mb-2">
+                        <!-- Overdue Books -->
+                        <div class="row g-2 mb-2">
 
-                            <div class="col-6 text-muted small">
+                            <div class="col-12 col-sm-6 text-muted small">
                                 Overdue Books
                             </div>
 
-                            <div class="col-6 fw-semibold small">
+                            <div class="col-12 col-sm-6 fw-semibold small">
                                 @Model.BorrowSummery.OverdueBooks Books
                             </div>
 
                         </div>
 
 
-                        <div class="row">
+                        <!-- Last Borrowed -->
+                        <div class="row g-2">
 
-                            <div class="col-6 text-muted small">
+                            <div class="col-12 col-sm-6 text-muted small">
                                 Last Borrowed
                             </div>
 
-                            <div class="col-6 fw-semibold small">
+                            <div class="col-12 col-sm-6 fw-semibold small">
                                 @(Model.BorrowSummery.LastBorrowed?.ToString("dd MMM yyyy") ?? "-")
                             </div>
 
@@ -259,13 +272,14 @@
 
 
         <!-- Currently Borrowed Books -->
-        <div class="card border rounded-3 mb-3">
+        <div class="card border rounded-3 mb-3 shadow-sm">
 
-            <div class="card-body">
+            <div class="card-body p-3 p-md-4">
 
                 <h6 class="fw-bold mb-3">
                     Currently Borrowed Books
                 </h6>
+
 
                 @if (Model.BorrowedHistory != null &&
                      Model.BorrowedHistory.Any())
@@ -278,23 +292,23 @@
 
                                 <tr>
 
-                                    <th class="small text-uppercase">
+                                    <th class="small text-uppercase text-nowrap">
                                         Book Title
                                     </th>
 
-                                    <th class="small text-uppercase">
+                                    <th class="small text-uppercase text-nowrap">
                                         Copy ID
                                     </th>
 
-                                    <th class="small text-uppercase">
+                                    <th class="small text-uppercase text-nowrap">
                                         Issue Date
                                     </th>
 
-                                    <th class="small text-uppercase">
+                                    <th class="small text-uppercase text-nowrap">
                                         Due Date
                                     </th>
 
-                                    <th class="small text-uppercase text-center">
+                                    <th class="small text-uppercase text-center text-nowrap">
                                         Action
                                     </th>
 
@@ -302,25 +316,26 @@
 
                             </thead>
 
+
                             <tbody>
 
                                 @foreach (var item in Model.BorrowedHistory)
                                 {
                                     <tr>
 
-                                        <td class="small">
+                                        <td class="small text-break">
                                             @item.Title
                                         </td>
 
-                                        <td class="small">
+                                        <td class="small text-nowrap">
                                             @item.CopyCode
                                         </td>
 
-                                        <td class="small">
+                                        <td class="small text-nowrap">
                                             @item.IssueDate.ToString("dd MMM yyyy")
                                         </td>
 
-                                        <td class="small">
+                                        <td class="small text-nowrap">
                                             @item.DueDate.ToString("dd MMM yyyy")
                                         </td>
 
@@ -344,7 +359,7 @@
                                                        value="@Model.SearchText" />
 
                                                 <button type="submit"
-                                                        class="btn btn-primary btn-sm">
+                                                        class="btn btn-primary btn-sm text-nowrap">
 
                                                     <i class="bi bi-arrow-return-left me-1"></i>
                                                     Return
@@ -383,13 +398,14 @@
 
 
         <!-- Borrowing History -->
-        <div class="card border rounded-3">
+        <div class="card border rounded-3 shadow-sm">
 
-            <div class="card-body">
+            <div class="card-body p-3 p-md-4">
 
                 <h6 class="fw-bold mb-3">
                     Borrowing History
                 </h6>
+
 
                 @if (Model.ReturnHistory != null &&
                      Model.ReturnHistory.Any())
@@ -402,23 +418,23 @@
 
                                 <tr>
 
-                                    <th class="small text-uppercase">
+                                    <th class="small text-uppercase text-nowrap">
                                         Book Title
                                     </th>
 
-                                    <th class="small text-uppercase">
+                                    <th class="small text-uppercase text-nowrap">
                                         Copy ID
                                     </th>
 
-                                    <th class="small text-uppercase">
+                                    <th class="small text-uppercase text-nowrap">
                                         Issue Date
                                     </th>
 
-                                    <th class="small text-uppercase">
+                                    <th class="small text-uppercase text-nowrap">
                                         Return Date
                                     </th>
 
-                                    <th class="small text-uppercase">
+                                    <th class="small text-uppercase text-nowrap">
                                         Status
                                     </th>
 
@@ -426,25 +442,26 @@
 
                             </thead>
 
+
                             <tbody>
 
                                 @foreach (var item in Model.ReturnHistory)
                                 {
                                     <tr>
 
-                                        <td class="small">
+                                        <td class="small text-break">
                                             @item.Title
                                         </td>
 
-                                        <td class="small">
+                                        <td class="small text-nowrap">
                                             @item.CopyCode
                                         </td>
 
-                                        <td class="small">
+                                        <td class="small text-nowrap">
                                             @item.IssueDate.ToString("dd MMM yyyy")
                                         </td>
 
-                                        <td class="small">
+                                        <td class="small text-nowrap">
                                             @(item.ReturnDate?.ToString("dd MMM yyyy") ?? "-")
                                         </td>
 
@@ -490,13 +507,14 @@
             </div>
 
         </div>
+
     }
     else
     {
         <!-- No Member Selected -->
-        <div class="card border rounded-3">
+        <div class="card border rounded-3 shadow-sm">
 
-            <div class="card-body text-center py-5">
+            <div class="card-body text-center py-5 px-3">
 
                 <i class="bi bi-person-search fs-1 text-muted"></i>
 
@@ -514,3 +532,4 @@
     }
 
 </div>
+
