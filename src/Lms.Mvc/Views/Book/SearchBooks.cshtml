@@ -94,6 +94,7 @@
                                         @if (book.Status == "Available")
                                         {
                                             <a asp-action="Issue"
+                                               asp-route-returnpage="SearchBooks"
                                                asp-route-copyId="@book.CopyId"
                                                class="btn btn-sm btn-primary"
                                                style="width: 80px;">

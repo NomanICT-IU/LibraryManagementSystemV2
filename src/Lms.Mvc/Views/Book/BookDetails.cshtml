@@ -8,21 +8,21 @@
     var copies = Model?.CopyInformation;
 }
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-3 py-md-4">
 
-    <div class="row">
+    <div class="row g-3">
 
         <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2">
+        <div class="col-12 col-md-3 col-lg-2">
 
-            <div class="bg-dark text-white rounded-4 min-vh-100 p-3">
+            <div class="bg-dark text-white rounded-4 p-3 h-100">
 
-                <h5 class="fw-bold mb-4">
-                    Library<br />
+                <h5 class="fw-bold mb-3 mb-md-4">
+                    Library<br class="d-none d-md-block" />
                     Management
                 </h5>
 
-                <div class="nav flex-column gap-2">
+                <div class="nav flex-column gap-1 gap-md-2">
 
                     <a asp-controller="Dashboard"
                        asp-action="Index"
@@ -68,18 +68,18 @@
 
 
         <!-- Main Content -->
-        <div class="col-md-9 col-lg-10">
+        <div class="col-12 col-md-9 col-lg-10">
 
-            <div class="p-3">
+            <div class="p-0 p-md-2 p-lg-3">
 
                 <!-- Header -->
-                <div class="mb-4">
+                <div class="mb-3 mb-md-4">
 
                     <h4 class="fw-bold">
                         Book Details
                     </h4>
 
-                    <p class="text-secondary">
+                    <p class="text-secondary mb-0">
                         View full book information and copy-wise status.
                     </p>
 
@@ -98,7 +98,7 @@
                             <div class="row g-3 align-items-end">
 
                                 <!-- Search By -->
-                                <div class="col-md-5">
+                                <div class="col-12 col-md-5">
 
                                     <label asp-for="SearchBy"
                                            class="form-label small fw-semibold">
@@ -130,7 +130,7 @@
 
 
                                 <!-- Search Text -->
-                                <div class="col-md-5">
+                                <div class="col-12 col-md-5">
 
                                     <label asp-for="SearchResult"
                                            class="form-label small fw-semibold">
@@ -145,7 +145,7 @@
 
 
                                 <!-- Search Button -->
-                                <div class="col-md-2">
+                                <div class="col-12 col-md-2">
 
                                     <button type="submit"
                                             class="btn btn-primary w-100">
@@ -172,13 +172,14 @@
 
                     <div class="row g-3 mb-3">
 
-                        <div class="col-lg-6">
+                        <!-- Book Information -->
+                        <div class="col-12 col-lg-6">
 
                             <div class="card border rounded-4 shadow-sm h-100">
 
                                 <div class="card-body">
 
-                                    <h5 class="fw-bold mb-4">
+                                    <h5 class="fw-bold mb-3 mb-md-4">
 
                                         <i class="bi bi-book me-2"></i>
 
@@ -193,13 +194,13 @@
                                         <div class="border-bottom pb-3 mb-3">
 
                                             <!-- Title -->
-                                            <div class="row mb-2">
+                                            <div class="row g-2 mb-2">
 
                                                 <div class="col-5 text-secondary">
                                                     Title
                                                 </div>
 
-                                                <div class="col-7 fw-semibold">
+                                                <div class="col-7 fw-semibold text-break">
                                                     @book.Title
                                                 </div>
 
@@ -207,13 +208,13 @@
 
 
                                             <!-- Author -->
-                                            <div class="row mb-2">
+                                            <div class="row g-2 mb-2">
 
                                                 <div class="col-5 text-secondary">
                                                     Author
                                                 </div>
 
-                                                <div class="col-7 fw-semibold">
+                                                <div class="col-7 fw-semibold text-break">
                                                     @book.Author
                                                 </div>
 
@@ -221,13 +222,13 @@
 
 
                                             <!-- ISBN -->
-                                            <div class="row mb-2">
+                                            <div class="row g-2 mb-2">
 
                                                 <div class="col-5 text-secondary">
                                                     ISBN
                                                 </div>
 
-                                                <div class="col-7 fw-semibold">
+                                                <div class="col-7 fw-semibold text-break">
                                                     @book.ISBN
                                                 </div>
 
@@ -235,13 +236,13 @@
 
 
                                             <!-- Category -->
-                                            <div class="row">
+                                            <div class="row g-2">
 
                                                 <div class="col-5 text-secondary">
                                                     Category
                                                 </div>
 
-                                                <div class="col-7 fw-semibold">
+                                                <div class="col-7 fw-semibold text-break">
                                                     @book.Category
                                                 </div>
 
@@ -258,15 +259,14 @@
                         </div>
 
 
-                     
-
-                        <div class="col-lg-6">
+                        <!-- Availability Summary -->
+                        <div class="col-12 col-lg-6">
 
                             <div class="card border rounded-4 shadow-sm h-100">
 
                                 <div class="card-body">
 
-                                    <h5 class="fw-bold mb-4">
+                                    <h5 class="fw-bold mb-3 mb-md-4">
 
                                         <i class="bi bi-bar-chart me-2"></i>
 
@@ -283,9 +283,8 @@
 
                                             <div class="border-bottom pb-3 mb-3">
 
-
                                                 <!-- Total Copies -->
-                                                <div class="row mb-2">
+                                                <div class="row g-2 mb-2">
 
                                                     <div class="col-7 text-secondary">
                                                         Total Copies
@@ -299,7 +298,7 @@
 
 
                                                 <!-- Available -->
-                                                <div class="row mb-2">
+                                                <div class="row g-2 mb-2">
 
                                                     <div class="col-7 text-secondary">
                                                         Available
@@ -313,7 +312,7 @@
 
 
                                                 <!-- Borrowed -->
-                                                <div class="row mb-2">
+                                                <div class="row g-2 mb-2">
 
                                                     <div class="col-7 text-secondary">
                                                         Borrowed
@@ -327,13 +326,13 @@
 
 
                                                 <!-- Status -->
-                                                <div class="row">
+                                                <div class="row g-2">
 
                                                     <div class="col-7 text-secondary">
                                                         Status
                                                     </div>
 
-                                                    <div class="col-5 fw-semibold">
+                                                    <div class="col-5 fw-semibold text-break">
                                                         @summary.Status
                                                     </div>
 
@@ -366,15 +365,13 @@
                     </div>
 
 
-                    <!-- ===================================================== -->
                     <!-- COPY INFORMATION -->
-                    <!-- ===================================================== -->
 
                     <div class="card border rounded-4 shadow-sm">
 
                         <div class="card-body">
 
-                            <h5 class="fw-bold mb-4">
+                            <h5 class="fw-bold mb-3 mb-md-4">
 
                                 <i class="bi bi-collection me-2"></i>
 
@@ -394,7 +391,7 @@
                                     <div class="mb-4">
 
                                         <!-- Book Id -->
-                                        <h6 class="fw-bold mb-3">
+                                        <h6 class="fw-bold mb-3 text-break">
                                             @book.Title
                                         </h6>
 
@@ -407,23 +404,27 @@
 
                                                     <tr>
 
-                                                        <th>
+                                                        <th class="text-nowrap">
                                                             COPY CODE
                                                         </th>
 
-                                                        <th>
+                                                        @* <th class="text-nowrap">
+                                                            Member Id
+                                                        </th> *@
+
+                                                        <th class="text-nowrap">
                                                             STATUS
                                                         </th>
 
-                                                        <th>
+                                                        <th class="text-nowrap">
                                                             BORROWED BY
                                                         </th>
 
-                                                        <th>
+                                                        <th class="text-nowrap">
                                                             DUE DATE
                                                         </th>
 
-                                                        <th>
+                                                        <th class="text-nowrap">
                                                             ACTION
                                                         </th>
 
@@ -440,15 +441,22 @@
                                                         <tr>
 
                                                             <!-- Copy Code -->
-                                                            <td class="fw-semibold">
+                                                            <td class="fw-semibold text-nowrap">
 
                                                                 @item.CopyCode
 
                                                             </td>
 
 
+                                                            @* <td class="fw-semibold">
+
+                                                                @item.MemberId
+
+                                                            </td> *@
+
+
                                                             <!-- Status -->
-                                                            <td>
+                                                            <td class="text-nowrap">
 
                                                                 @if (item.Status == "Available")
                                                                 {
@@ -479,7 +487,7 @@
 
 
                                                             <!-- Borrowed By -->
-                                                            <td>
+                                                            <td class="text-nowrap">
 
                                                                 @if (string.IsNullOrWhiteSpace(item.BorrowedBy))
                                                                 {
@@ -500,7 +508,7 @@
 
 
                                                             <!-- Due Date -->
-                                                            <td>
+                                                            <td class="text-nowrap">
 
                                                                 @if (item.DueDate.HasValue)
                                                                 {
@@ -521,13 +529,15 @@
 
 
                                                             <!-- Action -->
-                                                            <td>
+                                                            <td class="text-nowrap">
 
                                                                 @if (item.Status == "Available")
                                                                 {
 
-                                                                    <a asp-controller="BorrowRecord"
-                                                                       asp-action="Issue"
+                                                                    <a asp-action="Issue"
+                                                                       asp-route-returnpage="BookDetails"
+                                                                       asp-route-searchBy="@Model.SearchBy"
+                                                                       asp-route-searchResult="@Model.SearchResult"
                                                                        asp-route-copyId="@item.CopyId"
                                                                        class="btn btn-primary btn-sm issue-btn"
                                                                        style="width: 7rem;">
@@ -544,7 +554,7 @@
 
                                                                     <a asp-controller="Member"
                                                                        asp-action="Detail"
-                                                                       asp-route-memberId="@item"
+                                                                       asp-route-memberId="@item.MemberId"
                                                                        class="btn btn-outline-primary btn-sm"
                                                                        style="width: 7rem;">
 
@@ -592,47 +602,45 @@
                 }
 
 
-               
                 else if (!string.IsNullOrWhiteSpace(Model?.SearchResult))
                 {
 
-                <div class="alert alert-warning rounded-4">
+                    <div class="alert alert-warning rounded-4">
 
-                    <i class="bi bi-exclamation-triangle me-2"></i>
+                        <i class="bi bi-exclamation-triangle me-2"></i>
 
-                    No book found for
+                        No book found for
 
-                    <strong>
-                        @Model.SearchResult
-                    </strong>
+                        <strong class="text-break">
+                            @Model.SearchResult
+                        </strong>
 
-                </div>
+                    </div>
 
                 }
 
 
-               
                 else
                 {
 
-                <div class="card border rounded-4 shadow-sm">
+                    <div class="card border rounded-4 shadow-sm">
 
-                    <div class="card-body text-center py-5">
+                        <div class="card-body text-center py-4 py-md-5">
 
-                        <i class="bi bi-search display-5 text-secondary"></i>
+                            <i class="bi bi-search display-5 text-secondary"></i>
 
-                        <h5 class="fw-bold mt-3">
-                            Search for a Book
-                        </h5>
+                            <h5 class="fw-bold mt-3">
+                                Search for a Book
+                            </h5>
 
-                        <p class="text-secondary mb-0">
-                            Select ISBN, Title, or Author and enter
-                            your search text to view book details.
-                        </p>
+                            <p class="text-secondary mb-0">
+                                Select ISBN, Title, or Author and enter
+                                your search text to view book details.
+                            </p>
+
+                        </div>
 
                     </div>
-
-                </div>
 
                 }
 

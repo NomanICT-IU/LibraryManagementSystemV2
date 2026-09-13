@@ -28,7 +28,7 @@ public class BorrowedRecordController : Controller
 
         return View(models);
     }
-    [HttpPost]
+    [HttpPut]
     public async Task<IActionResult> ConfirmReturn(
      int borrowId, string searchBy, string searchText,
      CancellationToken cancellationToken)

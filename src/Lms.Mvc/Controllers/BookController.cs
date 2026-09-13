@@ -1,4 +1,5 @@
-﻿using Lms.Mvc.Models;
+﻿
+using Lms.Mvc.Models;
 using Lms.Mvc.Models.ViewModels;
 using Lms.Mvc.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -33,9 +34,7 @@ namespace Lms.Mvc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(
-            BookModel bookModel,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> Create(BookModel bookModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -125,23 +124,22 @@ namespace Lms.Mvc.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Issue(int copyId, string memberSearch = "",
-            CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Issue(BookIssueModel BIM, CancellationToken cancellationToken = default)
         {
-            var book = await bookService.GetBookCopyDetailsAsync(
-                copyId,
+            var book = await bookService.GetBookCopyDetailsAsync(BIM.CopyId,
                 cancellationToken);
 
             var bvm = new BookIssueViewModel
             {
                 Book = book.Data,
+                BookIssue = BIM
 
             };
 
-            if (!string.IsNullOrWhiteSpace(memberSearch))
+            if (!string.IsNullOrWhiteSpace(BIM.MemberSearch))
             {
                 var member = await memberService.FindMemberAsync(
-                    memberSearch,
+                    BIM.MemberSearch,
                     cancellationToken);
                 if (member != null)
                 {
@@ -149,7 +147,7 @@ namespace Lms.Mvc.Controllers
                     bvm.Issue = new IssueInformationModel()
                     {
                         IssueDate = DateTime.Now,
-                        CopyId = copyId,
+                        CopyId = BIM.CopyId,
                         MemberId = bvm.Member.MemberId,
                         DueDate = DateTime.Now.AddDays(7)
 
@@ -164,12 +162,25 @@ namespace Lms.Mvc.Controllers
         public async Task<IActionResult> ConfirmIssue(BookIssueViewModel vm, CancellationToken cancellationToken)
         {
             var response = await borrowRecordService
-           .CreateBorrowRecordAsync(vm.Issue, cancellationToken);
-
+                .CreateBorrowRecordAsync(vm.Issue, cancellationToken);
 
             if (response.Data)
             {
-                return RedirectToAction(nameof(SearchBooks));
+                if (vm.BookIssue.ReturnPage == "SearchBooks")
+                {
+                    return RedirectToAction(nameof(SearchBooks));
+                }
+
+                if (vm.BookIssue.ReturnPage == "BookDetails")
+                {
+                    return RedirectToAction(
+                        nameof(BookDetails),
+                        new
+                        {
+                            searchBy = vm.BookIssue.SearchBy,
+                            searchResult = vm.BookIssue.SearchResult
+                        });
+                }
             }
 
             ModelState.AddModelError(

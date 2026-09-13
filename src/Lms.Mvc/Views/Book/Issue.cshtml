@@ -103,6 +103,16 @@
                         <input type="hidden"
                                name="copyId"
                                value="@Model.Book.CopyId" />
+                        <input type="hidden"
+                               name="returnPage"
+                               value="@Model.BookIssue.ReturnPage" />
+                        <input type="hidden"
+                               name="searchBy"
+                               value="@Model.BookIssue.SearchBy" />
+                        <input type="hidden"
+                               name="searchResult"
+                               value="@Model.BookIssue.SearchResult" />
+                       
 
                         <div class="mb-3">
 
@@ -221,9 +231,14 @@
                         <!-- Hidden values -->
                         <input type="hidden"
                                asp-for="Issue.CopyId" />
-
                         <input type="hidden"
                                asp-for="Issue.MemberId" />
+                        <input type="hidden"
+                               asp-for="BookIssue.ReturnPage" />
+                        <input type="hidden"
+                               asp-for="BookIssue.SearchBy" />
+                        <input type="hidden"
+                               asp-for="BookIssue.SearchResult" />
 
                         <div class="row g-3">
 

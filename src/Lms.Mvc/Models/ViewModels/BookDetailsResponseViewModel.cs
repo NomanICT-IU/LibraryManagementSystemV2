@@ -35,6 +35,7 @@ public class BookAvailabilitySummaryModel
 public class CopyInformationModel
 {
     public int BookId { get; set; }
+    public int MemberId { get; set; }
     public int CopyId { get; set; }
     public string Title { get; set; }
     public string CopyCode { get; set; }
