@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [Security].[Roles] (
     [RoleId]      INT            IDENTITY (1, 1) NOT NULL,
     [RoleName]    NVARCHAR (255) NOT NULL,
+    [RoleCode]    NVARCHAR (20)  NOT NULL,
     [Description] NVARCHAR (255) NULL,
     [IsActive]    BIT            NOT NULL,
     [CreatedAt]   DATETIME       NOT NULL,

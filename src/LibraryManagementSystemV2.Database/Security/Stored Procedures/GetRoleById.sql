@@ -1,10 +1,12 @@
-﻿CREATE   PROCEDURE [Security].[GetRoleById]
+﻿
+CREATE   PROCEDURE [Security].[GetRoleById]
     @RoleId INT
 AS
 BEGIN
     SELECT
         [RoleId],
         [RoleName],
+        [RoleCode],
         [Description],
         [IsActive],
         [CreatedAt],

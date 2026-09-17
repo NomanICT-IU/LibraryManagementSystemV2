@@ -1,5 +1,7 @@
-﻿CREATE   PROCEDURE [Security].[CreateRoles]
+﻿
+CREATE   PROCEDURE [Security].[CreateRole]
     @RoleName NVARCHAR(255),
+    @RoleCode Nvarchar(20),
     @Description NVARCHAR(255) = NULL,
     @IsActive BIT,
     @CreatedAt DATETIME,
@@ -9,6 +11,7 @@ BEGIN
     INSERT INTO [Security].[Roles]
     (
         [RoleName],
+        [RoleCode],
         [Description],
         [IsActive],
         [CreatedAt],
@@ -17,6 +20,7 @@ BEGIN
     VALUES
     (
         @RoleName,
+        @RoleCode,
         @Description,
         @IsActive,
         @CreatedAt,

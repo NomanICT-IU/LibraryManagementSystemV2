@@ -97,7 +97,6 @@
     <Build Include="dbo\Stored Procedures\GetBookDetails.sql" />
     <Build Include="dbo\Stored Procedures\GetMemberList.sql" />
     <Build Include="dbo\Stored Procedures\GetBookCopyList.sql" />
-    <Build Include="dbo\Tables\RolePermission.sql" />
     <Build Include="Security\Tables\Roles.sql" />
     <Build Include="Security\Tables\Permissions.sql" />
     <Build Include="Security\Tables\UserRole.sql" />
@@ -113,12 +112,14 @@
     <Build Include="Security\Stored Procedures\GetRoleById.sql" />
     <Build Include="Security\Stored Procedures\DeleteRole.sql" />
     <Build Include="Security\Stored Procedures\UpdateRole.sql" />
-    <Build Include="Security\Stored Procedures\CreateRoles.sql" />
     <Build Include="Security\Stored Procedures\GetPermission.sql" />
     <Build Include="Security\Stored Procedures\GetUserById.sql" />
     <Build Include="Security\Stored Procedures\DeleteUser.sql" />
     <Build Include="Security\Stored Procedures\UpdateUser.sql" />
-    <Build Include="Security\Stored Procedures\CreateUsers.sql" />
     <Build Include="Security\Security.sql" />
+    <Build Include="Security\Tables\RolePermission.sql" />
+    <Build Include="Security\Stored Procedures\GetRolePermissions.sql" />
+    <Build Include="Security\Stored Procedures\CreateUser.sql" />
+    <Build Include="Security\Stored Procedures\CreateRole.sql" />
   </ItemGroup>
 </Project>

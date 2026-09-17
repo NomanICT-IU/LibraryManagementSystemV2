@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[RolePermission] (
+﻿CREATE TABLE [Security].[RolePermission] (
     [RolePermissionId] INT      IDENTITY (1, 1) NOT NULL,
     [RoleId]           INT      NOT NULL,
     [PermissionId]     INT      NOT NULL,

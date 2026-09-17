@@ -9,80 +9,201 @@ public interface IRoleRepository
     Task<Role?> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken);
 
     Task<bool> DeleteRoleAsync(int roleId, CancellationToken cancellationToken);
-}
 
-public class RoleRepository(IDbConnection dbConnection) : IRoleRepository
-{
-    public async Task<bool> CreateRoleAsync(Role role, CancellationToken cancellationToken)
+    Task<bool> CreateUserRoleAsync(UserRole userRole, CancellationToken cancellationToken);
+
+    Task<bool> UpdateUserRoleAsync(UserRole userRole, CancellationToken cancellationToken);
+
+    Task<UserRole?> GetUserRoleByIdAsync(int userRoleId, CancellationToken cancellationToken);
+
+    Task<bool> DeleteUserRoleAsync(int userRoleId, CancellationToken cancellationToken);
+
+    Task<bool> CreateRolePermissionAsync(RolePermission rolePermission, CancellationToken cancellationToken);
+
+    Task<bool> UpdateRolePermissionAsync(RolePermission rolePermission, CancellationToken cancellationToken);
+
+    Task<RolePermission?> GetRolePermissionByIdAsync(int rolePermissionId, CancellationToken cancellationToken);
+
+    Task<bool> DeleteRolePermissionAsync(int rolePermissionId, CancellationToken cancellationToken);
+
+
+    public class RoleRepository(IDbConnection dbConnection) : IRoleRepository
     {
-        var command = "Security.CreateRoles";
+        public async Task<bool> CreateRoleAsync(Role role, CancellationToken cancellationToken)
+        {
+            var command = "Security.CreateRole";
 
-        var parameters = new DynamicParameters();
+            var parameters = new DynamicParameters();
 
-        parameters.Add("@RoleName", role.RoleName);
-        parameters.Add("@RoleCode", role.RoleCode);
-        parameters.Add("@Description", role.Description);
-        parameters.Add("@IsActive", role.IsActive);
-        parameters.Add("@CreatedAt", role.CreatedAt);
+            parameters.Add("@RoleName", role.RoleName);
+            parameters.Add("@RoleCode", role.RoleCode);
+            parameters.Add("@Description", role.Description);
+            parameters.Add("@IsActive", role.IsActive);
+            parameters.Add("@CreatedAt", role.CreatedAt);
 
-        var result = await dbConnection.ExecuteAsync(
-            command,
-            parameters,
-            commandType: CommandType.StoredProcedure);
+            var result = await dbConnection.ExecuteAsync(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
 
-        return result > 0;
-    }
+            return result > 0;
+        }
 
-    public async Task<bool> UpdateRoleAsync(Role role, CancellationToken cancellationToken)
-    {
-        var command = "Security.UpdateRole";
+        public async Task<bool> UpdateRoleAsync(Role role, CancellationToken cancellationToken)
+        {
+            var command = "Security.UpdateRole";
 
-        var parameters = new DynamicParameters();
+            var parameters = new DynamicParameters();
 
-        parameters.Add("@RoleId", role.RoleId);
-        parameters.Add("@RoleName", role.RoleName);
-        parameters.Add("@RoleCode", role.RoleCode);
-        parameters.Add("@Description", role.Description);
-        parameters.Add("@IsActive", role.IsActive);
-        parameters.Add("@UpdatedAt", role.UpdatedAt);
+            parameters.Add("@RoleId", role.RoleId);
+            parameters.Add("@RoleName", role.RoleName);
+            parameters.Add("@RoleCode", role.RoleCode);
+            parameters.Add("@Description", role.Description);
+            parameters.Add("@IsActive", role.IsActive);
 
-        var result = await dbConnection.ExecuteAsync(
-            command,
-            parameters,
-            commandType: CommandType.StoredProcedure);
+            var result = await dbConnection.ExecuteAsync(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
 
-        return result > 0;
-    }
+            return result > 0;
+        }
 
-    public async Task<Role?> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken)
-    {
-        var command = "Security.GetRoleById";
+        public async Task<Role?> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken)
+        {
+            var command = "Security.GetRoleById";
 
-        var parameters = new DynamicParameters();
+            var parameters = new DynamicParameters();
 
-        parameters.Add("@RoleId", roleId);
+            parameters.Add("@RoleId", roleId);
 
-        var result = await dbConnection.QueryFirstOrDefaultAsync<Role>(
-            command,
-            parameters,
-            commandType: CommandType.StoredProcedure);
+            var result = await dbConnection.QueryFirstOrDefaultAsync<Role>(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
 
-        return result;
-    }
+            return result;
+        }
 
-    public async Task<bool> DeleteRoleAsync(int roleId, CancellationToken cancellationToken)
-    {
-        var command = "Security.DeleteRole";
+        public async Task<bool> DeleteRoleAsync(int roleId, CancellationToken cancellationToken)
+        {
+            var command = "Security.DeleteRole";
 
-        var parameters = new DynamicParameters();
+            var parameters = new DynamicParameters();
 
-        parameters.Add("@RoleId", roleId);
+            parameters.Add("@RoleId", roleId);
 
-        var result = await dbConnection.ExecuteAsync(
-            command,
-            parameters,
-            commandType: CommandType.StoredProcedure);
+            var result = await dbConnection.ExecuteAsync(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
 
-        return result > 0;
+            return result > 0;
+        }
+
+        public async Task<bool> CreateUserRoleAsync(UserRole userRole, CancellationToken cancellationToken)
+        {
+            var command = "Security.CreateUserRole";
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserId", userRole.UserId);
+            parameters.Add("@RoleId", userRole.RoleId);
+            parameters.Add("@AssignedAt", userRole.AssignedAt);
+            var result = await dbConnection.ExecuteAsync(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
+            return result > 0;
+        }
+
+        public async Task<bool> UpdateUserRoleAsync(UserRole userRole, CancellationToken cancellationToken)
+        {
+            var command = "Security.UpdateUserRole";
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserId", userRole.UserId);
+            parameters.Add("@RoleId", userRole.RoleId);
+            parameters.Add("@AssignedAt", userRole.AssignedAt);
+            var result = await dbConnection.ExecuteAsync(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
+            return result > 0;
+        }
+
+        public async Task<UserRole> GetUserRoleByIdAsync(int userRoleId, CancellationToken cancellationToken)
+        {
+            var command = "Security.GetUserRoleById";
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserRoleId", userRoleId);
+            var result = await dbConnection.QueryFirstOrDefaultAsync<UserRole>(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
+            return result;
+        }
+
+        public async Task<bool> DeleteUserRoleAsync(int userRoleId, CancellationToken cancellationToken)
+        {
+            var command = "Security.DeleteUserRole";
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserRoleId", userRoleId);
+            var result = await dbConnection.ExecuteAsync(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
+            return result > 0;
+        }
+
+        public async Task<bool> CreateRolePermissionAsync(RolePermission rolePermission, CancellationToken cancellationToken)
+        {
+            var command = "Security.CreateRolePermission";
+            var parameters = new DynamicParameters();
+            parameters.Add("@RoleId", rolePermission.RoleId);
+            parameters.Add("@PermissionId", rolePermission.PermissionId);
+            parameters.Add("@AssignedAt", rolePermission.AssignedAt);
+            var result = await dbConnection.ExecuteAsync(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
+            return result > 0;
+        }
+
+        public async Task<bool> UpdateRolePermissionAsync(RolePermission rolePermission, CancellationToken cancellationToken)
+        {
+            var command = "Security.UpdateRolePermission";
+            var parameters = new DynamicParameters();
+            parameters.Add("@RolePermissionId", rolePermission.RolePermissionId);
+            parameters.Add("@RoleId", rolePermission.RoleId);
+            parameters.Add("@PermissionId", rolePermission.PermissionId);
+            parameters.Add("@AssignedAt", rolePermission.AssignedAt);
+            var result = await dbConnection.ExecuteAsync(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
+            return result > 0;
+        }
+
+        public async Task<RolePermission> GetRolePermissionByIdAsync(int rolePermissionId, CancellationToken cancellationToken)
+        {
+            var command = "Security.GetRolePermissionById";
+            var parameters = new DynamicParameters();
+            parameters.Add("@RolePermissionId", rolePermissionId);
+            var result = await dbConnection.QueryFirstOrDefaultAsync<RolePermission>(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
+            return result;
+        }
+
+        public async Task<bool> DeleteRolePermissionAsync(int rolePermissionId, CancellationToken cancellationToken)
+        {
+            var command = "Security.DeleteRolePermission";
+            var parameters = new DynamicParameters();
+            parameters.Add("@RolePermissionId", rolePermissionId);
+            var result = await dbConnection.ExecuteAsync(
+                command,
+                parameters,
+                commandType: CommandType.StoredProcedure);
+            return result > 0;
+        }
     }
 }

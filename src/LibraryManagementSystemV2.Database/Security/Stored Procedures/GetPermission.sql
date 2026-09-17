@@ -1,13 +1,12 @@
-﻿CREATE   PROCEDURE [Security].[GetPermission]
-   
+﻿
+CREATE   PROCEDURE [Security].[GetPermission]
+   @searchText nvarchar(100) = null
 AS
 BEGIN
     SELECT
-        [PermissionName],
-        [PermissionCode],
+[PermissionName],
+[PermissionCode],
 [Description],
-[IsActive],
-[CreatedAt],
-[UpdatedAt]
+[IsActive]
     FROM [Security].[Permissions]
 END;

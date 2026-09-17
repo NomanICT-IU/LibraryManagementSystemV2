@@ -8,6 +8,6 @@ BEGIN
         [RoleId],
         [PermissionId],
         [AssignedAt]
-    FROM [dbo].[RolePermission]
+    FROM [Security].[RolePermission]
     WHERE [RolePermissionId] = @RolePermissionId;
 END;

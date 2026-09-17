@@ -1,4 +1,5 @@
-﻿CREATE   PROCEDURE [Security].[CreateUsers]
+﻿
+CREATE   PROCEDURE [Security].[CreateUser]
     @UserName NVARCHAR(100),
     @Email NVARCHAR(255),
     @PasswordHash NVARCHAR(500),

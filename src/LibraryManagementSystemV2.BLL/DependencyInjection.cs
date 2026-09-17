@@ -11,6 +11,7 @@ public static class DependencyInjection
         services.AddScoped<IBorrowRecordService, BorrowRecordService>();
         services.AddScoped<IDashboardInformationService, DashboardInformationService>();
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddValidatorsFromAssemblyContaining<BookDtoValidator>();
         return services;
     }

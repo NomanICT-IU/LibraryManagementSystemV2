@@ -1,4 +1,6 @@
-﻿namespace LibraryManagementSystemV2.DAL;
+﻿using static LibraryManagementSystemV2.DAL.Repository.IRoleRepository;
+
+namespace LibraryManagementSystemV2.DAL;
 
 public static class DependencyInjection
 {
@@ -15,6 +17,8 @@ public static class DependencyInjection
         services.AddScoped<IBorrowRecordRepository, BorrowRecordRepository>();
         services.AddScoped<IDashboardInformationRepository, DashboardInformationRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+
         return services;
     }
 
