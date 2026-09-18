@@ -12,6 +12,7 @@ public static class DependencyInjection
         services.AddScoped<IDashboardInformationService, DashboardInformationService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IPermissionService, PermissionService>();
         services.AddValidatorsFromAssemblyContaining<BookDtoValidator>();
         return services;
     }

@@ -18,6 +18,8 @@ public static class DependencyInjection
         services.AddScoped<IDashboardInformationRepository, DashboardInformationRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IPermissionRepository, PermissionRepository>();
+
 
         return services;
     }
