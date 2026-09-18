@@ -1,9 +1,10 @@
 ﻿using Lms.Mvc.Models;
+using Lms.Mvc.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lms.Mvc.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController(IAccountService accountService) : Controller
     {
         [HttpGet]
         public IActionResult Login()
@@ -15,7 +16,16 @@ namespace Lms.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginUserModel model, CancellationToken cancellationToken)
         {
-            return View();
+            var response = await accountService.GetAccountByIdAsync(model, cancellationToken);
+            if (response.IsError)
+            {
+                ModelState.AddModelError(string.Empty, response.Message);
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
         }
     }
 }

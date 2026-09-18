@@ -28,6 +28,14 @@ public class UsersController(IUserService userService) : ControllerBase
         { Data = result });
     }
 
+    [HttpGet("get-user-by-indentity")]
+    public async Task<IActionResult> GetUserByIndentity(string indentity, CancellationToken cancellationToken)
+    {
+        var result = await userService.GetUserByIndentityAsync(indentity, cancellationToken);
+        return Ok(new
+        { Data = result });
+    }
+
     [HttpDelete("delete-user/{userId:int}")]
     public async Task<IActionResult> DeleteUser(int userId, CancellationToken cancellationToken)
     {

@@ -13,6 +13,7 @@ public static class DependencyInjection
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IPermissionService, PermissionService>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddValidatorsFromAssemblyContaining<BookDtoValidator>();
         return services;
     }

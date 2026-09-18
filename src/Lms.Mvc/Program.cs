@@ -7,7 +7,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient("LMSApi", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:8080/");
+    client.BaseAddress = new Uri("https://localhost:7261/");
     client.Timeout = TimeSpan.FromSeconds(30);
 });
 
@@ -17,7 +17,7 @@ builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<IBookCopyService, BookCopyService>();
 builder.Services.AddScoped<IBorrowRecordService, BorrowRecordService>();
-
+builder.Services.AddScoped<IAccountService, AccountService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,7 +37,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Dashboard}/{action=Index}/{id?}")
+    pattern: "{controller=Account}/{action=Login}/{id?}")
     .WithStaticAssets();
 
 

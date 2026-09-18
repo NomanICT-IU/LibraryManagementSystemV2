@@ -47,12 +47,13 @@
 
             context.Response.StatusCode = statusCode;
 
-            var response = new ApiResponse<object>
+            var response = new ErrorMessageResult
             {
                 StatusCode = statusCode,
                 Message = exception switch
                 {
                     NotFoundException => exception.Message,
+                    InvalidException => exception.Message,
                     BadRequestException => exception.Message,
                     UnauthorizedAccessException => exception.Message,
                     _ => "An unexpected error occurred."
