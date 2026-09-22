@@ -118,8 +118,9 @@
     <Build Include="Security\Stored Procedures\UpdateUser.sql" />
     <Build Include="Security\Security.sql" />
     <Build Include="Security\Tables\RolePermission.sql" />
-    <Build Include="Security\Stored Procedures\GetRolePermissions.sql" />
     <Build Include="Security\Stored Procedures\CreateUser.sql" />
     <Build Include="Security\Stored Procedures\CreateRole.sql" />
+    <Build Include="Security\Stored Procedures\GetUserRolesAndPermissions.sql" />
+    <Build Include="Security\Stored Procedures\GetUserByIndentity.sql" />
   </ItemGroup>
 </Project>
