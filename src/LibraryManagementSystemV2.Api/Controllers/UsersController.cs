@@ -5,7 +5,7 @@
 public class UsersController(IUserService userService) : ControllerBase
 {
     [HttpPost("create-user")]
-    public async Task<IActionResult> CreateUser([FromBody] UserDto userDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userDto, CancellationToken cancellationToken)
     {
         var result = await userService.CreateUserAsync(userDto, cancellationToken);
 

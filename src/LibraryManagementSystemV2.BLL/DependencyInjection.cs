@@ -14,6 +14,8 @@ public static class DependencyInjection
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IPermissionService, PermissionService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddSingleton<IPasswordHasher, Argon2idPasswordHasher>();
+        services.AddSingleton<IJwtSigner, RsaJwtSigner>();
         services.AddValidatorsFromAssemblyContaining<BookDtoValidator>();
         return services;
     }

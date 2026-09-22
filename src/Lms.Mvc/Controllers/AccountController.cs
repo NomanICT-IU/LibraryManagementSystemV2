@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lms.Mvc.Controllers
 {
-    public class AccountController(IAccountService accountService) : Controller
+    public class AccountController(IAccountService accountService, ITokenCookieService tokenCookieService) : Controller
     {
         [HttpGet]
         public IActionResult Login()
@@ -24,6 +24,9 @@ namespace Lms.Mvc.Controllers
             }
             else
             {
+                tokenCookieService.RemoveTokens();
+                tokenCookieService.AddTokens(response.Data.AccessToken, response.Data.AccessTokenExpiresOnUtc, response.Data.RefreshToken);
+
                 return RedirectToAction("Index", "Dashboard");
             }
         }

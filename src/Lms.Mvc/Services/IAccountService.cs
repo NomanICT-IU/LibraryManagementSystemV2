@@ -4,7 +4,7 @@ namespace Lms.Mvc.Services;
 
 public interface IAccountService
 {
-    Task<ApiResponse<AccountModel>> GetAccountByIdAsync(LoginUserModel userModel, CancellationToken cancellationToken);
+    Task<ApiResponse<LoginResponse>> GetAccountByIdAsync(LoginUserModel userModel, CancellationToken cancellationToken);
 }
 public class AccountService : IAccountService
 {
@@ -13,26 +13,25 @@ public class AccountService : IAccountService
     {
         _httpClientFactory = httpClientFactory.CreateClient("LMSApi");
     }
-    public async Task<ApiResponse<AccountModel>> GetAccountByIdAsync(LoginUserModel userModel, CancellationToken cancellationToken)
+    public async Task<ApiResponse<LoginResponse>> GetAccountByIdAsync(LoginUserModel userModel, CancellationToken cancellationToken)
     {
-        var endpoint =
-            $"api/Account?Identity={Uri.EscapeDataString(userModel.Identifier)}" +
-            $"&Password={Uri.EscapeDataString(userModel.Password)}";
+        var endpoint = $"api/Account/login";
 
-        var response = await _httpClientFactory.GetAsync(
+        var response = await _httpClientFactory.PostAsJsonAsync(
             endpoint,
+            userModel,
             cancellationToken);
 
         if (response.IsSuccessStatusCode)
         {
-            return await response.Content.ReadFromJsonAsync<ApiResponse<AccountModel>>(cancellationToken);
+            return await response.Content.ReadFromJsonAsync<ApiResponse<LoginResponse>>(cancellationToken);
 
         }
 
         var errorResponse = await response.Content.ReadFromJsonAsync<ErrorMessageResult>(
             cancellationToken);
 
-        return new ApiResponse<AccountModel>
+        return new ApiResponse<LoginResponse>
         {
             Message = errorResponse?.Message ?? "An unexpected error occurred."
 

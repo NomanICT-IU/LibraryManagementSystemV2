@@ -1,7 +1,11 @@
-﻿namespace LibraryManagementSystemV2.Api.Controllers;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+
+namespace LibraryManagementSystemV2.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+
 public class BookController(IBookService _bookService) : ControllerBase
 {
     [HttpPost("create-book")]
@@ -78,8 +82,10 @@ public class BookController(IBookService _bookService) : ControllerBase
         });
     }
     [HttpGet("get-book-list")]
+
     public async Task<IActionResult> GetBookListAsync(string searchText, int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
+        var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
         var result = await _bookService.GetBookListAsync(searchText, pageNumber, pageSize, cancellationToken);
         return Ok(new ApiResponse<BookListResponseDto>
         {

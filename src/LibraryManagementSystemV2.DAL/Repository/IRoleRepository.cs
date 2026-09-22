@@ -26,7 +26,7 @@ public interface IRoleRepository
 
     Task<bool> DeleteRolePermissionAsync(int rolePermissionId, CancellationToken cancellationToken);
 
-
+    Task<RolesPermissions> GetRollAndPermissionByUserId(int userId, CancellationToken cancellationToken);
     public class RoleRepository(IDbConnection dbConnection) : IRoleRepository
     {
         public async Task<bool> CreateRoleAsync(Role role, CancellationToken cancellationToken)
@@ -204,6 +204,26 @@ public interface IRoleRepository
                 parameters,
                 commandType: CommandType.StoredProcedure);
             return result > 0;
+        }
+
+        public async Task<RolesPermissions> GetRollAndPermissionByUserId(int userId, CancellationToken cancellationToken)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId);
+
+            var command = new CommandDefinition("Security.GetUserRolesAndPermissions",
+            parameters,
+            commandType: CommandType.StoredProcedure);
+            using var result = await dbConnection.QueryMultipleAsync(command);
+
+            var roles = (await result.ReadAsync<string>()).ToList();
+            var permissions = (await result.ReadAsync<string>()).ToList();
+
+            return new RolesPermissions
+            {
+                Roles = roles,
+                Permissions = permissions
+            };
         }
     }
 }

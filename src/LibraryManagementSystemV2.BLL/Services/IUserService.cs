@@ -2,7 +2,7 @@
 
 public interface IUserService
 {
-    Task<bool> CreateUserAsync(UserDto userDto, CancellationToken cancellationToken);
+    Task<bool> CreateUserAsync(CreateUserDto userDto, CancellationToken cancellationToken);
 
     Task<bool> UpdateUserAsync(UserDto userDto, CancellationToken cancellationToken);
 
@@ -12,12 +12,14 @@ public interface IUserService
     Task<bool> DeleteUserAsync(int userId, CancellationToken cancellationToken);
 }
 
-public class UserService(IUserRepository userRepository) : IUserService
+public class UserService(IUserRepository userRepository, IPasswordHasher passwordHasher) : IUserService
 {
-    public async Task<bool> CreateUserAsync(UserDto userDto, CancellationToken cancellationToken)
+    public async Task<bool> CreateUserAsync(CreateUserDto userDto, CancellationToken cancellationToken)
     {
+        var hash = passwordHasher.Hash(RawPassword.Create(userDto.Password));
         var user = userDto.Adapt<User>();
-
+        user.CreatedAt = DateTime.Now;
+        user.PasswordHash = hash.Value;
         return await userRepository.CreateUserAsync(user, cancellationToken);
     }
 

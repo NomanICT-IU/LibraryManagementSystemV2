@@ -2,6 +2,6 @@
 
 public class LoginRequestDto
 {
-    public string Identity { get; set; }
+    public string Identifier { get; set; }
     public string Password { get; set; }
 }
