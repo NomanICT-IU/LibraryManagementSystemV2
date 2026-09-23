@@ -1,5 +1,6 @@
 
 
+using LibraryManagementSystemV2.Api.Authentication;
 using LibraryManagementSystemV2.Api.Exceptions;
 using Serilog;
 
@@ -45,6 +46,11 @@ builder.Services.AddApplicationDataAccess(
 // Application Services
 // ======================================================
 builder.Services.AddApplicationServices();
+// ======================================================
+// Authentication
+// ======================================================
+builder.Services.AddJwtAuthentication();
+builder.Services.AddPermissionAuthorization();
 
 // ======================================================
 // Build Application
@@ -85,6 +91,7 @@ app.UseHttpsRedirection();
 // ======================================================
 // Authorization
 // ======================================================
+app.UseAuthentication();
 app.UseAuthorization();
 
 // ======================================================

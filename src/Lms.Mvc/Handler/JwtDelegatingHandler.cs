@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using Lms.Mvc.Services;
+using System.Net.Http.Headers;
 
 namespace Lms.Mvc.Handler;
 
@@ -12,7 +13,7 @@ public class JwtDelegatingHandler(
         var token = httpContextAccessor
             .HttpContext?
             .Request
-            .Cookies["access_token"];
+            .Cookies[TokenCookieService.AccessTokenCookie];
 
         if (!string.IsNullOrWhiteSpace(token))
         {

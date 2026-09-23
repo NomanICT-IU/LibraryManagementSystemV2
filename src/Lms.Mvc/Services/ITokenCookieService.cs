@@ -12,8 +12,8 @@ public interface ITokenCookieService
 public class TokenCookieService(
     IHttpContextAccessor httpContextAccessor) : ITokenCookieService
 {
-    private const string AccessTokenCookie = "access_token";
-    private const string RefreshTokenCookie = "refresh_token";
+    public const string AccessTokenCookie = "access_token";
+    public const string RefreshTokenCookie = "refresh_token";
 
     public void AddTokens(
         string accessToken,

@@ -1,11 +1,16 @@
 using Lms.Mvc.Handler;
 using Lms.Mvc.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddAuthorization();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new AuthorizeFilter());
+});
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<JwtDelegatingHandler>();
@@ -39,6 +44,7 @@ builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<IBookCopyService, BookCopyService>();
 builder.Services.AddScoped<IBorrowRecordService, BorrowRecordService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IClaimsProvider, ClaimsProvider>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

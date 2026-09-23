@@ -15,27 +15,26 @@ public interface IJwtSigner
     bool ValidateSignature(string token);
 
     string HashRefreshToken(string refreshToken);
-
-    JwtClaims? ReadClaims(string token);
+    TokenValidationParameters GetTokenValidationParameters();
 }
-
-public sealed record JwtClaims(Guid subject, string Role, IReadOnlyList<string> Permissions, Guid SessionId, DateTime ExpiresOnUtc);
-
 public sealed class AccessTokenSpec
 {
     private AccessTokenSpec(
         int subject,
+        string email,
         IReadOnlyList<string> roles,
         IReadOnlyList<string> permissions,
         DateTime expiresOnUtc)
     {
         Subject = subject;
+        Email = email;
         Roles = roles;
         Permissions = permissions;
         ExpiresOnUtc = expiresOnUtc;
     }
 
     public int Subject { get; }
+    public string Email { get; }
 
     public IReadOnlyList<string> Roles { get; }
 
@@ -45,6 +44,7 @@ public sealed class AccessTokenSpec
 
     public static AccessTokenSpec Create(
         int subject,
+        string email,
         IReadOnlyList<string> roles,
         IReadOnlyList<string> permissions,
         DateTime expiresOnUtc)
@@ -62,6 +62,7 @@ public sealed class AccessTokenSpec
 
         return new AccessTokenSpec(
             subject,
+            email,
             roles,
             permissions,
             expiresOnUtc);
@@ -102,6 +103,7 @@ public sealed class RsaJwtSigner : IJwtSigner, IDisposable
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, spec.Subject.ToString()),
+            new(JwtRegisteredClaimNames.Email, spec.Email),
         };
 
         claims.AddRange(spec.Roles.Select(r => new Claim(ClaimTypes.Role, r)));
@@ -138,29 +140,8 @@ public sealed class RsaJwtSigner : IJwtSigner, IDisposable
     public string HashRefreshToken(string refreshToken) =>
         Convert.ToHexString(SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(refreshToken)));
 
-    public JwtClaims? ReadClaims(string token)
-    {
-        try
-        {
-            var jwt = _handler.ReadJwtToken(token);
-            var sub = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
-            var role = jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            var sessionId = jwt.Claims.FirstOrDefault(c => c.Type == SessionIdClaimType)?.Value;
 
-            if (sub is null || role is null || sessionId is null)
-            {
-                return null;
-            }
-
-            var permissions = jwt.Claims.Where(c => c.Type == PermissionClaimType).Select(c => c.Value).ToList();
-
-            return new JwtClaims(Guid.Parse(sub), role, permissions, Guid.Parse(sessionId), jwt.ValidTo);
-        }
-        catch (Exception ex) when (ex is ArgumentException or FormatException)
-        {
-            return null;
-        }
-    }
+    public TokenValidationParameters GetTokenValidationParameters() => _validationParameters;
 
     public void Dispose() => _rsa.Dispose();
 }

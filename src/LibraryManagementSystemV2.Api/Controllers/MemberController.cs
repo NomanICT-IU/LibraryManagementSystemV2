@@ -1,7 +1,10 @@
-﻿namespace LibraryManagementSystemV2.Api.Controllers;
+﻿using Microsoft.AspNetCore.Authorization;
+
+namespace LibraryManagementSystemV2.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class MemberController(IMemberService _memberService) : ControllerBase
 {
     [HttpPost("create-member")]

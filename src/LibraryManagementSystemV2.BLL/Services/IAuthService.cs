@@ -27,11 +27,11 @@ public class AuthService(IUserRepository userRepository, IPasswordHasher passwor
         }
         var rolePermissions = await roleRepository.GetRollAndPermissionByUserId(user.UserId, cancellationToken);
 
-        var accessToken = jwtSigner.SignAccessToken(AccessTokenSpec.Create(user.UserId, rolePermissions.Roles, rolePermissions.Permissions, DateTime.UtcNow.AddHours(1)));
+        var accessToken = jwtSigner.SignAccessToken(AccessTokenSpec.Create(user.UserId, user.Email, rolePermissions.Roles, rolePermissions.Permissions, DateTime.UtcNow.AddHours(1)));
 
         var (RefreshToken, RefreshTokenHash) = jwtSigner.IssueRefreshToken();
 
-        return new LoginResult(user.UserId, accessToken, RefreshToken, DateTime.UtcNow.AddHours(1));
+        return new LoginResult(user.UserId, user.Email, accessToken, RefreshToken, DateTime.UtcNow.AddHours(1));
 
     }
 }

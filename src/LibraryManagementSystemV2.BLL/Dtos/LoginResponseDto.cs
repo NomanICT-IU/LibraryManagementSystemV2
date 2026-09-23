@@ -11,6 +11,7 @@
 //}
 public sealed record LoginResult(
     int UserId,
+    string Email,
     string? AccessToken,
     string? RefreshToken,
     DateTime? AccessTokenExpiresOnUtc);

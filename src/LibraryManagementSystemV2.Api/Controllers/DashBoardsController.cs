@@ -6,6 +6,7 @@
 public class DashBoardsController(IDashboardInformationService dashboardInformationService) : ControllerBase
 {
     [HttpGet("get-dashboard-information")]
+    //[Authorize(Policy = Permissions.Dashboard.Read)]
     public async Task<IActionResult> GetDashBoardInformation(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var result = await dashboardInformationService.GetDashboardInformationAsync(pageNumber, pageSize, cancellationToken);

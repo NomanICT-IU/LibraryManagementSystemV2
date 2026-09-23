@@ -1,14 +1,17 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using LibraryManagementSystemV2.Shared.Constants;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace LibraryManagementSystemV2.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-
+[Authorize]
 public class BookController(IBookService _bookService) : ControllerBase
 {
     [HttpPost("create-book")]
+    [Authorize(Policy = Permissions.Book.Create)]
     public async Task<IActionResult> CreateBookAsync([FromBody] BookDto bookDto, CancellationToken cancellationToken)
     {
         var result = await _bookService.CreateBookAsync(bookDto, cancellationToken);
@@ -19,6 +22,7 @@ public class BookController(IBookService _bookService) : ControllerBase
         });
     }
     [HttpDelete("delete-book/{bookId:int}")]
+    [Authorize(Policy = Permissions.Book.Delete)]
     public async Task<IActionResult> DeleteBookAsync(int bookId, CancellationToken cancellationToken)
     {
         var result = await _bookService.DeleteBookAsync(
@@ -32,7 +36,7 @@ public class BookController(IBookService _bookService) : ControllerBase
 
 
     [HttpGet("get-book-by-id/{bookId:int}")]
-
+    [Authorize(Policy = Permissions.Book.Read)]
     public async Task<IActionResult> GetBookByIdAsync(int bookId, CancellationToken cancellationToken)
     {
         var result = await _bookService.GetBookByIdAsync(bookId, cancellationToken);
@@ -43,6 +47,7 @@ public class BookController(IBookService _bookService) : ControllerBase
 
     }
     [HttpPut("update-book")]
+    [Authorize(Policy = Permissions.Book.Update)]
     public async Task<IActionResult> UpdateBookAsync([FromBody] BookDto bookDto, CancellationToken cancellationToken)
     {
         var result = await _bookService.UpdateBookAsync(bookDto, cancellationToken);
@@ -52,6 +57,7 @@ public class BookController(IBookService _bookService) : ControllerBase
     }
 
     [HttpGet("search-book-recod-author-isbn-title")]
+    [Authorize(Policy = Permissions.Book.Read)]
     public async Task<IActionResult> SearchBookRecordAsync(string searchBy = "", string searchText = "", int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var result = await _bookService.SearchBookRecordAsync(searchBy, searchText, pageNumber, pageSize, cancellationToken);
@@ -68,6 +74,7 @@ public class BookController(IBookService _bookService) : ControllerBase
     }
 
     [HttpGet("get-book-detail")]
+    [Authorize(Policy = Permissions.Book.All)]
     public async Task<IActionResult> GetBookDetailsAsync(string searchBy = "", string searchResult = "",
     CancellationToken cancellationToken = default)
     {
@@ -82,7 +89,7 @@ public class BookController(IBookService _bookService) : ControllerBase
         });
     }
     [HttpGet("get-book-list")]
-
+    [Authorize(Policy = Permissions.Book.All)]
     public async Task<IActionResult> GetBookListAsync(string searchText, int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
     {
         var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
