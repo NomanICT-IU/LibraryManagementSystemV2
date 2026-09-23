@@ -16,7 +16,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<JwtDelegatingHandler>();
 builder.Services.AddHttpClient("LMSApi", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7261/");
+    client.BaseAddress = new Uri("http://localhost:8080/");
     client.Timeout = TimeSpan.FromMinutes(30);
 }).AddHttpMessageHandler<JwtDelegatingHandler>();
 

@@ -1,7 +1,22 @@
-﻿namespace Lms.Mvc;
+﻿using System.Reflection;
+
+namespace Lms.Mvc;
 
 public static class Permissions
 {
+    public static IEnumerable<string> GetAll()
+    {
+        return typeof(Permissions)
+            .GetNestedTypes(BindingFlags.Public)
+            .SelectMany(type => type
+                .GetFields(BindingFlags.Public | BindingFlags.Static)
+                .Where(field =>
+                    field.IsLiteral &&
+                    !field.IsInitOnly &&
+                    field.FieldType == typeof(string))
+                .Select(field => (string)field.GetValue(null)!));
+    }
+
     public static class Book
     {
         public const string Create = "book.create";

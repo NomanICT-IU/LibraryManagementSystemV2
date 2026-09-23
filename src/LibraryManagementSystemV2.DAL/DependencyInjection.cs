@@ -1,4 +1,4 @@
-﻿using static LibraryManagementSystemV2.DAL.Repository.IRoleRepository;
+﻿using LibraryManagementSystemV2.DAL.SeedData;
 
 namespace LibraryManagementSystemV2.DAL;
 
@@ -11,6 +11,7 @@ public static class DependencyInjection
         {
             return new SqlConnection(connectionString);
         });
+        DatabaseSeeder.SeedPermissions(connectionString);
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IBookCopyRepository, BookCopyRepository>();
         services.AddScoped<IMemberRepository, MemberRepository>();

@@ -1,17 +1,30 @@
-﻿namespace LibraryManagementSystemV2.Shared.Constants;
+﻿using System.Reflection;
+
+namespace LibraryManagementSystemV2.Shared.Constants;
 
 public static class Permissions
 {
+    public static IEnumerable<string> GetAll()
+    {
+        return typeof(Permissions)
+            .GetNestedTypes(BindingFlags.Public)
+            .SelectMany(type => type
+                .GetFields(BindingFlags.Public | BindingFlags.Static)
+                .Where(field =>
+                    field.IsLiteral &&
+                    !field.IsInitOnly &&
+                    field.FieldType == typeof(string))
+                .Select(field => (string)field.GetValue(null)!));
+    }
+
     public static class Book
     {
         public const string Create = "book.create";
         public const string Delete = "book.delete";
         public const string Read = "book.read";
+        public const string Detail = "book.detail";
         public const string Update = "book.update";
-        public const string Search = "book.search";
-        public const string BookCopyDetail = "book.bookcopy_detail";
         public const string All = "book.all";
-        public const string AllView = "book.all_view";
     }
 
     public static class BookCopy
