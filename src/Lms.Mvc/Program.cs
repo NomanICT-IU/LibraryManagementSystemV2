@@ -16,7 +16,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<JwtDelegatingHandler>();
 builder.Services.AddHttpClient("LMSApi", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:8080/");
+    client.BaseAddress = new Uri("https://lmsapi.com/");
     client.Timeout = TimeSpan.FromMinutes(30);
 }).AddHttpMessageHandler<JwtDelegatingHandler>();
 
@@ -25,7 +25,7 @@ builder.Services
     .AddCookie(options =>
     {
         options.Cookie.Name = "LMS.Auth";
-        options.Cookie.HttpOnly = true;
+        // options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.Cookie.SameSite = SameSiteMode.Strict;
 

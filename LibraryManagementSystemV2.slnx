@@ -1,15 +1,37 @@
 <Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="DebugLocal" />
+    <BuildType Name="Release" />
+  </Configurations>
   <Folder Name="/src/">
-    <Project Path="src/LibraryManagementSystemV2.Api/LibraryManagementSystemV2.Api.csproj" />
-    <Project Path="src/LibraryManagementSystemV2.BLL/LibraryManagementSystemV2.BLL.csproj" />
-    <Project Path="src/LibraryManagementSystemV2.DAL/LibraryManagementSystemV2.DAL.csproj" />
+    <Project Path="src/LibraryManagementSystemV2.Api/LibraryManagementSystemV2.Api.csproj">
+      <BuildType Solution="DebugLocal|*" Project="Debug" />
+    </Project>
+    <Project Path="src/LibraryManagementSystemV2.BLL/LibraryManagementSystemV2.BLL.csproj">
+      <BuildType Solution="DebugLocal|*" Project="Debug" />
+    </Project>
+    <Project Path="src/LibraryManagementSystemV2.DAL/LibraryManagementSystemV2.DAL.csproj">
+      <BuildType Solution="DebugLocal|*" Project="Debug" />
+    </Project>
     <Project Path="src/LibraryManagementSystemV2.Database/LibraryManagementSystemV2.Database.sqlproj" Id="5c54d450-6530-4064-9257-c7d921d62193">
+      <BuildType Solution="DebugLocal|*" Project="Debug" />
       <Build />
       <Deploy />
     </Project>
-    <Project Path="src/LibraryManagementSystemV2.Shared/LibraryManagementSystemV2.Shared.csproj" />
+    <Project Path="src/LibraryManagementSystemV2.Shared/LibraryManagementSystemV2.Shared.csproj">
+      <BuildType Solution="DebugLocal|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/src/Reports/">
+    <Project Path="src/LmsReport/LmsReport.rptproj">
+      <Deploy Solution="Debug|*" />
+      <Deploy Solution="Release|*" />
+    </Project>
   </Folder>
   <Folder Name="/src/Web/">
-    <Project Path="src/Lms.Mvc/Lms.Mvc.csproj" Id="a4004c50-9ad1-4c2e-810c-eee16c16d52e" />
+    <Project Path="src/Lms.Mvc/Lms.Mvc.csproj" Id="a4004c50-9ad1-4c2e-810c-eee16c16d52e">
+      <BuildType Solution="DebugLocal|*" Project="Debug" />
+    </Project>
   </Folder>
 </Solution>
