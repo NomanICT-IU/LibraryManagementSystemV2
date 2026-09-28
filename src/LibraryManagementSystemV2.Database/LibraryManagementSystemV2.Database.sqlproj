@@ -122,5 +122,6 @@
     <Build Include="Security\Stored Procedures\CreateRole.sql" />
     <Build Include="Security\Stored Procedures\GetUserRolesAndPermissions.sql" />
     <Build Include="Security\Stored Procedures\GetUserByIndentity.sql" />
+    <Build Include="Security\Stored Procedures\GetRoleList.sql" />
   </ItemGroup>
 </Project>

@@ -22,9 +22,7 @@ public class BookCopyService : IBookCopyService
         _httpClient = httpClientFactory.CreateClient("LMSApi");
     }
 
-    public async Task<ApiResponse<BookCopyModel>> CreateBookCopiesAsync(
-      BookCopyModel bookCopyModel,
-      CancellationToken cancellationToken)
+    public async Task<ApiResponse<BookCopyModel>> CreateBookCopiesAsync(BookCopyModel bookCopyModel, CancellationToken cancellationToken)
     {
         var response = await _httpClient.PostAsJsonAsync(
             "api/BookCopy/create-book-copy",

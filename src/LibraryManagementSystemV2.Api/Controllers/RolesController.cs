@@ -58,6 +58,16 @@ public class RolesController(IRoleService roleService) : ControllerBase
         });
     }
 
+    //Get Role List
+    [HttpGet("get-role-list")]
+    public async Task<IActionResult> GetRoleList(CancellationToken cancellationToken)
+    {
+        var result = await roleService.GetRoleList(cancellationToken);
+        return Ok(new ApiResponse<IEnumerable<RoleDto>>
+        {
+            Data = result
+        });
+    }
     // CREATE
     [HttpPost("create-user-role")]
     public async Task<IActionResult> CreateUserRole([FromBody] UserRoleDto userRoleDto, CancellationToken cancellationToken)

@@ -7,6 +7,7 @@ public interface IRoleRepository
     Task<bool> UpdateRoleAsync(Role role, CancellationToken cancellationToken);
 
     Task<Role?> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken);
+    Task<IEnumerable<Role>> GetRoleList(CancellationToken cancellationToken);
 
     Task<bool> DeleteRoleAsync(int roleId, CancellationToken cancellationToken);
 
@@ -101,6 +102,16 @@ public class RoleRepository(IDbConnection dbConnection) : IRoleRepository
             commandType: CommandType.StoredProcedure);
 
         return result > 0;
+    }
+
+    public async Task<IEnumerable<Role>> GetRoleList(CancellationToken cancellationToken)
+    {
+        var roles = await dbConnection.QueryAsync<Role>(
+            new CommandDefinition(
+                commandText: "[Security].[GetRoleList]",
+                commandType: CommandType.StoredProcedure,
+                cancellationToken: cancellationToken));
+        return roles;
     }
 
     public async Task<bool> CreateUserRoleAsync(UserRole userRole, CancellationToken cancellationToken)

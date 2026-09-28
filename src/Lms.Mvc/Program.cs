@@ -45,6 +45,7 @@ builder.Services.AddScoped<IBookCopyService, BookCopyService>();
 builder.Services.AddScoped<IBorrowRecordService, BorrowRecordService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IClaimsProvider, ClaimsProvider>();
+builder.Services.AddScoped<IRolesService, RolesService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -2,6 +2,7 @@
 
 using LibraryManagementSystemV2.Api.Authentication;
 using LibraryManagementSystemV2.Api.Exceptions;
+using Microsoft.OpenApi;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +35,31 @@ builder.Services.AddSerilog((services, loggerConfiguration) =>
 // ======================================================
 // Swagger
 // ======================================================
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Library Management System API",
+        Version = "v1"
+    });
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT Bearer token."
+    });
+
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] =
+            new List<string>()
+    });
+
+});
 
 // ======================================================
 // Data Access

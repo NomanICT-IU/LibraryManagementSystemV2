@@ -9,6 +9,7 @@ public interface IRoleService
     Task<RoleDto?> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken);
 
     Task<bool> DeleteRoleAsync(int roleId, CancellationToken cancellationToken);
+    Task<IEnumerable<RoleDto>> GetRoleList(CancellationToken cancellationToken);
     Task<bool> CreateUserRoleAsync(UserRoleDto userRoleDto, CancellationToken cancellationToken);
 
     Task<bool> UpdateUserRoleAsync(UserRoleDto userRoleDto, CancellationToken cancellationToken);
@@ -49,19 +50,24 @@ public class RoleService(IRoleRepository roleRepository) : IRoleService
         return role?.Adapt<RoleDto>();
     }
 
-    public Task<bool> DeleteRoleAsync(int roleId, CancellationToken cancellationToken)
+    public async Task<bool> DeleteRoleAsync(int roleId, CancellationToken cancellationToken)
     {
-        return roleRepository.DeleteRoleAsync(roleId, cancellationToken);
+        return await roleRepository.DeleteRoleAsync(roleId, cancellationToken);
     }
 
-    public Task<bool> CreateUserRoleAsync(UserRoleDto userRoleDto, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RoleDto>> GetRoleList(CancellationToken cancellationToken)
     {
-        return roleRepository.CreateUserRoleAsync(userRoleDto.Adapt<UserRole>(), cancellationToken);
+        var roles = await roleRepository.GetRoleList(cancellationToken);
+        return roles.Adapt<IEnumerable<RoleDto>>();
+    }
+    public async Task<bool> CreateUserRoleAsync(UserRoleDto userRoleDto, CancellationToken cancellationToken)
+    {
+        return await roleRepository.CreateUserRoleAsync(userRoleDto.Adapt<UserRole>(), cancellationToken);
     }
 
-    public Task<bool> UpdateUserRoleAsync(UserRoleDto userRoleDto, CancellationToken cancellationToken)
+    public async Task<bool> UpdateUserRoleAsync(UserRoleDto userRoleDto, CancellationToken cancellationToken)
     {
-        return roleRepository.UpdateUserRoleAsync(userRoleDto.Adapt<UserRole>(), cancellationToken);
+        return await roleRepository.UpdateUserRoleAsync(userRoleDto.Adapt<UserRole>(), cancellationToken);
     }
 
     public async Task<UserRoleDto> GetUserRoleByIdAsync(int userRoleId, CancellationToken cancellationToken)

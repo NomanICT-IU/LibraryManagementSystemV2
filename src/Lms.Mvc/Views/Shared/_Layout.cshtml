@@ -101,6 +101,11 @@
                            class="nav-link text-white @(currentController == "Book" && currentAction == "BookDetails" ? "active bg-secondary rounded-3" : "")">
                             Book Details
                         </a>
+                         <a asp-controller="Role"
+                           asp-action="Index"
+                           class="nav-link text-white @(currentController == "Role" && currentAction == "Index" ? "active bg-secondary rounded-3" : "")">
+                           Role
+                        </a>
 
                     </div>
 
