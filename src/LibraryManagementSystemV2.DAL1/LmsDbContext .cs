@@ -1,7 +1,4 @@
-﻿using LibraryManagementSystemV2.DAL.Entites;
-using Microsoft.EntityFrameworkCore;
-
-namespace LibraryManagementSystemV2.DAL1;
+﻿namespace LibraryManagementSystemV2.DAL1;
 
 public class LmsDbContext : DbContext
 {
@@ -14,4 +11,11 @@ public class LmsDbContext : DbContext
     public DbSet<BookCopy> BookCopies { get; set; }
     public DbSet<Member> Members { get; set; }
     public DbSet<BorrowRecord> BorrowRecords { get; set; }
+
+    protected override void OnModelCreating(
+       ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(LmsDbContext).Assembly);
+    }
 }

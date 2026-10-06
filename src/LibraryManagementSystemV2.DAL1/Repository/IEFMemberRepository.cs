@@ -1,5 +1,4 @@
 ﻿using LibraryManagementSystemV2.DAL1.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagementSystemV2.DAL1.Repository;
 
