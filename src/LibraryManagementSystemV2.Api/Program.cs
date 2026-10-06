@@ -2,6 +2,9 @@
 
 using LibraryManagementSystemV2.Api.Authentication;
 using LibraryManagementSystemV2.Api.Exceptions;
+using LibraryManagementSystemV2.DAL1;
+using LibraryManagementSystemV2.DAL1.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Serilog;
 
@@ -67,6 +70,12 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddApplicationDataAccess(
     builder.Configuration.GetConnectionString("DefaultConnection"));
 
+// Data access configuration for LmsDbContext using SQL Server
+builder.Services.AddDbContext<LmsDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IEFMemberRepository, EFMemberRepository>();
 // ======================================================
 // Application Services
 // ======================================================

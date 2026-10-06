@@ -14,6 +14,9 @@
     <Project Path="src/LibraryManagementSystemV2.DAL/LibraryManagementSystemV2.DAL.csproj">
       <BuildType Solution="DebugLocal|*" Project="Debug" />
     </Project>
+    <Project Path="src/LibraryManagementSystemV2.DAL1/LibraryManagementSystemV2.DAL1.csproj" Id="6777d8f3-193a-4c07-b0f4-6c75a3bab5ad">
+      <BuildType Solution="DebugLocal|*" Project="Debug" />
+    </Project>
     <Project Path="src/LibraryManagementSystemV2.Database/LibraryManagementSystemV2.Database.sqlproj" Id="5c54d450-6530-4064-9257-c7d921d62193">
       <BuildType Solution="DebugLocal|*" Project="Debug" />
       <Build />

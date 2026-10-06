@@ -10,7 +10,7 @@ public sealed class JwtBearerOptionsConfiguration(IJwtSigner jwtSigner)
     public void Configure(JwtBearerOptions options) =>
         Configure(JwtBearerDefaults.AuthenticationScheme, options);
 
-    public void Configure(string? name, JwtBearerOptions options)
+    public void Configure(string name, JwtBearerOptions options)
     {
         if (name != JwtBearerDefaults.AuthenticationScheme)
         {

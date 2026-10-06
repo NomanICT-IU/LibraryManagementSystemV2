@@ -7,10 +7,7 @@ public interface IMemberRepository
     public Task<bool> DeleteMemberAsync(int memberId, CancellationToken cancellationToken);
     public Task<Member> GetMemberByIdAsync(int memberId, CancellationToken cancellationToken);
     public Task<MemberDetails> FindMemberAsync(string searchText, CancellationToken cancellationToken);
-    public Task<MemberDetailsResponse> GetMemberDetailsAsync(
-    string searchBy,
-    string searchText,
-    CancellationToken cancellationToken);
+    public Task<MemberDetailsResponse> GetMemberDetailsAsync(string searchBy, string searchText, CancellationToken cancellationToken);
     public Task<MemberListResponse> GetMemberListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
 
 }

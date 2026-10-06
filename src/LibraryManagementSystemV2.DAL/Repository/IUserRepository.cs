@@ -4,8 +4,8 @@ public interface IUserRepository
 {
     Task<bool> CreateUserAsync(User user, CancellationToken cancellationToken);
     Task<bool> UpdateUserAsync(User user, CancellationToken cancellationToken);
-    Task<User?> GetUserByIdAsync(int userId, CancellationToken cancellationToken);
-    Task<User?> GetUserByIndentityAsync(string indentity, CancellationToken cancellationToken);
+    Task<User> GetUserByIdAsync(int userId, CancellationToken cancellationToken);
+    Task<User> GetUserByIndentityAsync(string indentity, CancellationToken cancellationToken);
     Task<bool> DeleteUserAsync(int userId, CancellationToken cancellationToken);
 }
 public class UserRepository(IDbConnection dbConnection) : IUserRepository

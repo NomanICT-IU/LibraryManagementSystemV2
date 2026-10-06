@@ -4,6 +4,6 @@
 public sealed record LoginResponse(
     int UserId,
     string Email,
-    string? AccessToken,
-    string? RefreshToken,
+    string AccessToken,
+    string RefreshToken,
     DateTime? AccessTokenExpiresOnUtc);

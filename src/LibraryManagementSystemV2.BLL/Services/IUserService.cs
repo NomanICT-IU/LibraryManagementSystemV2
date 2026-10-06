@@ -6,8 +6,8 @@ public interface IUserService
 
     Task<bool> UpdateUserAsync(UserDto userDto, CancellationToken cancellationToken);
 
-    Task<UserDto?> GetUserByIdAsync(int userId, CancellationToken cancellationToken);
-    Task<UserDto?> GetUserByIndentityAsync(string indentity, CancellationToken cancellationToken);
+    Task<UserDto> GetUserByIdAsync(int userId, CancellationToken cancellationToken);
+    Task<UserDto> GetUserByIndentityAsync(string indentity, CancellationToken cancellationToken);
 
     Task<bool> DeleteUserAsync(int userId, CancellationToken cancellationToken);
 }
@@ -32,7 +32,7 @@ public class UserService(IUserRepository userRepository, IPasswordHasher passwor
         return await userRepository.UpdateUserAsync(user, cancellationToken);
     }
 
-    public async Task<UserDto?> GetUserByIdAsync(int userId, CancellationToken cancellationToken)
+    public async Task<UserDto> GetUserByIdAsync(int userId, CancellationToken cancellationToken)
     {
         var user = await userRepository.GetUserByIdAsync(userId, cancellationToken);
 

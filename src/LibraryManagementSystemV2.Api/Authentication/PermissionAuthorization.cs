@@ -32,10 +32,10 @@ public sealed class PermissionPolicyProvider(IOptions<AuthorizationOptions> opti
     public Task<AuthorizationPolicy> GetDefaultPolicyAsync() =>
         _fallback.GetDefaultPolicyAsync();
 
-    public Task<AuthorizationPolicy?> GetFallbackPolicyAsync() =>
+    public Task<AuthorizationPolicy> GetFallbackPolicyAsync() =>
         _fallback.GetFallbackPolicyAsync();
 
-    public async Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
+    public async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
     {
         var existing = await _fallback.GetPolicyAsync(policyName);
         if (existing is not null)

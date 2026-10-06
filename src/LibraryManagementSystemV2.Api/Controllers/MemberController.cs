@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LibraryManagementSystemV2.DAL1.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryManagementSystemV2.Api.Controllers;
 
@@ -7,6 +8,12 @@ namespace LibraryManagementSystemV2.Api.Controllers;
 [Authorize]
 public class MemberController(IMemberService _memberService) : ControllerBase
 {
+    [HttpGet("borrow-record-by-member-id/{memberId:int}")]
+    public async Task<IActionResult> GetBorrowRecordsByMemberIdAsync(int memberId, CancellationToken cancellationToken)
+    {
+        var result = await _memberService.GetBorrowRecordsByMemberIdAsync(memberId, cancellationToken);
+        return Ok(new ApiResponse<List<MemberBorrowRecordDto>> { Data = result });
+    }
     [HttpPost("create-member")]
     public async Task<IActionResult> CreateMemberAsync([FromBody] MemberDto memberDto, CancellationToken cancellationToken)
     {

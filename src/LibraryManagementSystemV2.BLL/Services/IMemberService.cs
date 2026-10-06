@@ -1,4 +1,7 @@
-﻿namespace LibraryManagementSystemV2.BLL.Services;
+﻿using LibraryManagementSystemV2.DAL1.Entities;
+using LibraryManagementSystemV2.DAL1.Repository;
+
+namespace LibraryManagementSystemV2.BLL.Services;
 
 public interface IMemberService
 {
@@ -7,21 +10,25 @@ public interface IMemberService
     public Task<bool> DeleteMemberAsync(int memberId, CancellationToken cancellationToken);
     public Task<MemberDto> GetMemberByIdAsync(int memberId, CancellationToken cancellationToken);
     public Task<MemberDetailsDto> FindMemberAsync(string searchText, CancellationToken cancellationToken);
-    public Task<MemberDetailsResponseDto> GetMemberDetailsAsync(
-   string searchBy,
-   string searchText,
-   CancellationToken cancellationToken);
+    public Task<MemberDetailsResponseDto> GetMemberDetailsAsync(string searchBy, string searchText, CancellationToken cancellationToken);
     public Task<MemberListResponseDto> GetMemberListAsync(string searchText, int pageNumber, int pageSize, CancellationToken cancellationToken);
 
+    Task<List<MemberBorrowRecordDto>> GetBorrowRecordsByMemberIdAsync(int memberId, CancellationToken cancellationToken);
 }
 
 public class MemberService : IMemberService
 {
     private readonly IMemberRepository _memberRepository;
+    private readonly IEFMemberRepository _eFMemberRepository;
 
-    public MemberService(IMemberRepository memberRepository)
+    public MemberService(IMemberRepository memberRepository, IEFMemberRepository eFMemberRepository)
     {
         _memberRepository = memberRepository;
+        _eFMemberRepository = eFMemberRepository;
+    }
+    public Task<List<MemberBorrowRecordDto>> GetBorrowRecordsByMemberIdAsync(int memberId, CancellationToken cancellationToken)
+    {
+        return _eFMemberRepository.GetBorrowRecordsByMemberIdAsync(memberId, cancellationToken); ;
     }
     public async Task<MemberDto> CreateMemberAsync(MemberDto memberDto, CancellationToken cancellationToken)
     {
@@ -74,4 +81,6 @@ public class MemberService : IMemberService
             TotalRecords = memberList.TotalRecords
         };
     }
+
+
 }

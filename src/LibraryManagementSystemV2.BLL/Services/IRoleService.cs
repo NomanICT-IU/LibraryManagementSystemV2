@@ -6,7 +6,7 @@ public interface IRoleService
 
     Task<bool> UpdateRoleAsync(RoleDto roleDto, CancellationToken cancellationToken);
 
-    Task<RoleDto?> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken);
+    Task<RoleDto> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken);
 
     Task<bool> DeleteRoleAsync(int roleId, CancellationToken cancellationToken);
     Task<IEnumerable<RoleDto>> GetRoleList(CancellationToken cancellationToken);
@@ -14,14 +14,14 @@ public interface IRoleService
 
     Task<bool> UpdateUserRoleAsync(UserRoleDto userRoleDto, CancellationToken cancellationToken);
 
-    Task<UserRoleDto?> GetUserRoleByIdAsync(int userRoleId, CancellationToken cancellationToken);
+    Task<UserRoleDto> GetUserRoleByIdAsync(int userRoleId, CancellationToken cancellationToken);
 
     Task<bool> DeleteUserRoleAsync(int userRoleId, CancellationToken cancellationToken);
     Task<bool> CreateRolePermissionAsync(RolePermissionDto rolePermissionDto, CancellationToken cancellationToken);
 
     Task<bool> UpdateRolePermissionAsync(RolePermissionDto rolePermissionDto, CancellationToken cancellationToken);
 
-    Task<RolePermissionDto?> GetRolePermissionByIdAsync(int rolePermissionId, CancellationToken cancellationToken);
+    Task<RolePermissionDto> GetRolePermissionByIdAsync(int rolePermissionId, CancellationToken cancellationToken);
 
     Task<bool> DeleteRolePermissionAsync(int rolePermissionId, CancellationToken cancellationToken);
 
@@ -43,7 +43,7 @@ public class RoleService(IRoleRepository roleRepository) : IRoleService
         return await roleRepository.UpdateRoleAsync(role, cancellationToken);
     }
 
-    public async Task<RoleDto?> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken)
+    public async Task<RoleDto> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken)
     {
         var role = await roleRepository.GetRoleByIdAsync(roleId, cancellationToken);
 
@@ -92,7 +92,7 @@ public class RoleService(IRoleRepository roleRepository) : IRoleService
         return await roleRepository.UpdateRolePermissionAsync(rolePermissionDto.Adapt<RolePermission>(), cancellationToken);
     }
 
-    public async Task<RolePermissionDto?> GetRolePermissionByIdAsync(int rolePermissionId, CancellationToken cancellationToken)
+    public async Task<RolePermissionDto> GetRolePermissionByIdAsync(int rolePermissionId, CancellationToken cancellationToken)
     {
         var rolePermission = await roleRepository.GetRolePermissionByIdAsync(rolePermissionId, cancellationToken);
         return rolePermission?.Adapt<RolePermissionDto>();

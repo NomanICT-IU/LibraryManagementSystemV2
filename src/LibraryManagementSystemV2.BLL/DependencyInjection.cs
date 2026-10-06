@@ -1,4 +1,6 @@
-﻿namespace LibraryManagementSystemV2.BLL;
+﻿using LibraryManagementSystemV2.DAL1.Repository;
+
+namespace LibraryManagementSystemV2.BLL;
 
 public static class DependencyInjection
 {
@@ -8,6 +10,7 @@ public static class DependencyInjection
         services.AddScoped<IBookService, BookService>();
         services.AddScoped<IBookCopyService, BookCopyService>();
         services.AddScoped<IMemberService, MemberService>();
+        services.AddScoped<IEFMemberRepository, EFMemberRepository>();
         services.AddScoped<IBorrowRecordService, BorrowRecordService>();
         services.AddScoped<IDashboardInformationService, DashboardInformationService>();
         services.AddScoped<IRoleService, RoleService>();

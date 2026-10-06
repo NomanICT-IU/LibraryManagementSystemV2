@@ -6,7 +6,7 @@ public interface IRoleRepository
 
     Task<bool> UpdateRoleAsync(Role role, CancellationToken cancellationToken);
 
-    Task<Role?> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken);
+    Task<Role> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken);
     Task<IEnumerable<Role>> GetRoleList(CancellationToken cancellationToken);
 
     Task<bool> DeleteRoleAsync(int roleId, CancellationToken cancellationToken);
@@ -15,7 +15,7 @@ public interface IRoleRepository
 
     Task<bool> UpdateUserRoleAsync(UserRole userRole, CancellationToken cancellationToken);
 
-    Task<UserRole?> GetUserRoleByIdAsync(int userRoleId, CancellationToken cancellationToken);
+    Task<UserRole> GetUserRoleByIdAsync(int userRoleId, CancellationToken cancellationToken);
 
     Task<bool> DeleteUserRoleAsync(int userRoleId, CancellationToken cancellationToken);
 
@@ -23,7 +23,7 @@ public interface IRoleRepository
 
     Task<bool> UpdateRolePermissionAsync(RolePermission rolePermission, CancellationToken cancellationToken);
 
-    Task<RolePermission?> GetRolePermissionByIdAsync(int rolePermissionId, CancellationToken cancellationToken);
+    Task<RolePermission> GetRolePermissionByIdAsync(int rolePermissionId, CancellationToken cancellationToken);
 
     Task<bool> DeleteRolePermissionAsync(int rolePermissionId, CancellationToken cancellationToken);
 
@@ -72,7 +72,7 @@ public class RoleRepository(IDbConnection dbConnection) : IRoleRepository
         return result > 0;
     }
 
-    public async Task<Role?> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken)
+    public async Task<Role> GetRoleByIdAsync(int roleId, CancellationToken cancellationToken)
     {
         var command = "Security.GetRoleById";
 
